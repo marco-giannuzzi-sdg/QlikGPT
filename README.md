@@ -53,13 +53,21 @@ Then go to **Actions -> Deploy QlikGPT to Qlik Cloud -> Run workflow**. Subseque
 
 **First run not yet verified:** repository code is present, but creating apps and applying the scripts requires configuring the GitHub secret and running the workflow. Inspect the GitHub Actions run logs if any CLI/space-permission issue occurs.
 
-## Frontend as Code — user never has to drag/drop
+## Frontend as Code — native Qlik Sense sheets and filter panes
 
-Qlik CLI `qlik app build` supports `--objects`, `--measures`, `--dimensions` and `--no-reload`. The three files in `frontend/` are the declarative **deployable native Qlik object definitions**, and `frontend/dashboard-spec.json` describes the AI-target dashboard.
+The user's workstation and the Qlik sheet editor are **not used**. GitHub Actions deploys all three ETL apps, then handles the native Presentation UI in two phases:
 
-Currently the deployable JSON files contain empty arrays `[]`, so the first GitHub Actions run builds the **data layer only**. We will generate real Qlik Engine JSON object definitions and validate them in the test tenant in the next frontend iteration: **sheets, grid layout, KPIs, charts, filters, master items and chart styling**, without manual UI editing.
+1. `qlik app build --dimensions frontend/dimensions.json --measures frontend/measures.json --objects frontend/objects.json --no-reload` applies versioned master items and sheet properties.
+2. `ci/deploy_filters.py` uses **Qlik Associative Engine's QIX WebSocket API** to materialize real native Qlik sheet children from `frontend/objects.json` (4 KPI, 2 charts and 1 filter pane), then attaches the 3 listbox children from `frontend/filters.json` (SalesYear, Market, Channel). This extra step is essential because an embedded `qChildren` JSON array alone is not proof of an actual QIX parent/child relationship.
+3. The deployment saves the app, verifies the QIX hierarchy (7 sheet children, 3 nested listboxes), round-trips the app via `qlik app unbuild` and checks the expected 20 object IDs, then validates `Count(OrderID)=5000`.
 
-See [Frontend README](frontend/README.md) for file purposes.
+**Verified:** GitHub Actions runs #28 (first native object creation) and #29 (idempotent re-deployment) completed successfully. These checks prove Engine objects are present and persistent. They do not replace visual QA in the Qlik browser for appearance, cell sizing and styling.
+
+- [GitHub Actions success #29](https://github.com/marco-giannuzzi-sdg/QlikGPT/actions/runs/40491366744)
+- [Presentation app](https://sdggroup-it.eu.qlikcloud.com/sense/app/07dfa926-4895-4fb2-af4c-eac90e9eb2cb)
+- [QIX frontend deployer](ci/deploy_filters.py)
+
+Native object IDs are stable. Reruns update existing objects, so subsequent AI-generated changes are idempotent without duplicate graphs or filters.
 
 ## Local Windows CMD path (legacy, optional)
 
