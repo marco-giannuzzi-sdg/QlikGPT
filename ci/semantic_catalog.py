@@ -517,6 +517,27 @@ def orchestrate_semantic_catalog(state: dict, *, run: Callable,
     if not impacted:
         return
 
+    # Variable creation through a long-lived app QIX session can be rejected
+    # in application modal mode (Engine error 6003). The official Qlik CLI
+    # handles variable import in its own app session with --no-reload, before
+    # the separate QIX session used for exact read-back and QA.
+    import tempfile
+    from pathlib import Path
+    for key in sorted(impacted):
+        selected = manifests[key]["catalogVariables"]
+        if not selected:
+            continue
+        with tempfile.TemporaryDirectory(prefix="qlikgpt-variables-") as tmp:
+            var_file = Path(tmp) / "managed-variables.json"
+            var_file.write_text(
+                json.dumps([assets.variable_properties(variables[mid])
+                            for mid in selected], ensure_ascii=False),
+                encoding="utf-8",
+            )
+            print(f"CLI variable import [{key}]: {len(selected)} subscribed objects", flush=True)
+            run("app", "build", "--app", state[key], "--no-reload",
+                "--variables", str(var_file))
+
     connections: list[tuple[Qix, int]] = []
     changes: list = []
     asset_changes: list = []
