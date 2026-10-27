@@ -1,0 +1,81 @@
+name: Deploy QlikGPT to Qlik Cloud
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/**'
+      - 'frontend/**'
+      - 'ci/**'
+      - '.github/workflows/deploy-qlik-cloud.yml'
+
+# Explicit opt-in: initially off. Enable only after storing secrets.
+concurrency:
+  group: qlikgpt-dev-deploy
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  qlik-deploy:
+    name: Three-app ETL and frontend deploy
+    # To prevent accidental runs before credentials are configured.
+    if: ${{ vars.QLIK_CICD_ENABLED == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      QLIK_TENANT: https://sdggroup-it.eu.qlikcloud.com
+      QLIK_API_KEY: ${{ secrets.QLIK_API_KEY }}
+      QLIK_SPACE_ID: ${{ vars.QLIK_SPACE_ID }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Install Qlik CLI 3.4.0
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --silent --show-error \
+            "https://github.com/qlik-oss/qlik-cli/releases/download/v3.4.0/qlik-Linux-x86_64.tar.gz" \
+            --output /tmp/qlik-cli.tar.gz
+          mkdir -p "$HOME/.local/bin"
+          tar -xzf /tmp/qlik-cli.tar.gz -C "$HOME/.local/bin" qlik
+          chmod +x "$HOME/.local/bin/qlik"
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          "$HOME/.local/bin/qlik" version
+
+      - name: Authenticate to Qlik Cloud
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$QLIK_API_KEY" || { echo "Missing QLIK_API_KEY GitHub Secret"; exit 1; }
+          qlik context create qlikgpt-ci --server "$QLIK_TENANT" --api-key "$QLIK_API_KEY"
+          qlik context use qlikgpt-ci
+          qlik user me >/dev/null
+          echo "Qlik Cloud authentication confirmed."
+
+      - name: Create or reuse apps, deploy QVS and frontend JSON
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 ci/deploy.py
+
+      - name: Persist generated app IDs to GitHub
+        # Persist even if ETL2 / Presentation reload fails, avoiding duplicates on retry.
+        if: ${{ always() && vars.QLIK_CICD_ENABLED == 'true' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- deployment/app-ids.json; then
+            echo "App IDs unchanged."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add deployment/app-ids.json
+          git commit -m "chore(qlik): persist generated app IDs [skip ci]"
+          git push origin HEAD:main
