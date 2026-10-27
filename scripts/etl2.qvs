@@ -1,5 +1,7 @@
 // ================================================================
 // QlikGPT - ETL2 / TRANSFORM
+// Governed deployment: GitHub applies this script with --no-reload.
+// Data refresh is a separate explicit app/chain action in GitHub Actions.
 // Reads ETL1's RAW QVD, cleans rows and calculates commercial KPIs.
 // Produces an independent, transformed QVD.
 // ================================================================
