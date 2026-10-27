@@ -120,6 +120,10 @@ def main() -> None:
                 "qExtendsId": "",
                 "visualization": "listbox",
                 "title": label,
+                "showTitle": True,
+                "searchEnabled": True,
+                "autoConfirm": True,
+                "layoutOptions": {"dataLayout": "singleColumn", "dense": True},
                 "qListObjectDef": {
                     "qStateName": "$",
                     "qLibraryId": "",
@@ -139,6 +143,15 @@ def main() -> None:
             else:
                 qix.call(existing, "SetProperties", [properties])
                 print(f"Updated native Qlik filter: {label}", flush=True)
+
+        # The visual brand block must carry real markdown, not just a title.
+        brand_handle = find_child(qix, sheet, "qlikgpt_brand_header")
+        if brand_handle is None:
+            raise RuntimeError("Branded header object missing from Qlik sheet")
+        brand_layout = qix.call(brand_handle, "GetLayout", [])["qLayout"]
+        if "QlikGPT" not in str(brand_layout.get("markdown", "")):
+            raise RuntimeError("QlikGPT brand markup was not saved in the header")
+        print("Brand header: native text-image with QlikGPT wordmark saved.", flush=True)
 
         # Validate native chart Engine data, not merely object persistence.
         # A sheet can contain a chart title while the visualization is blank.
