@@ -19,9 +19,12 @@ from deploy_filters import Qix, find_child
 
 ROOT = Path(__file__).resolve().parents[1]
 CATALOG = ROOT / "catalog" / "measures.json"
+# Additional apps are onboarded by adding apps/presentation3.json,
+# apps/presentation3-objects.json, etc. No Python routing table to edit.
 MANIFESTS = {
-    "presentation": ROOT / "apps" / "presentation1.json",
-    "presentation2": ROOT / "apps" / "presentation2.json",
+    ("presentation" if p.stem == "presentation1" else p.stem): p
+    for p in sorted((ROOT / "apps").glob("presentation*.json"))
+    if re.fullmatch(r"presentation[0-9]+\.json", p.name)
 }
 ALLOWED_FIELDS = {"Revenue", "Margin", "Cost", "OrderID", "Quantity", "Market",
                   "OrderDate", "Channel", "CustomerID", "SalesYear"}
@@ -77,8 +80,16 @@ def validate_catalog(catalog: dict, manifests: dict) -> dict:
             raise ValueError(f"{app_key}: unknown subscribed measures: {sorted(missing)}")
         if not manifest.get("loadScript") == "scripts/presentation.qvs":
             raise ValueError(f"{app_key}: unapproved loadScript")
-        if app_key == "presentation2" and manifest.get("dashboardSource") != "apps/presentation2-objects.json":
-            raise ValueError("Unexpected second presentation dashboard file")
+        suffix = "1" if app_key == "presentation" else app_key.removeprefix("presentation")
+        expected_dashboard = f"apps/presentation{suffix}-objects.json"
+        if manifest.get("dashboardSource") != expected_dashboard:
+            raise ValueError(f"{app_key}: dashboardSource must be {expected_dashboard}")
+        if not isinstance(manifest.get("appName"), str) or not manifest["appName"]:
+            raise ValueError(f"{app_key}: missing appName")
+        if "filterSource" in manifest and not (ROOT / manifest["filterSource"]).exists():
+            raise ValueError(f"{app_key}: missing filterSource")
+        if "dimensionSource" in manifest and not (ROOT / manifest["dimensionSource"]).exists():
+            raise ValueError(f"{app_key}: missing dimensionSource")
     # Every KPI/chart measure must be an approved catalog subscription. This
     # forbids private JSON/inline master-measure definitions in both apps.
     for app_key, manifest in manifests.items():
@@ -132,12 +143,14 @@ def determine_impacted(catalog: dict, manifests: dict, changed: set[str],
         modified = changed_metric_ids(catalog)
         affected |= {key for key, manifest in manifests.items()
                      if modified.intersection(manifest["catalogMeasures"])}
-    for key in manifests:
-        suffix = "1" if key == "presentation" else "2"
-        if f"apps/presentation{suffix}.json" in changed:
+    for key, manifest in manifests.items():
+        suffix = "1" if key == "presentation" else key.removeprefix("presentation")
+        candidates = {
+            f"apps/presentation{suffix}.json", manifest["dashboardSource"],
+            manifest.get("filterSource"), manifest.get("dimensionSource"),
+        }
+        if any(p in changed for p in candidates if p):
             affected.add(key)
-    if "apps/presentation2-objects.json" in changed:
-        affected.add("presentation2")
     if any(path.startswith("ci/") or path.startswith(".github/") for path in changed):
         affected |= set(manifests)
     return affected
@@ -229,10 +242,12 @@ def rollback(changes: list) -> None:
             print(f"WARNING: manual rollback required for {mid}: {exc}", flush=True)
 
 
-def deploy_secondary_sheet(qix: Qix, doc: int) -> None:
+def deploy_governed_sheets(qix: Qix, doc: int, manifest: dict) -> None:
     definitions = json.loads(
-        (ROOT / "apps" / "presentation2-objects.json").read_text(encoding="utf-8")
+        (ROOT / manifest["dashboardSource"]).read_text(encoding="utf-8")
     )
+    if len(definitions) != 1:
+        raise ValueError("One governed sheet per demo Presentation is supported")
     props = definitions[0]
     sheet_id = props["qInfo"]["qId"]
     opened = qix.call(doc, "GetObject", {"qId": sheet_id})
@@ -241,7 +256,7 @@ def deploy_secondary_sheet(qix: Qix, doc: int) -> None:
         created = qix.call(doc, "CreateObject", {"qProp": {k:v for k,v in props.items() if k != "qChildren"}})
         sheet = created.get("qReturn", {}).get("qHandle")
         if sheet is None:
-            raise RuntimeError("Unable to create secondary native Qlik sheet")
+            raise RuntimeError("Unable to create native Qlik sheet")
     else:
         # Update sheet grid and header without discarding existing native children.
         old = qix.call(sheet, "GetProperties", [])["qProp"]
@@ -266,7 +281,7 @@ def deploy_secondary_sheet(qix: Qix, doc: int) -> None:
         ref = props_read["qHyperCubeDef"]["qMeasures"][0].get("qLibraryId")
         if ref != measure_id or cube.get("qSize", {}).get("qcy", 0) < 1:
             raise RuntimeError(f"Native KPI {cid} did not bind to master measure {measure_id}")
-        print(f"[presentation2] KPI {cid} linked to qLibraryId={measure_id}", flush=True)
+        print(f"[{manifest[\'appKey\']}] KPI {cid} linked to qLibraryId={measure_id}", flush=True)
 
 
 def orchestrate_semantic_catalog(state: dict, *, run: Callable,
@@ -277,17 +292,24 @@ def orchestrate_semantic_catalog(state: dict, *, run: Callable,
     definitions = validate_catalog(catalog, manifests)  # no side effects
     changed = changed_paths()
 
-    is_new = not bool(state.get("presentation2"))
-    app2 = ensure_app(state, "presentation2", manifests["presentation2"]["appName"])
-    persist(state)
+    new_apps = set()
+    # First Presentation is already created/reloaded by the ETL orchestrator.
+    # Discover and provision every additional manifest-driven Presentation.
+    for key, manifest in sorted(manifests.items()):
+        if key == "presentation":
+            continue
+        if not state.get(key):
+            new_apps.add(key)
+        app_id = ensure_app(state, key, manifest["appName"])
+        persist(state)
+        if key in new_apps or scope == "full":
+            print(f"=== Deploying {key} model from transformed QVD ===", flush=True)
+            run("app", "build", "--app", app_id, "--script",
+                manifest["loadScript"])
 
-    # A newly created Presentation must have a data model before measures exist.
-    if is_new or scope == "full":
-        print("=== Deploying second Presentation model from transformed QVD ===", flush=True)
-        run("app", "build", "--app", app2, "--script",
-            manifests["presentation2"]["loadScript"])
     impacted = determine_impacted(
-        definitions, manifests, changed, full=(scope == "full"), new_app=is_new
+        definitions, manifests, changed, full=(scope == "full"),
+        new_app=bool(new_apps)
     )
     print(f"SEMANTIC-CATALOG impacted={sorted(impacted)} "
           f"changed={sorted(changed)}", flush=True)
@@ -303,8 +325,8 @@ def orchestrate_semantic_catalog(state: dict, *, run: Callable,
             connections.append((qix, doc))
             for mid in manifests[key]["catalogMeasures"]:
                 sync_one(qix, doc, key, definitions[mid], changes)
-            if key == "presentation2":
-                deploy_secondary_sheet(qix, doc)
+            if key != "presentation":
+                deploy_governed_sheets(qix, doc, manifests[key])
         for qix, doc in connections:
             qix.call(doc, "DoSave", [])
         # Validate all subscribed expressions from independent Engine sessions.
