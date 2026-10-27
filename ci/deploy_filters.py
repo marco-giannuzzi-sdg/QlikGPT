@@ -81,6 +81,13 @@ def main() -> None:
         doc = qix.call(-1, "OpenDoc", {"qDocName": sys.argv[1]})["qReturn"]["qHandle"]
         sheet = qix.call(doc, "GetObject", {"qId": "qlikgpt_sales_overview"})["qReturn"]["qHandle"]
         pane = qix.call(sheet, "GetChild", {"qId": "qlikgpt_filter_panel"})["qReturn"]["qHandle"]
+        print("QIX handles: doc=%s sheet=%s pane=%s" % (doc, sheet, pane), flush=True)
+        for handle_name, handle in (("sheet", sheet), ("pane", pane)):
+            try:
+                info = qix.call(handle, "GetInfo")
+                print("QIX %s info: %s" % (handle_name, info.get("qInfo")), flush=True)
+            except RuntimeError as exc:
+                print("QIX %s GetInfo diagnostic: %s" % (handle_name, exc), flush=True)
 
         for item in definitions:
             item_id, field, label = item["id"], item["field"], item["label"]
@@ -109,7 +116,13 @@ def main() -> None:
                     ],
                 },
             }
-            qix.call(pane, "CreateChild", [properties])
+            # Test the minimal CreateChild request first; apply listbox config
+            # separately using SetProperties after the handle exists.
+            qix.call(pane, "CreateChild", [{"qInfo": properties["qInfo"], "qExtendsId": ""}])
+            child_handle = find_child(qix, pane, item_id)
+            if child_handle is None:
+                raise RuntimeError("Minimal CreateChild did not return a child handle")
+            qix.call(child_handle, "SetProperties", {"qProp": properties})
             if find_child(qix, pane, item_id) is None:
                 raise RuntimeError(f"QIX did not register created child: {item_id}")
             print(f"Created native Qlik filter: {label} ({item_id})")
