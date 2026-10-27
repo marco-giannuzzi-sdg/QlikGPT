@@ -1,0 +1,240 @@
+{
+  "schemaVersion": 1,
+  "source": "QVS scripts and GitHub app registry (static declarations, not live Qlik metadata)",
+  "tenant": "https://sdggroup-it.eu.qlikcloud.com",
+  "apps": {
+    "etl1": {
+      "key": "etl1",
+      "name": "QlikGPT - 01 ETL RAW",
+      "type": "etl",
+      "script": "scripts/etl1.qvs",
+      "appId": "932480d2-415d-4535-9267-c699f44c55c6",
+      "reads": [],
+      "writes": [
+        {
+          "uri": "lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd",
+          "format": "qvd",
+          "line": 31,
+          "table": "RawOrders"
+        }
+      ],
+      "residents": [],
+      "autogenerate": [
+        5000
+      ]
+    },
+    "etl2": {
+      "key": "etl2",
+      "name": "QlikGPT - 02 ETL TRANSFORM",
+      "type": "etl",
+      "script": "scripts/etl2.qvs",
+      "appId": "70ba9d05-24b7-46ec-8b8c-560e8169c3d1",
+      "reads": [
+        {
+          "uri": "lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd",
+          "format": "qvd",
+          "line": 14
+        }
+      ],
+      "writes": [
+        {
+          "uri": "lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd",
+          "format": "qvd",
+          "line": 36,
+          "table": "SalesClean"
+        }
+      ],
+      "residents": [
+        "RawOrders"
+      ],
+      "autogenerate": []
+    },
+    "presentation": {
+      "key": "presentation",
+      "name": "QlikGPT - 03 PRESENTATION",
+      "type": "presentation",
+      "script": "scripts/presentation.qvs",
+      "manifest": "apps/presentation1.json",
+      "appId": "07dfa926-4895-4fb2-af4c-eac90e9eb2cb",
+      "reads": [
+        {
+          "uri": "lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd",
+          "format": "qvd",
+          "line": 27
+        }
+      ],
+      "writes": [],
+      "residents": [
+        "FactSales"
+      ],
+      "autogenerate": []
+    },
+    "presentation2": {
+      "key": "presentation2",
+      "name": "QlikGPT - 04 PRESENTATION SHARED",
+      "type": "presentation",
+      "script": "scripts/presentation.qvs",
+      "manifest": "apps/presentation2.json",
+      "appId": "04280b14-6ba5-4fe9-90d6-2ff8fa1c994f",
+      "reads": [
+        {
+          "uri": "lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd",
+          "format": "qvd",
+          "line": 27
+        }
+      ],
+      "writes": [],
+      "residents": [
+        "FactSales"
+      ],
+      "autogenerate": []
+    }
+  },
+  "resources": [
+    {
+      "id": "resource:lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd",
+      "uri": "lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd",
+      "format": "qvd",
+      "producer": "etl1",
+      "consumers": [
+        "etl2"
+      ],
+      "reads": [
+        {
+          "app": "etl2",
+          "script": "scripts/etl2.qvs",
+          "uri": "lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd",
+          "format": "qvd",
+          "line": 14
+        }
+      ],
+      "writes": [
+        {
+          "app": "etl1",
+          "script": "scripts/etl1.qvs",
+          "uri": "lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd",
+          "format": "qvd",
+          "line": 31,
+          "table": "RawOrders"
+        }
+      ]
+    },
+    {
+      "id": "resource:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd",
+      "uri": "lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd",
+      "format": "qvd",
+      "producer": "etl2",
+      "consumers": [
+        "presentation",
+        "presentation2"
+      ],
+      "reads": [
+        {
+          "app": "presentation",
+          "script": "scripts/presentation.qvs",
+          "uri": "lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd",
+          "format": "qvd",
+          "line": 27
+        },
+        {
+          "app": "presentation2",
+          "script": "scripts/presentation.qvs",
+          "uri": "lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd",
+          "format": "qvd",
+          "line": 27
+        }
+      ],
+      "writes": [
+        {
+          "app": "etl2",
+          "script": "scripts/etl2.qvs",
+          "uri": "lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd",
+          "format": "qvd",
+          "line": 36,
+          "table": "SalesClean"
+        }
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "upstream": "etl1",
+      "downstream": "etl2",
+      "resources": [
+        "lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd"
+      ]
+    },
+    {
+      "upstream": "etl2",
+      "downstream": "presentation",
+      "resources": [
+        "lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd"
+      ]
+    },
+    {
+      "upstream": "etl2",
+      "downstream": "presentation2",
+      "resources": [
+        "lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd"
+      ]
+    }
+  ],
+  "resourceLinks": [
+    {
+      "upstream": "etl1",
+      "downstream": "etl2",
+      "resource": "lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd",
+      "kind": "qvd"
+    },
+    {
+      "upstream": "etl2",
+      "downstream": "presentation",
+      "resource": "lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd",
+      "kind": "qvd"
+    },
+    {
+      "upstream": "etl2",
+      "downstream": "presentation2",
+      "resource": "lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd",
+      "kind": "qvd"
+    }
+  ],
+  "impact": {
+    "etl1": {
+      "direct": [
+        "etl2"
+      ],
+      "transitive": [
+        "etl2",
+        "presentation",
+        "presentation2"
+      ],
+      "indirect": [
+        "presentation",
+        "presentation2"
+      ]
+    },
+    "etl2": {
+      "direct": [
+        "presentation",
+        "presentation2"
+      ],
+      "transitive": [
+        "presentation",
+        "presentation2"
+      ],
+      "indirect": []
+    },
+    "presentation": {
+      "direct": [],
+      "transitive": [],
+      "indirect": []
+    },
+    "presentation2": {
+      "direct": [],
+      "transitive": [],
+      "indirect": []
+    }
+  },
+  "warnings": []
+}
