@@ -93,7 +93,7 @@ def dimension_properties(item: dict) -> dict:
 
 def variable_properties(item: dict) -> dict:
     return {
-        "qInfo": {"qId": item["id"], "qType": "Variable"},
+        "qInfo": {"qId": item["id"], "qType": "variable"},
         "qName": item["name"],
         "qComment": item["description"],
         "qDefinition": item["definition"],
