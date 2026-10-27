@@ -1,124 +1,73 @@
-# QlikGPT - Qlik Sense SaaS three-app QVD PoC
+# QlikGPT — Native Qlik Sense SaaS as Code
 
-This project automatically creates **three separate Qlik Cloud analytics applications** and deploys their respective Qlik load scripts from GitHub source files, with QVD handoffs.
+This PoC separates **three Qlik Cloud applications** following the classic Qlik extract/transform/presentation architecture, and supports a **PC-free GitHub Actions CI/CD** workflow, including a path for **native Qlik frontend development via JSON**.
 
-## Design
+## Architecture
 
 ```text
-App 1: QlikGPT - 01 ETL RAW
-    scripts/etl1.qvs
-    AUTOGENERATE 5000 orders
-        |
-        v STORE
-    lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd
-        |
-        v LOAD FROM QVD
-App 2: QlikGPT - 02 ETL TRANSFORM
-    scripts/etl2.qvs
-    Clean rows, calculate Revenue/Cost
-        |
-        v STORE
-    lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd
-        |
-        v LOAD FROM QVD
-App 3: QlikGPT - 03 PRESENTATION
-    scripts/presentation.qvs
-    FactSales + Calendar associative model
+ChatGPT / GitHub (source)
+  |
+  v GitHub Actions (hosted runner: no local PC)
+  |
+  +-- QlikGPT - 01 ETL RAW
+  |     scripts/etl1.qvs
+  |     5000 synthetic orders -> DataFiles/QlikGPT/01_RAW/RawOrders.qvd
+  |
+  +-- QlikGPT - 02 ETL TRANSFORM
+  |     scripts/etl2.qvs
+  |     RawOrders.qvd -> DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd
+  |
+  +-- QlikGPT - 03 PRESENTATION
+        scripts/presentation.qvs
+        Sales_Clean.qvd -> FactSales / Calendar
+        frontend/*.json -> native Qlik sheets, measures, dimensions, charts
 ```
 
-All three applications **must be in the same Qlik Cloud space** because `lib://DataFiles/...` without an explicit space name refers to the current space. By default, the scripts create them in the authenticated user's personal space.
+All three apps **must live in the same space** (personal space by default). The first single-app PoC is not used or modified.
 
-### Files
+## PC-free GitHub Actions deployment (recommended)
 
-| File | What it does |
-| --- | --- |
-| `scripts/etl1.qvs` | ETL1: generates synthetic RAW orders, stores RAW QVD |
-| `scripts/etl2.qvs` | ETL2: loads RAW QVD, applies transformations, stores clean QVD |
-| `scripts/presentation.qvs` | Presentation: loads clean QVD into FactSales and Calendar |
-| `create-apps.cmd` | Creates the three Qlik apps and saves their real App IDs locally |
-| `deploy-all.cmd` | Deploys the appropriate QVS to each app, reloads in dependency order |
-| `run-pipeline.cmd` | **One-command setup**: creates apps (if absent) and deploys all scripts |
-| `build.cmd` | Compatibility alias for `run-pipeline.cmd` |
-| `.local/app-ids.cmd` | Auto-generated, git-ignored state file holding App IDs |
+Workflow: [`.github/workflows/deploy-qlik-cloud.yml`](.github/workflows/deploy-qlik-cloud.yml)
 
-## Requirements
+The Actions workflow:
+1. Runs on a **GitHub-hosted Ubuntu runner** (no user's workstation involved).
+2. Installs Qlik CLI v3.4.0 and authenticates against Qlik Cloud.
+3. Creates the 3 apps once; stores their App IDs in [`deployment/app-ids.json`](deployment/app-ids.json) and commits that file back to the repository.
+4. Deploys and reloads `scripts/etl1.qvs`, `scripts/etl2.qvs`, and `scripts/presentation.qvs`, in order.
+5. Applies `frontend/dimensions.json`, `frontend/measures.json` and `frontend/objects.json` to the Presentation app when these arrays are populated.
+6. Evaluates `Count(OrderID)` to check the Presentation app can be queried.
 
-- Windows CMD (not PowerShell required)
-- Qlik CLI (`qlik.exe`) in the repository folder or on PATH
-- A working Qlik CLI login/context (`qlik.exe user me`)
-- Permission to create and edit apps, reload, and write QVDs to the target space
-- Internet access to the Qlik Cloud tenant
+### One-time GitHub configuration (browser only, **no PC scripts**)
 
-## Quick start from Windows CMD
+Open this repository -> **Settings -> Secrets and variables -> Actions**.
 
-1. Clone the repository (or download the repository ZIP and extract it).
-2. Open CMD **inside the repository folder**.
-3. If `qlik.exe` is not available via PATH, copy it into the repository folder (it is ignored by Git).
-4. Confirm authentication: `qlik.exe user me`.
-5. Run:
+1. **Repository secret:** `QLIK_API_KEY` — the existing personal development API key. Never commit or paste it into chat.
+2. **Repository variable:** `QLIK_CICD_ENABLED` = `true` (set this only when the tenant and token are ready).
+3. **Optional variable:** `QLIK_SPACE_ID` = the Qlik shared development space UUID; leave unset to use the current user's personal space.
 
-```cmd
-run-pipeline.cmd
-```
+Then go to **Actions -> Deploy QlikGPT to Qlik Cloud -> Run workflow**. Subsequent commits on `main` that change `scripts/`, `frontend/` or `ci/` deploy automatically, while changes solely to documentation or `deployment/app-ids.json` do not trigger a new deployment.
 
-This runs the three actions end-to-end. Qlik CLI reads each **local QVS source file automatically** using the `--script` option; there is **no manual copy/paste** into the Qlik editor.
+**Permissions:** the repository must allow GitHub Actions to write repository contents so it can save the generated App IDs. On first execution, this workflow **creates three apps in your Qlik Cloud tenant** and reloads them. If the user cannot enable repo settings, an organization administrator must approve access.
 
-### Optional separate commands
+**Security:** using long-lived user API keys in CI is a PoC convenience only. Prefer an approved Qlik OAuth machine-to-machine identity for enterprise production. Consider making this repository private; never put corporate confidential data or API keys in Git.
 
-```cmd
-create-apps.cmd
-deploy-all.cmd
-```
+**First run not yet verified:** repository code is present, but creating apps and applying the scripts requires configuring the GitHub secret and running the workflow. Inspect the GitHub Actions run logs if any CLI/space-permission issue occurs.
 
-### Shared space instead of personal space (optional)
+## Frontend as Code — user never has to drag/drop
 
-Only *before the first creation*, set your target shared space ID in the CMD session:
+Qlik CLI `qlik app build` supports `--objects`, `--measures`, `--dimensions` and `--no-reload`. The three files in `frontend/` are the declarative **deployable native Qlik object definitions**, and `frontend/dashboard-spec.json` describes the AI-target dashboard.
 
-```cmd
-set QLIK_SPACE_ID=your-shared-space-uuid
-run-pipeline.cmd
-```
+Currently the deployable JSON files contain empty arrays `[]`, so the first GitHub Actions run builds the **data layer only**. We will generate real Qlik Engine JSON object definitions and validate them in the test tenant in the next frontend iteration: **sheets, grid layout, KPIs, charts, filters, master items and chart styling**, without manual UI editing.
 
-All three applications are created in that same space. This requires appropriate edit and data-file permissions. Do not change space after IDs are generated without migrating all three apps and their QVD files.
+See [Frontend README](frontend/README.md) for file purposes.
 
-## Re-running
+## Local Windows CMD path (legacy, optional)
 
-- App IDs are written locally to `.local/app-ids.cmd` **immediately after each successfully-created app**.
-- Later executions reuse the same apps: no duplicate apps are created as long as that local state file is retained.
-- Subsequent `deploy-all.cmd` runs overwrite the **load script** of each saved app, then reload sequentially.
-- If a step fails, the pipeline stops and does not execute downstream steps.
-- Randomized demo sales data is regenerated on each ETL1 reload, so sales KPI values are not deterministic.
+`create-apps.cmd`, `deploy-all.cmd`, and `run-pipeline.cmd` remain for local recovery or troubleshooting. The recommended GitHub Actions path does **not** call them or require a local computer.
 
-## Data model and validation
+## Useful references
 
-ETL1: 5,000 rows in `RawOrders` and the RAW QVD.
-
-ETL2: rows passing basic validation; columns such as OrderID, OrderDate, Market, ProductCategory, Channel, CustomerID, Quantity, UnitPrice, Revenue, Cost.
-
-Presentation: `FactSales` and `Calendar` related only by `OrderDate`; supports Revenue, Cost, Margin, MarginPct and time/group breakdowns.
-
-```cmd
-REM Verify using the generated Presentation App ID:
-call .local\app-ids.cmd
-qlik.exe app eval "Count(OrderID)" --app "%QLIK_PRESENTATION_APP_ID%"
-```
-
-Expected: `5000` rows.
-
-## Security notes
-
-- This is a PoC with **synthetic** data only.
-- The GitHub repository may be public. Never add tenant credentials, source-system secrets or client data.
-- CLI authentication stays on the local workstation.
-- The local App IDs file is deliberately excluded from source control.
-- The previously created single PoC application is **not touched** by this new pipeline.
-- GitHub commits do **not** automatically deploy to Qlik Cloud; running the CMD launcher performs deployment.
-
-## Next iteration
-
-Generate master measures, dimensions, JSON visualization objects and sheets as versioned code for the Presentation application. Add a safer staging/production promotion process, tests, schedules and possibly GitHub Actions on an approved runner.
-
-Official reference:
-- https://qlik.dev/toolkits/qlik-cli/app/app-create/
-- https://qlik.dev/toolkits/qlik-cli/app/app-build/
-- https://help.qlik.com/en-US/cloud-services/Subsystems/Hub/Content/Sense_Hub/Spaces/manage-data-files-spaces.htm
+- [Qlik CLI app build](https://qlik.dev/toolkits/qlik-cli/app/app-build/)
+- [Qlik CLI context create](https://qlik.dev/toolkits/qlik-cli/context/context-create/)
+- [Qlik Engine objects, sheets, visuals](https://qlik.dev/toolkits/qlik-api/guides/app-sheet-list-objects/)
+- [Qlik Cloud version control and DTAP](https://qlik.dev/manage/oem/product-development/dtap-environments/)
