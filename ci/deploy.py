@@ -287,20 +287,29 @@ def main() -> None:
         print("Frontend-only deployment: retaining ETL1, ETL2 and Presentation data.", flush=True)
 
     # Multi-app governed master measures; creates second Presentation on first run.
-    from semantic_catalog import orchestrate_semantic_catalog
+    from semantic_catalog import orchestrate_semantic_catalog, changed_paths
+    files_changed = changed_paths()
     orchestrate_semantic_catalog(
         state, run=run, ensure_app=ensure_app, persist=persist, scope=scope
     )
 
-    deploy_frontend(state["presentation"])
-    # The Qlik CLI cannot round-trip three-level filterpane property trees.
-    # Create nested listboxes through the official QIX Engine API.
-    print("Deploying native listboxes via QIX API...", flush=True)
-    subprocess.run(
-        [sys.executable, "ci/deploy_filters.py", state["presentation"]],
-        cwd=ROOT, check=True,
+    # A catalog-only commit deploys ONLY to the subscribed apps.
+    # Rebuild the original Sales Overview only when its own frontend or CI changes.
+    refresh_p1_frontend = (
+        scope == "full" or not files_changed or
+        any(path.startswith(("frontend/", "ci/", ".github/"))
+            for path in files_changed)
     )
-    validate_frontend(state["presentation"])
+    if refresh_p1_frontend:
+        deploy_frontend(state["presentation"])
+        # Qlik CLI does not fully materialize nested sheet children.
+        subprocess.run(
+            [sys.executable, "ci/deploy_filters.py", state["presentation"]],
+            cwd=ROOT, check=True,
+        )
+        validate_frontend(state["presentation"])
+    else:
+        print("Skipping Presentation 1 frontend: catalog/manifests-only change.", flush=True)
     print("=== Presentation Count(OrderID) ===", flush=True)
     run("app", "eval", "Count(OrderID)", "--app", state["presentation"])
     print(f"Presentation app: {TENANT}/sense/app/{state['presentation']}", flush=True)
