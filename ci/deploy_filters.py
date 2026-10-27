@@ -55,9 +55,18 @@ class Qix:
         self.ws.close()
 
 
-def child_ids(qix: Qix, handle: int) -> set[str]:
-    result = qix.call(handle, "GetChildInfos", [])
-    return {info["qId"] for info in result.get("qInfos", [])}
+def find_child(qix: Qix, parent: int, child_id: str) -> int | None:
+    """Use GetChild for a specific known ID; some engines reject GetChildInfos."""
+    try:
+        result = qix.call(parent, "GetChild", {"qId": child_id})
+        return result["qReturn"]["qHandle"]
+    except RuntimeError as exc:
+        error = str(exc)
+        # A missing object can return -32602 or a not-found error from QIX.
+        # Never suppress unrelated authentication / session / application errors.
+        if "error -32602" in error or "not found" in error.lower():
+            return None
+        raise
 
 
 def main() -> None:
@@ -72,13 +81,12 @@ def main() -> None:
         doc = qix.call(-1, "OpenDoc", {"qDocName": sys.argv[1]})["qReturn"]["qHandle"]
         sheet = qix.call(doc, "GetObject", {"qId": "qlikgpt_sales_overview"})["qReturn"]["qHandle"]
         pane = qix.call(sheet, "GetChild", {"qId": "qlikgpt_filter_panel"})["qReturn"]["qHandle"]
-        existing = child_ids(qix, pane)
 
         for item in definitions:
             item_id, field, label = item["id"], item["field"], item["label"]
             if not item_id.startswith("qlikgpt_list_"):
                 raise ValueError(f"Unexpected listbox ID: {item_id}")
-            if item_id in existing:
+            if find_child(qix, pane, item_id) is not None:
                 print(f"Filter already exists: {label} ({item_id})")
                 continue
             properties = {
@@ -93,18 +101,16 @@ def main() -> None:
                     "qInitialDataFetch": [{"qLeft": 0, "qTop": 0, "qWidth": 1, "qHeight": 100}],
                 },
             }
-            created = qix.call(pane, "CreateChild", {"qProp": properties})
-            returned_id = created.get("qInfo", {}).get("qId", item_id)
-            if returned_id != item_id:
-                raise RuntimeError(f"Filter created with unexpected ID: {returned_id}")
-            existing.add(item_id)
+            qix.call(pane, "CreateChild", {"qProp": properties})
+            if find_child(qix, pane, item_id) is None:
+                raise RuntimeError(f"QIX did not register created child: {item_id}")
             print(f"Created native Qlik filter: {label} ({item_id})")
 
-        after = child_ids(qix, pane)
         needed = {d["id"] for d in definitions}
-        if not needed.issubset(after):
-            raise RuntimeError("One or more listboxes were not persisted in filterpane")
-        qix.call(doc, "DoSave", [])
+        missing = [child_id for child_id in needed if find_child(qix, pane, child_id) is None]
+        if missing:
+            raise RuntimeError("Missing filterpane children: " + ", ".join(missing))
+        qix.call(doc, "DoSave")
         print(f"QIX filterpane verified: {len(needed)} native listboxes saved.")
     finally:
         qix.close()
