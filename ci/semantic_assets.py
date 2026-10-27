@@ -97,7 +97,6 @@ def variable_properties(item: dict) -> dict:
         "qName": item["name"],
         "qComment": item["description"],
         "qDefinition": item["definition"],
-        "qIncludeInBookmark": False,
     }
 
 
@@ -121,7 +120,7 @@ def mismatch(props: dict | None, expected: dict, kind: str) -> list[str]:
         }
     else:
         keys = {key:(props.get(key), expected[key])
-                for key in ("qName", "qComment", "qDefinition", "qIncludeInBookmark")}
+                for key in ("qName", "qComment", "qDefinition")}
     return [key for key, (a, b) in keys.items() if a != b]
 
 
