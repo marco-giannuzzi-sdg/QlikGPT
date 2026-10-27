@@ -286,21 +286,21 @@ def main() -> None:
     # Rebuild the original Sales Overview only when its own frontend or CI changes.
     refresh_p1_frontend = (
         scope == "full" or not files_changed or
-        any(path.startswith(("apps/presentation1", "frontend/", "ci/", ".github/"))
+        any(path.startswith(("apps/presentation1", "ci/", ".github/"))
             for path in files_changed)
     )
     if refresh_p1_frontend:
         deploy_dimensions(state["presentation"])
         # Qlik CLI does not fully materialize nested sheet children.
         subprocess.run(
-            [sys.executable, "ci/deploy_filters.py", state["presentation"]],
+            [sys.executable, "ci/deploy_visuals.py", state["presentation"]],
             cwd=ROOT, check=True,
         )
         validate_frontend(state["presentation"])
         # Once every dashboard KPI/chart is QIX-linked to a catalog measure,
         # remove only the four known unused PoC master-item duplicates.
         from semantic_catalog import prune_unsubscribed_measures, read_json, CATALOG
-        from deploy_filters import Qix
+        from deploy_visuals import Qix
         catalog = read_json(CATALOG)
         subscriptions = set(read_json(ROOT / "apps/presentation1.json")["catalogMeasures"])
         qix = Qix(state["presentation"])

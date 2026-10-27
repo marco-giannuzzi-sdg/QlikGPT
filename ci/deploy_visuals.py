@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Create native Qlik filter pane listboxes using QIX WebSocket from GitHub Actions.
+"""Deploy native Qlik Sales Overview sheet, charts, KPI and filters using QIX.
 
 QLIK_API_KEY stays in a GitHub secret and is never logged. Idempotent on reruns.
 """

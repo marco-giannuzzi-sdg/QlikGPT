@@ -1,38 +1,39 @@
-# Central Semantic Catalog — QlikGPT
+# Guida al Semantic Catalog
 
-The authoritative shared metric definitions are in [measures.json](measures.json). Two Presentation application manifests subscribe to them:
+## Dove definire le misure
 
-| Presentation | Shared measures |
-| --- | --- |
-| [Presentation 1](../apps/presentation1.json) | `qlikgpt_shared_revenue`, `qlikgpt_shared_orders` |
-| [Presentation 2](../apps/presentation2.json) | `qlikgpt_shared_revenue`, `qlikgpt_shared_margin_pct` |
+**Solo** [catalog/measures.json](measures.json) contiene le definizioni dei master item, anche quando nessuna app li utilizza. Ogni misura ha un ID stabile, `expression`, `format`, `title`, `version`, `description` e `requiredFields`.
 
-Presentation 1 also preserves its **four local master measures** in `frontend/measures.json`; they are *not* part of the global catalog.
+Le Presentations contengono esclusivamente una lista `catalogMeasures` di ID, non copie delle formule. Un'app senza misura corrispondente nel manifest **non deve riceverla**. Il namespace storico `qlikgpt_shared_*` è stato mantenuto per preservare gli ID Qlik già in uso: nel nostro progetto significa *governata*, non necessariamente usata da più applicazioni.
 
-## Change management
+## Esempio: una misura condivisa
 
-Edit the `expression` for `qlikgpt_shared_revenue` and commit to `main`. GitHub Actions detects the changed measure ID, finds subscribed apps, and updates the same native master-measure ID in each. It reads back the expression using QIX `GetMeasure` and checks that the app has required fields; all updates execute on a GitHub-hosted runner, **no workstation required**.
+Se in GitHub modifichi `qlikgpt_shared_revenue`, il diff delle definizioni individua che il suo ID è sottoscritto sia da `presentation1.json` sia da `presentation2.json`. Actions distribuisce la nuova formula in entrambe via QIX `SetProperties`, legge la formula nuovamente da Qlik ed esegue un test `qlik app eval`.
 
-Changes to a measure subscribed only by one Presentation should deploy only to that subscriber. The workflow preserves stable IDs, checks for duplicate IDs, validates references and preflights expressions. Unsubscribing does **not** automatically delete an existing Qlik master measure; deletion needs a separate approved operation.
+## Esempio: una misura ancora inutilizzata
 
-### Example
+`qlikgpt_shared_average_order` è già nel catalogo. Per usarla domani in Presentation 2:
 
-```json
-{
-  "id": "qlikgpt_shared_revenue",
-  "title": "Ricavi condivisi",
-  "expression": "Sum(Revenue)",
-  "requiredFields": ["Revenue"]
-}
-```
+1. Apri `apps/presentation2.json`.
+2. Aggiungi `"qlikgpt_shared_average_order"` al suo array `catalogMeasures`.
+3. Esegui commit su `main`.
 
-A chart linked through `qLibraryId` inherits changes to its master measure. An inline expression does not. Presentation 2 contains two native KPI objects linked to shared library measures.
+Il runner crea il nuovo master item in Presentation 2; **il catalogo resta identico**, e Presentation 1 non cambia. Potrai poi creare un nuovo KPI facendo riferimento al medesimo ID in `apps/presentation2-objects.json`.
 
-The pipeline deliberately uses normalized fields from the common Sales_Clean QVD in both Presentation apps. Different business models will require compatibility checks or per-app translation.
+## Terza o successiva Presentation
 
-### Limits
+Per una nuova app aggiungi:
+- `apps/presentation3.json`, con `appKey="presentation3"`, `appName`, `loadScript="scripts/presentation.qvs"`, `catalogMeasures` e `dashboardSource="apps/presentation3-objects.json"`;
+- `apps/presentation3-objects.json`, con le definizioni del foglio Qlik e relativi figli `qLibraryId`.
 
-- Changes are propagated on a successful **CI deployment**, not instantaneously on Qlik Cloud without GitHub Actions.
-- For the PoC, deploy to two editable development apps; published/managed apps have distinct promotion requirements.
-- Automatic deletion and universal transactional multi-app deployment are not claimed.
-- Never store API keys or client data in the public repository.
+L'orchestratore rileva i manifest `presentationN.json`, crea e inizializza le nuove app, salva i loro App ID in `deployment/app-ids.json` e distribuisce soltanto le misure a cui si sono iscritte. Le nuove app devono poter leggere i QVD e avere gli stessi campi semantici oppure fornire una propria mappatura dati in una futura estensione.
+
+## Controlli
+
+- JSON valido, ID univoci, sottoscrizioni valide, niente misure inline nei KPI/grafici.
+- Qlik GetField per `requiredFields`, GetMeasure/SetProperties e readback della definizione.
+- QIX `qLibraryId` dei grafici, ipercubi non vuoti e valutazione espressioni.
+- Misure non sottoscritte eliminate **solo dopo controllo delle dipendenze**, mai in maniera cieca.
+- Su errori nel mezzo di un deployment, rollback compensativo *best effort*, con log espliciti.
+
+Il codice Qlik è aggiornato tramite GitHub Actions, senza dipendenza dal PC dell'autore.

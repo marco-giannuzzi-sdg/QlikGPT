@@ -17,7 +17,7 @@ Use a coherent BI design system rather than Qlik's default color on every metric
 
 ## Chart definitions
 
-All code is stored in [frontend/objects.json](../frontend/objects.json).
+The Sales Overview dashboard is stored in [apps/presentation1-objects.json](../apps/presentation1-objects.json).
 
 - **Revenue trend:** 20 chronological `YearMonth` values, native Qlik linechart, 3px solid teal line, discrete date axis, no legend, data points enabled, currency value format.
 - **Revenue by market:** native Qlik barchart, horizontal orientation, sorted by `Sum(Revenue)` descending, value labels enabled, matching teal hue.
@@ -35,3 +35,7 @@ Any commit modifying only `frontend/**` runs a **frontend-only** deploy, leaving
 ## Next level
 
 A tenant-level Qlik custom theme can extend margins, typography, background and chart palettes. This is deliberately not imported without checking tenant permissions and the rendered native dashboard first.
+
+## Central measure governance
+
+All four KPI measures and both Revenue charts use `qLibraryId` references to master measures in `catalog/measures.json`. No inline measure formulas or app-specific master-measure files. Display formatting is controlled by the corresponding catalog measure. The second Presentation uses the same contract.

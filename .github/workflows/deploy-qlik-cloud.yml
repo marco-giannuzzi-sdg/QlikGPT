@@ -1,4 +1,4 @@
-name: Deploy QlikGPT to Qlik Cloud
+name: QlikGPT — Governed Qlik Cloud deployments
 
 on:
   workflow_dispatch:
@@ -6,7 +6,6 @@ on:
     branches: [main]
     paths:
       - 'scripts/**'
-      - 'frontend/**'
       - 'catalog/**'
       - 'apps/**'
       - 'tests/**'
@@ -23,7 +22,7 @@ permissions:
 
 jobs:
   qlik-deploy:
-    name: Three-app ETL and frontend deploy
+    name: ETL and governed Presentation deployment
     # To prevent accidental runs before credentials are configured.
     if: ${{ vars.QLIK_CICD_ENABLED == 'true' }}
     runs-on: ubuntu-latest
@@ -66,7 +65,7 @@ jobs:
         shell: bash
         run: |
           python3 -m unittest discover -s tests -v
-          python3 -m py_compile ci/semantic_catalog.py ci/deploy.py ci/deploy_filters.py
+          python3 -m py_compile ci/semantic_catalog.py ci/deploy.py ci/deploy_visuals.py
 
       - name: Authenticate to Qlik Cloud
         shell: bash
