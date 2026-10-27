@@ -1,6 +1,7 @@
 """Pure validation tests for multi-app Semantic Catalog (no Qlik credentials needed)."""
 from __future__ import annotations
 from copy import deepcopy
+import json
 from pathlib import Path
 import sys
 import unittest
@@ -94,10 +95,10 @@ class CatalogValidationTests(unittest.TestCase):
 
     def test_impact_analysis_non_shared_targets_one(self):
         catalog = sc.validate_catalog(self.catalog, self.manifests)
-        with patch.object(sc, "changed_metric_ids", return_value={"qlikgpt_shared_margin_pct"}):
+        with patch.object(sc, "changed_metric_ids", return_value={"qlikgpt_shared_orders"}):
             result = sc.determine_impacted(
                 catalog, self.manifests, {"catalog/measures.json"}, False, False)
-        self.assertEqual(result, {"presentation2"})
+        self.assertEqual(result, {"presentation"})
 
     def test_unrelated_frontend_has_no_semantic_changes(self):
         catalog = sc.validate_catalog(self.catalog, self.manifests)
