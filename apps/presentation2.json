@@ -4,8 +4,7 @@
   "loadScript": "scripts/presentation.qvs",
   "catalogMeasures": [
     "qlikgpt_shared_revenue",
-    "qlikgpt_shared_margin_pct",
-    "qlikgpt_shared_average_order"
+    "qlikgpt_shared_margin_pct"
   ],
   "dashboardSource": "apps/presentation2-objects.json",
   "description": "Catalog-governed native KPIs linked with qLibraryId."
