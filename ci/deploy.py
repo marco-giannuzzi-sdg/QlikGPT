@@ -273,10 +273,17 @@ def main() -> None:
         ensure_app(state, kind, name)
     persist(state)
 
-    # Do not switch app ownership or silently target a production app.
-    for kind, name, script in APPS:
-        print(f"=== Deploying {name} ===", flush=True)
-        run("app", "build", "--app", state[kind], "--script", script)
+    # Frontend-only commits must not regenerate synthetic orders.
+    # This keeps sales KPI numbers stable while styling the Qlik dashboard.
+    scope = os.environ.get("QLIK_DEPLOY_SCOPE", "full")
+    if scope not in {"full", "frontend"}:
+        raise ValueError("Unknown QLIK_DEPLOY_SCOPE: " + scope)
+    if scope == "full":
+        for kind, name, script in APPS:
+            print(f"=== Deploying {name} ===", flush=True)
+            run("app", "build", "--app", state[kind], "--script", script)
+    else:
+        print("Frontend-only deployment: retaining ETL1, ETL2 and Presentation data.", flush=True)
 
     deploy_frontend(state["presentation"])
     # The Qlik CLI cannot round-trip three-level filterpane property trees.
