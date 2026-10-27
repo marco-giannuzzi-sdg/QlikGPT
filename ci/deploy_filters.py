@@ -89,19 +89,26 @@ def main() -> None:
             if find_child(qix, pane, item_id) is not None:
                 print(f"Filter already exists: {label} ({item_id})")
                 continue
+            # Qlik documents CreateChild with positional JSON-RPC params.
+            # Keep properties minimal to mirror the native Engine example.
             properties = {
                 "qInfo": {"qId": item_id, "qType": "listbox"},
-                "qExtendsId": "",
                 "visualization": "listbox",
                 "title": label,
                 "qListObjectDef": {
                     "qStateName": "$",
-                    "qDef": {"qGrouping": "N", "qFieldDefs": [field], "qFieldLabels": [label]},
-                    "qShowAlternatives": True,
-                    "qInitialDataFetch": [{"qLeft": 0, "qTop": 0, "qWidth": 1, "qHeight": 100}],
+                    "qLibraryId": "",
+                    "qDef": {
+                        "qFieldDefs": [field],
+                        "qFieldLabels": [label],
+                        "qSortCriterias": [{"qSortByLoadOrder": 1}],
+                    },
+                    "qInitialDataFetch": [
+                        {"qTop": 0, "qHeight": 100, "qLeft": 0, "qWidth": 1}
+                    ],
                 },
             }
-            qix.call(pane, "CreateChild", {"qProp": properties})
+            qix.call(pane, "CreateChild", [properties])
             if find_child(qix, pane, item_id) is None:
                 raise RuntimeError(f"QIX did not register created child: {item_id}")
             print(f"Created native Qlik filter: {label} ({item_id})")
