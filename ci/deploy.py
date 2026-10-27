@@ -297,6 +297,23 @@ def main() -> None:
             cwd=ROOT, check=True,
         )
         validate_frontend(state["presentation"])
+        # Once every dashboard KPI/chart is QIX-linked to a catalog measure,
+        # remove only the four known unused PoC master-item duplicates.
+        from semantic_catalog import prune_unsubscribed_measures, read_json, CATALOG
+        from deploy_filters import Qix
+        catalog = read_json(CATALOG)
+        subscriptions = set(read_json(ROOT / "apps/presentation1.json")["catalogMeasures"])
+        qix = Qix(state["presentation"])
+        try:
+            doc = qix.call(-1, "OpenDoc",
+                           {"qDocName": state["presentation"]})["qReturn"]["qHandle"]
+            prune_unsubscribed_measures(
+                qix, doc, "presentation", {m["id"] for m in catalog["measures"]},
+                subscriptions, legacy=True
+            )
+        finally:
+            qix.close()
+
     else:
         print("Skipping Presentation 1 frontend: catalog/manifests-only change.", flush=True)
     print("=== Presentation Count(OrderID) ===", flush=True)
