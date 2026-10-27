@@ -7,6 +7,7 @@ import os
 from pathlib import Path
 import re
 import subprocess
+import tempfile
 import time
 from urllib import error as urlerror
 from urllib import parse as urlparse
@@ -201,6 +202,53 @@ def deploy_frontend(app_id: str) -> None:
     print("Frontend JSON applied to the Presentation app.")
 
 
+
+def validate_frontend(app_id: str) -> None:
+    """Round-trip the Presentation app through Qlik CLI to confirm persisted objects."""
+    expected_ids = {
+        "qlikgpt_sales_overview",
+        "qlikgpt_kpi_revenue", "qlikgpt_kpi_orders",
+        "qlikgpt_kpi_margin", "qlikgpt_kpi_margin_pct",
+        "qlikgpt_chart_month", "qlikgpt_chart_market",
+        "qlikgpt_m_revenue", "qlikgpt_m_orders",
+        "qlikgpt_m_margin", "qlikgpt_m_margin_pct",
+        "qlikgpt_d_market", "qlikgpt_d_yearmonth",
+        "qlikgpt_d_category", "qlikgpt_d_year",
+        "qlikgpt_d_channel",
+    }
+
+    ids: set[str] = set()
+    with tempfile.TemporaryDirectory(prefix="qlikgpt-audit-") as directory:
+        output = Path(directory) / "extracted"
+        run("app", "unbuild", "--app", app_id, "--dir", str(output))
+
+        def scan(value: object) -> None:
+            if isinstance(value, dict):
+                info = value.get("qInfo", {})
+                if isinstance(info, dict) and isinstance(info.get("qId"), str):
+                    ids.add(info["qId"])
+                for child in value.values():
+                    scan(child)
+            elif isinstance(value, list):
+                for child in value:
+                    scan(child)
+
+        json_files = list(output.rglob("*.json"))
+        if not json_files:
+            raise RuntimeError("Qlik unbuild returned no JSON objects")
+        for file in json_files:
+            scan(json.loads(file.read_text(encoding="utf-8")))
+
+    missing = expected_ids - ids
+    print(
+        f"Frontend persistence check: found {len(ids & expected_ids)}/"
+        f"{len(expected_ids)} expected object IDs", flush=True
+    )
+    if missing:
+        raise RuntimeError(
+            "Qlik app is missing these native UI objects: " + ", ".join(sorted(missing))
+        )
+
 def main() -> None:
     if not TENANT:
         raise RuntimeError("QLIK_TENANT not configured")
@@ -228,6 +276,7 @@ def main() -> None:
         run("app", "build", "--app", state[kind], "--script", script)
 
     deploy_frontend(state["presentation"])
+    validate_frontend(state["presentation"])
     print("=== Presentation Count(OrderID) ===", flush=True)
     run("app", "eval", "Count(OrderID)", "--app", state["presentation"])
     print(f"Presentation app: {TENANT}/sense/app/{state['presentation']}", flush=True)
