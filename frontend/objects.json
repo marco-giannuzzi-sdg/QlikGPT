@@ -1,1 +1,313 @@
-[]
+[
+  {
+    "qInfo": {
+      "qId": "qlikgpt_sales_overview",
+      "qType": "sheet"
+    },
+    "qExtendsId": "",
+    "qMetaDef": {
+      "title": "Sales Overview",
+      "description": "QlikGPT • dashboard generata da codice GitHub Actions"
+    },
+    "title": "Sales Overview",
+    "description": "Overview vendite e marginalità",
+    "rank": 0,
+    "columns": 24,
+    "rows": 12,
+    "gridMode": "edit",
+    "cells": [
+      {
+        "name": "qlikgpt_kpi_revenue",
+        "type": "kpi",
+        "col": 0,
+        "row": 0,
+        "colspan": 6,
+        "rowspan": 3,
+        "bounds": {
+          "x": 0,
+          "y": 0,
+          "width": 25,
+          "height": 25
+        }
+      },
+      {
+        "name": "qlikgpt_kpi_orders",
+        "type": "kpi",
+        "col": 6,
+        "row": 0,
+        "colspan": 6,
+        "rowspan": 3,
+        "bounds": {
+          "x": 25,
+          "y": 0,
+          "width": 25,
+          "height": 25
+        }
+      },
+      {
+        "name": "qlikgpt_kpi_margin",
+        "type": "kpi",
+        "col": 12,
+        "row": 0,
+        "colspan": 6,
+        "rowspan": 3,
+        "bounds": {
+          "x": 50,
+          "y": 0,
+          "width": 25,
+          "height": 25
+        }
+      },
+      {
+        "name": "qlikgpt_kpi_margin_pct",
+        "type": "kpi",
+        "col": 18,
+        "row": 0,
+        "colspan": 6,
+        "rowspan": 3,
+        "bounds": {
+          "x": 75,
+          "y": 0,
+          "width": 25,
+          "height": 25
+        }
+      },
+      {
+        "name": "qlikgpt_chart_month",
+        "type": "linechart",
+        "col": 0,
+        "row": 3,
+        "colspan": 14,
+        "rowspan": 9,
+        "bounds": {
+          "x": 0,
+          "y": 25,
+          "width": 58.333333333333336,
+          "height": 75
+        }
+      },
+      {
+        "name": "qlikgpt_chart_market",
+        "type": "barchart",
+        "col": 14,
+        "row": 3,
+        "colspan": 10,
+        "rowspan": 9,
+        "bounds": {
+          "x": 58.333333333333336,
+          "y": 25,
+          "width": 41.666666666666664,
+          "height": 75
+        }
+      }
+    ],
+    "qChildListDef": {
+      "qData": {
+        "title": "/title",
+        "description": "/description",
+        "type": "/qInfo/qType",
+        "id": "/qInfo/qId"
+      }
+    },
+    "qChildren": [
+      {
+        "qInfo": {
+          "qId": "qlikgpt_kpi_revenue",
+          "qType": "kpi"
+        },
+        "qExtendsId": "",
+        "visualization": "kpi",
+        "title": "Fatturato",
+        "showTitles": true,
+        "qHyperCubeDef": {
+          "qDimensions": [],
+          "qMeasures": [
+            {
+              "qDef": {
+                "qLabel": "Fatturato",
+                "qDef": "Num(Sum(Revenue),'€ #,##0')"
+              }
+            }
+          ],
+          "qInitialDataFetch": [
+            {
+              "qLeft": 0,
+              "qTop": 0,
+              "qWidth": 1,
+              "qHeight": 1
+            }
+          ]
+        }
+      },
+      {
+        "qInfo": {
+          "qId": "qlikgpt_kpi_orders",
+          "qType": "kpi"
+        },
+        "qExtendsId": "",
+        "visualization": "kpi",
+        "title": "Ordini",
+        "showTitles": true,
+        "qHyperCubeDef": {
+          "qDimensions": [],
+          "qMeasures": [
+            {
+              "qDef": {
+                "qLabel": "Ordini",
+                "qDef": "Num(Count(DISTINCT OrderID),'#,##0')"
+              }
+            }
+          ],
+          "qInitialDataFetch": [
+            {
+              "qLeft": 0,
+              "qTop": 0,
+              "qWidth": 1,
+              "qHeight": 1
+            }
+          ]
+        }
+      },
+      {
+        "qInfo": {
+          "qId": "qlikgpt_kpi_margin",
+          "qType": "kpi"
+        },
+        "qExtendsId": "",
+        "visualization": "kpi",
+        "title": "Margine",
+        "showTitles": true,
+        "qHyperCubeDef": {
+          "qDimensions": [],
+          "qMeasures": [
+            {
+              "qDef": {
+                "qLabel": "Margine",
+                "qDef": "Num(Sum(Margin),'€ #,##0')"
+              }
+            }
+          ],
+          "qInitialDataFetch": [
+            {
+              "qLeft": 0,
+              "qTop": 0,
+              "qWidth": 1,
+              "qHeight": 1
+            }
+          ]
+        }
+      },
+      {
+        "qInfo": {
+          "qId": "qlikgpt_kpi_margin_pct",
+          "qType": "kpi"
+        },
+        "qExtendsId": "",
+        "visualization": "kpi",
+        "title": "Margine %",
+        "showTitles": true,
+        "qHyperCubeDef": {
+          "qDimensions": [],
+          "qMeasures": [
+            {
+              "qDef": {
+                "qLabel": "Margine %",
+                "qDef": "Num(If(Sum(Revenue)>0,Sum(Margin)/Sum(Revenue),0),'0.0%')"
+              }
+            }
+          ],
+          "qInitialDataFetch": [
+            {
+              "qLeft": 0,
+              "qTop": 0,
+              "qWidth": 1,
+              "qHeight": 1
+            }
+          ]
+        }
+      },
+      {
+        "qInfo": {
+          "qId": "qlikgpt_chart_month",
+          "qType": "linechart"
+        },
+        "qExtendsId": "",
+        "visualization": "linechart",
+        "title": "Andamento fatturato mensile",
+        "showTitles": true,
+        "qHyperCubeDef": {
+          "qDimensions": [
+            {
+              "qDef": {
+                "qGrouping": "N",
+                "qFieldDefs": [
+                  "YearMonth"
+                ],
+                "qFieldLabels": [
+                  "Anno / mese"
+                ]
+              }
+            }
+          ],
+          "qMeasures": [
+            {
+              "qDef": {
+                "qLabel": "Fatturato",
+                "qDef": "Sum(Revenue)"
+              }
+            }
+          ],
+          "qInitialDataFetch": [
+            {
+              "qLeft": 0,
+              "qTop": 0,
+              "qWidth": 2,
+              "qHeight": 100
+            }
+          ]
+        }
+      },
+      {
+        "qInfo": {
+          "qId": "qlikgpt_chart_market",
+          "qType": "barchart"
+        },
+        "qExtendsId": "",
+        "visualization": "barchart",
+        "title": "Fatturato per mercato",
+        "showTitles": true,
+        "qHyperCubeDef": {
+          "qDimensions": [
+            {
+              "qDef": {
+                "qGrouping": "N",
+                "qFieldDefs": [
+                  "Market"
+                ],
+                "qFieldLabels": [
+                  "Mercato"
+                ]
+              }
+            }
+          ],
+          "qMeasures": [
+            {
+              "qDef": {
+                "qLabel": "Fatturato",
+                "qDef": "Sum(Revenue)"
+              }
+            }
+          ],
+          "qInitialDataFetch": [
+            {
+              "qLeft": 0,
+              "qTop": 0,
+              "qWidth": 2,
+              "qHeight": 100
+            }
+          ]
+        }
+      }
+    ]
+  }
+]
