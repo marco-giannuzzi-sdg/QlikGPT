@@ -224,6 +224,48 @@ def prune_unsubscribed_measures(qix: Qix, doc: int, app_key: str,
     print(f"[{app_key}] catalog reconciliation: removed {len(deleted)} inactive/legacy measures: {deleted}", flush=True)
 
 
+def detect_catalog_drift(state: dict, manifests: dict,
+                         definitions: dict) -> set[str]:
+    """Read-only reconciliation. Catch changes missed by a previous failed CI run.
+
+    Git diff is an optimization, not proof that Qlik is already synchronized.
+    """
+    drift = set()
+    for app_key, manifest in manifests.items():
+        qix = Qix(state[app_key])
+        try:
+            doc = qix.call(-1, "OpenDoc",
+                           {"qDocName": state[app_key]})["qReturn"]["qHandle"]
+            subscribed = set(manifest["catalogMeasures"])
+            for mid in sorted(subscribed):
+                _handle, props = actual_measure(qix, doc, mid)
+                definition = definitions[mid]
+                if props is None:
+                    drift.add(app_key)
+                    print(f"DRIFT [{app_key}]: missing {mid}", flush=True)
+                    break
+                measure = props.get("qMeasure", {})
+                meta = props.get("qMetaDef", {})
+                if (measure.get("qDef") != definition["expression"] or
+                    measure.get("qLabel") != definition["title"] or
+                    measure.get("qNumFormat", {}).get("qFmt")
+                        != definition["format"]["qFmt"] or
+                    meta.get("description") != definition["description"]):
+                    drift.add(app_key)
+                    print(f"DRIFT [{app_key}]: changed properties for {mid}", flush=True)
+                    break
+            if app_key not in drift:
+                for mid in definitions.keys() - subscribed:
+                    handle, _ = actual_measure(qix, doc, mid)
+                    if handle is not None:
+                        drift.add(app_key)
+                        print(f"DRIFT [{app_key}]: unsubscribed metric {mid} still installed", flush=True)
+                        break
+        finally:
+            qix.close()
+    return drift
+
+
 def validate_required_fields(qix: Qix, doc: int, item: dict) -> None:
     for field in item["requiredFields"]:
         lookup = qix.call(doc, "GetField", {"qFieldName": field})
@@ -354,6 +396,10 @@ def orchestrate_semantic_catalog(state: dict, *, run: Callable,
         definitions, manifests, changed, full=(scope == "full"),
         new_app=bool(new_apps)
     )
+    # Recover pending changes even when the last commit only changes tests
+    # or documentation following a failed deployment.
+    if scope != "full":
+        impacted |= detect_catalog_drift(state, manifests, definitions)
     print(f"SEMANTIC-CATALOG impacted={sorted(impacted)} "
           f"changed={sorted(changed)}", flush=True)
     if not impacted:
