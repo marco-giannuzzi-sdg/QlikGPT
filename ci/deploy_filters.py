@@ -29,7 +29,7 @@ class Qix:
         )
         self.request_id = 0
 
-    def call(self, handle: int, method: str, params: dict | None = None) -> dict:
+    def call(self, handle: int, method: str, params: dict | list | None = None) -> dict:
         self.request_id += 1
         wanted_id = self.request_id
         message = {
@@ -56,7 +56,7 @@ class Qix:
 
 
 def child_ids(qix: Qix, handle: int) -> set[str]:
-    result = qix.call(handle, "GetChildInfos")
+    result = qix.call(handle, "GetChildInfos", [])
     return {info["qId"] for info in result.get("qInfos", [])}
 
 
@@ -104,7 +104,7 @@ def main() -> None:
         needed = {d["id"] for d in definitions}
         if not needed.issubset(after):
             raise RuntimeError("One or more listboxes were not persisted in filterpane")
-        qix.call(doc, "DoSave")
+        qix.call(doc, "DoSave", [])
         print(f"QIX filterpane verified: {len(needed)} native listboxes saved.")
     finally:
         qix.close()
