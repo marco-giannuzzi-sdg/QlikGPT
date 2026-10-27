@@ -34,8 +34,10 @@ class Qix:
         wanted_id = self.request_id
         message = {
             "jsonrpc": "2.0", "id": wanted_id,
-            "handle": handle, "method": method, "params": params or {},
+            "handle": handle, "method": method,
         }
+        if params is not None:
+            message["params"] = params
         self.ws.send(json.dumps(message))
         for _ in range(200):
             response = json.loads(self.ws.recv())
