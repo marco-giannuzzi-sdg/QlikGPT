@@ -211,6 +211,8 @@ def validate_frontend(app_id: str) -> None:
         "qlikgpt_kpi_margin", "qlikgpt_kpi_margin_pct",
         "qlikgpt_chart_month", "qlikgpt_chart_market",
         "qlikgpt_filter_panel",
+        "qlikgpt_list_year", "qlikgpt_list_market",
+        "qlikgpt_list_channel",
         "qlikgpt_m_revenue", "qlikgpt_m_orders",
         "qlikgpt_m_margin", "qlikgpt_m_margin_pct",
         "qlikgpt_d_market", "qlikgpt_d_yearmonth",
@@ -277,6 +279,13 @@ def main() -> None:
         run("app", "build", "--app", state[kind], "--script", script)
 
     deploy_frontend(state["presentation"])
+    # The Qlik CLI cannot round-trip three-level filterpane property trees.
+    # Create nested listboxes through the official QIX Engine API.
+    print("Deploying native listboxes via QIX API...", flush=True)
+    subprocess.run(
+        [sys.executable, "ci/deploy_filters.py", state["presentation"]],
+        cwd=ROOT, check=True,
+    )
     validate_frontend(state["presentation"])
     print("=== Presentation Count(OrderID) ===", flush=True)
     run("app", "eval", "Count(OrderID)", "--app", state["presentation"])
