@@ -1,0 +1,33 @@
+// ===============================================================
+// PRESENTATION - Analytics layer
+// Final star-like model for Qlik charts: Sales + Calendar.
+// Requires ETL2 to have loaded Sales_Staging.
+// ===============================================================
+
+Sales:
+NoConcatenate
+LOAD
+    OrderID,
+    OrderDate,
+    Market,
+    ProductCategory,
+    Channel,
+    CustomerID,
+    Quantity,
+    UnitPrice,
+    Revenue,
+    Cost,
+    Round(Revenue - Cost, 0.01) AS Margin
+RESIDENT Sales_Staging;
+
+DROP TABLE Sales_Staging;
+
+// Calendar relates to Sales through OrderDate only.
+Calendar:
+LOAD DISTINCT
+    OrderDate,
+    Year(OrderDate)        AS SalesYear,
+    Month(OrderDate)       AS SalesMonth,
+    MonthName(OrderDate)   AS YearMonth,
+    QuarterName(OrderDate) AS YearQuarter
+RESIDENT Sales;
