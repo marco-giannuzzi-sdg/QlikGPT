@@ -44,6 +44,7 @@ def read_apps():
             **m, "manifest": path.relative_to(ROOT).as_posix(),
             "appId": apps.get(key, ""),
             "visuals": load(ROOT / m["dashboardSource"]),
+            "filters": load(ROOT / m["filterSource"]) if m.get("filterSource") else [],
         }
     return data
 
@@ -115,6 +116,18 @@ def generate():
                                     "app":key,"sheet":sheet_name,"visualId":visualid,
                                     "visualType":qtype,
                                 })
+        for filt in app["filters"]:
+            dim_id = filt.get("dimensionId")
+            if not dim_id or dim_id not in subs["dimension"]:
+                raise ValueError(
+                    f"{key}/filter:{filt.get('id')}: missing master dimension subscription"
+                )
+            if "field" in filt:
+                raise ValueError(f"{key}/filter:{filt.get('id')}: inline field is forbidden")
+            lookup[("dimension", dim_id)]["visuals"].append({
+                "app": key, "sheet": "Filtri",
+                "visualId": filt["id"], "visualType": "listbox",
+            })
     return {"schemaVersion":2,"source":"GitHub declarations (not QIX runtime usage)",
             "apps":{key:{"name":v["appName"],"appId":v["appId"],"manifest":v["manifest"]}
                     for key,v in apps.items()},

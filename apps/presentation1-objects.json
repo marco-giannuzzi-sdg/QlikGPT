@@ -383,10 +383,10 @@
               "qDef": {
                 "qGrouping": "N",
                 "qFieldDefs": [
-                  "YearMonth"
+                  ""
                 ],
                 "qFieldLabels": [
-                  "Anno / mese"
+                  ""
                 ],
                 "autoSort": false,
                 "qSortCriterias": [
@@ -395,7 +395,7 @@
                   }
                 ]
               },
-              "qLibraryId": "",
+              "qLibraryId": "qlikgpt_d_yearmonth",
               "qNullSuppression": true
             }
           ],
@@ -494,10 +494,10 @@
               "qDef": {
                 "qGrouping": "N",
                 "qFieldDefs": [
-                  "Market"
+                  ""
                 ],
                 "qFieldLabels": [
-                  "Mercato"
+                  ""
                 ],
                 "autoSort": false,
                 "qSortCriterias": [
@@ -509,7 +509,7 @@
                   }
                 ]
               },
-              "qLibraryId": "",
+              "qLibraryId": "qlikgpt_d_market",
               "qNullSuppression": true
             }
           ],

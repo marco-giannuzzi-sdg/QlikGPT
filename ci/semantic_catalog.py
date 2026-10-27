@@ -188,13 +188,32 @@ def validate_catalog(catalog: dict, manifests: dict) -> dict:
             for child in sheet.get("qChildren", []):
                 if child.get("qInfo", {}).get("qType") == "measure":
                     raise ValueError(f"{app_key}: master measures belong in catalog")
-                for item in child.get("qHyperCubeDef", {}).get("qMeasures", []):
+                cube = child.get("qHyperCubeDef", {})
+                for item in cube.get("qMeasures", []):
                     mid = item.get("qLibraryId")
                     if not mid or mid not in manifest["catalogMeasures"]:
                         raise ValueError(
                             f"{app_key}: visual {child.get('qInfo',{}).get('qId')} "
                             "has inline measure or missing catalog subscription"
                         )
+                for item in cube.get("qDimensions", []):
+                    dim_id = item.get("qLibraryId")
+                    if not dim_id or dim_id not in manifest.get("catalogDimensions", []):
+                        raise ValueError(
+                            f"{app_key}: visual {child.get('qInfo',{}).get('qId')} "
+                            "has inline dimension or missing catalog subscription"
+                        )
+        if "filterSource" in manifest:
+            filters = json.loads((ROOT / manifest["filterSource"]).read_text())
+            for filt in filters:
+                dim_id = filt.get("dimensionId")
+                if not dim_id or dim_id not in manifest.get("catalogDimensions", []):
+                    raise ValueError(
+                        f"{app_key}: filter {filt.get('id')} has inline dimension "
+                        "or missing catalog subscription"
+                    )
+                if "field" in filt:
+                    raise ValueError(f"{app_key}: filter {filt.get('id')} cannot embed a field")
     return by_id
 
 

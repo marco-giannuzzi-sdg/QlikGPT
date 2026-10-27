@@ -1,17 +1,17 @@
 [
   {
     "id": "qlikgpt_list_year",
-    "field": "SalesYear",
-    "label": "Anno"
+    "label": "Anno",
+    "dimensionId": "qlikgpt_d_year"
   },
   {
     "id": "qlikgpt_list_market",
-    "field": "Market",
-    "label": "Mercato"
+    "label": "Mercato",
+    "dimensionId": "qlikgpt_d_market"
   },
   {
     "id": "qlikgpt_list_channel",
-    "field": "Channel",
-    "label": "Canale"
+    "label": "Canale",
+    "dimensionId": "qlikgpt_d_channel"
   }
 ]

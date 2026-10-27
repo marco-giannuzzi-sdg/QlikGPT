@@ -73,8 +73,17 @@ class CatalogV2Tests(unittest.TestCase):
         self.assertEqual(unused["apps"],[])
         d=next(m for m in r["items"] if m["id"]=="qlikgpt_d_market")
         self.assertEqual(len(d["apps"]),2)
-        self.assertEqual(d["visuals"],[])
-        self.assertTrue(any("dimensione inline" in w for w in r["warnings"]))
+        self.assertEqual(
+            {(v["app"],v["visualId"]) for v in d["visuals"]},
+            {("presentation","qlikgpt_chart_market"),
+             ("presentation","qlikgpt_list_market")}
+        )
+        self.assertEqual(r["warnings"],[])
+        ym = next(x for x in r["items"] if x["id"] == "qlikgpt_d_yearmonth")
+        self.assertEqual(
+            [(v["app"],v["visualId"]) for v in ym["visuals"]],
+            [("presentation","qlikgpt_chart_month")],
+        )
         self.assertIn("Matrice delle dipendenze",report.render(r))
 
     def test_unsubscribed_library_measure_rejected(self):
@@ -83,6 +92,49 @@ class CatalogV2Tests(unittest.TestCase):
         with patch.object(report,"read_apps",return_value=apps):
             with self.assertRaisesRegex(ValueError,"missing catalog subscription"):
                 report.generate()
+
+
+    def test_chart_and_filter_dimensions_all_have_real_master_item_references(self):
+        apps = report.read_apps()
+        for key, app in apps.items():
+            for sheet in app["visuals"]:
+                for obj in report.nodes(sheet):
+                    cube = obj.get("qHyperCubeDef", {})
+                    for dim in cube.get("qDimensions", []):
+                        self.assertIn(dim.get("qLibraryId"),app["catalogDimensions"])
+                        self.assertFalse(any(
+                            x.strip() for x in dim.get("qDef", {}).get("qFieldDefs", [])
+                            if isinstance(x, str)
+                        ))
+                    for mea in cube.get("qMeasures", []):
+                        self.assertIn(mea.get("qLibraryId"), app["catalogMeasures"])
+            for filt in app["filters"]:
+                self.assertIn(filt.get("dimensionId"),app["catalogDimensions"])
+                self.assertNotIn("field",filt)
+
+    def test_chart_inline_dimension_is_rejected_before_deployment(self):
+        original = Path.read_text
+        import json
+        def patched(path,*args,**kwargs):
+            body = original(path,*args,**kwargs)
+            if str(path).endswith("apps/presentation1-objects.json"):
+                sheets = json.loads(body)
+                for child in sheets[0]["qChildren"]:
+                    if child.get("qInfo",{}).get("qId")=="qlikgpt_chart_month":
+                        child["qHyperCubeDef"]["qDimensions"][0]["qLibraryId"] = ""
+                return json.dumps(sheets)
+            return body
+        with patch.object(Path,"read_text",patched):
+            with self.assertRaisesRegex(ValueError,"inline dimension"):
+                metrics.validate_catalog(metrics.read_json(metrics.CATALOG),self.manifests)
+
+    def test_filter_without_master_item_is_rejected_by_impact_report(self):
+        apps=report.read_apps()
+        apps["presentation"]["filters"][0]["dimensionId"]="unknown"
+        with patch.object(report,"read_apps",return_value=apps):
+            with self.assertRaisesRegex(ValueError,"missing master dimension subscription"):
+                report.generate()
+
 
 
 if __name__=="__main__":

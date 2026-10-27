@@ -59,3 +59,11 @@ Il catalogo governa **tutte le master measures**, anche quelle non ancora assegn
 - Per un'analisi puntuale puoi usare `python3 ci/catalog_report.py --impact measure:qlikgpt_shared_revenue` oppure sostituire `measure` con `dimension` o `variable`.
 - `ci/catalog_report.py` rigenera `catalog/USAGE.md` e `catalog/usage.json` nel workflow; il bot li committa con `[skip ci]`.
 - Il report non significa che una dimensione referenziata tramite campo inline sia collegata come master dimension: evidenzia la migrazione eventuale.
+
+## Utilizzo effettivo dei master item nei grafici e nei filtri
+
+Tutte le visualizzazioni QlikGPT governate devono fare riferimento a misure e dimensioni **effettivamente esistenti come master item nativi** tramite `qLibraryId`. È vietato specificare campi di dimensione o formule di misura inline nelle ipercube delle Presentations: il validator CI controlla i riferimenti prima della distribuzione.
+
+Anche i listbox `apps/presentation1-filters.json` utilizzano `dimensionId` (ID master dimension) e non duplicano più i nomi dei campi. Il deployment QIX assegna `qListObjectDef.qLibraryId` e verifica su Qlik Engine che il filtro abbia valori reali. Le proprietà locali di ordinamento dei grafici possono restare in configurazione, senza sostituire il master item.
+
+Il report [Usage & Impact](USAGE.md) registra grafici **e filtri** che referenziano le dimensioni master; per le Presentation versionate non devono comparire avvisi di dimensioni inline. ETL1 ed ETL2 sono applicazioni di preparazione dati, senza fogli analitici da vincolare a master item.

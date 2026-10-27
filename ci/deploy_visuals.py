@@ -74,7 +74,7 @@ def main() -> None:
         raise SystemExit("Expected presentation app ID as argument")
     definitions = json.loads(CONFIG.read_text(encoding="utf-8"))
     if not isinstance(definitions, list):
-        raise TypeError("frontend/filters.json must be an array")
+        raise TypeError("apps/presentation1-filters.json must be an array")
 
     source = json.loads((ROOT / "apps" / "presentation1-objects.json").read_text(encoding="utf-8"))
     target = next(
@@ -112,7 +112,7 @@ def main() -> None:
         if pane is None:
             raise RuntimeError("Native filterpane was not linked to sheet by QIX")
         for item in definitions:
-            item_id, field, label = item["id"], item["field"], item["label"]
+            item_id, dim_id, label = item["id"], item["dimensionId"], item["label"]
             if not item_id.startswith("qlikgpt_list_"):
                 raise ValueError(f"Unexpected listbox ID: {item_id}")
             properties = {
@@ -126,8 +126,8 @@ def main() -> None:
                 "layoutOptions": {"dataLayout": "singleColumn", "dense": True},
                 "qListObjectDef": {
                     "qStateName": "$",
-                    "qLibraryId": "",
-                    "qDef": {"qFieldDefs": [field], "qFieldLabels": [label]},
+                    "qLibraryId": dim_id,
+                    "qDef": {"qFieldDefs": [""], "qFieldLabels": [""]},
                     "qInitialDataFetch": [
                         {"qTop": 0, "qHeight": 100, "qLeft": 0, "qWidth": 1}
                     ],
@@ -143,6 +143,15 @@ def main() -> None:
             else:
                 qix.call(existing, "SetProperties", [properties])
                 print(f"Updated native Qlik filter: {label}", flush=True)
+            native_filter_props = qix.call(existing, "GetProperties", [])["qProp"]
+            persisted_id = native_filter_props.get("qListObjectDef", {}).get("qLibraryId")
+            if persisted_id != dim_id:
+                raise RuntimeError(f"Listbox {item_id} must reference master dimension {dim_id}; got {persisted_id}")
+            list_layout = qix.call(existing, "GetLayout", [])["qLayout"]
+            row_count = list_layout.get("qListObject", {}).get("qSize", {}).get("qcy", 0)
+            if row_count < 1:
+                raise RuntimeError(f"Listbox {item_id} with master dimension {dim_id} has no values")
+            print(f"FILTER MASTER VERIFIED {item_id} => {dim_id}, values={row_count}", flush=True)
 
         # Contract check: every chart/KPI must actually reference a catalog
         # master measure, not merely contain a valid-looking qLibraryId in JSON.
@@ -161,6 +170,19 @@ def main() -> None:
                     raise RuntimeError("Visual is not using catalog master: " + visual["qInfo"]["qId"])
                 if observed.get("qDef", {}).get("qDef", "").strip():
                     raise RuntimeError("Inline master formula found in " + visual["qInfo"]["qId"])
+            expected_dims = visual.get("qHyperCubeDef", {}).get("qDimensions", [])
+            actual_dims = props_read.get("qHyperCubeDef", {}).get("qDimensions", [])
+            if len(expected_dims) != len(actual_dims):
+                raise RuntimeError(f"Unexpected dimension count in {visual['qInfo']['qId']}")
+            for wanted_dim, observed_dim in zip(expected_dims, actual_dims):
+                dimension_id = wanted_dim.get("qLibraryId")
+                if not dimension_id or observed_dim.get("qLibraryId") != dimension_id:
+                    raise RuntimeError(
+                        f"Chart {visual['qInfo']['qId']} is not linked to master dimension {dimension_id}"
+                    )
+                if any(f.strip() for f in observed_dim.get("qDef", {}).get("qFieldDefs", []) if isinstance(f,str)):
+                    raise RuntimeError(f"Chart {visual['qInfo']['qId']} still contains inline fields")
+                print(f"CHART DIMENSION MASTER VERIFIED {visual['qInfo']['qId']} => {dimension_id}", flush=True)
             print("Catalog qLibraryId verified for " + visual["qInfo"]["qId"], flush=True)
 
         # The visual brand block must carry real markdown, not just a title.
