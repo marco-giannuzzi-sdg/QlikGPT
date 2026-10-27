@@ -140,6 +140,27 @@ def main() -> None:
                 qix.call(existing, "SetProperties", [properties])
                 print(f"Updated native Qlik filter: {label}", flush=True)
 
+        # Validate native chart Engine data, not merely object persistence.
+        # A sheet can contain a chart title while the visualization is blank.
+        for chart_id in ("qlikgpt_chart_month", "qlikgpt_chart_market"):
+            chart_handle = find_child(qix, sheet, chart_id)
+            if chart_handle is None:
+                raise RuntimeError("Native chart not addressable: " + chart_id)
+            layout = qix.call(chart_handle, "GetLayout", [])["qLayout"]
+            cube = layout.get("qHyperCube", {})
+            size = cube.get("qSize", {})
+            pages = cube.get("qDataPages", [])
+            sample = (pages[0].get("qMatrix", [])[:2] if pages else [])
+            print(
+                "QIX chart diagnostic %s: size=%s dim=%s measures=%s "
+                "pages=%s sample=%s" % (
+                    chart_id, size, cube.get("qDimensionInfo"),
+                    cube.get("qMeasureInfo"), len(pages), sample,
+                ), flush=True
+            )
+            if size.get("qcy", 0) == 0:
+                raise RuntimeError("Chart hypercube contains zero data rows: " + chart_id)
+
         # Verify the live Engine hierarchy, not only JSON exported by Qlik CLI.
         for props in target.get("qChildren", []):
             if find_child(qix, sheet, props["qInfo"]["qId"]) is None:
