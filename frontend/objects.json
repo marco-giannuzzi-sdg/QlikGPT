@@ -6,11 +6,11 @@
     },
     "qExtendsId": "",
     "qMetaDef": {
-      "title": "Sales Overview",
-      "description": "QlikGPT • dashboard generata da codice GitHub Actions"
+      "title": "Sales Overview | Executive",
+      "description": "Performance commerciale | Fatturato, ordini e marginalità"
     },
-    "title": "Sales Overview",
-    "description": "Overview vendite e marginalità",
+    "title": "Sales Overview | Executive",
+    "description": "Performance commerciale | Fatturato, ordini e marginalità",
     "rank": 0,
     "columns": 24,
     "rows": 12,
@@ -131,7 +131,7 @@
         },
         "qExtendsId": "",
         "visualization": "filterpane",
-        "title": "Filtri",
+        "title": "FILTRI / PERIOD & MARKET",
         "showTitles": false,
         "qChildListDef": {
           "qData": {
@@ -148,15 +148,22 @@
         },
         "qExtendsId": "",
         "visualization": "kpi",
-        "title": "Fatturato",
+        "title": "RICAVI TOTALI",
         "showTitles": true,
         "qHyperCubeDef": {
           "qDimensions": [],
           "qMeasures": [
             {
               "qDef": {
-                "qLabel": "Fatturato",
-                "qDef": "Num(Sum(Revenue),'€ #,##0')"
+                "qLabel": "RICAVI TOTALI",
+                "qDef": "='€ ' & Num(Sum(Revenue)/1000000,'0.00') & 'M'",
+                "conditionalColoring": {
+                  "useConditionalColoring": false,
+                  "paletteSingleColor": {
+                    "index": -1,
+                    "color": "#142B49"
+                  }
+                }
               }
             }
           ],
@@ -168,6 +175,22 @@
               "qHeight": 1
             }
           ]
+        },
+        "subtitle": "",
+        "version": "1.0.0",
+        "showDetails": false,
+        "textAlign": "left",
+        "layoutBehavior": "Responsive",
+        "fontSize": "M",
+        "showMeasureTitle": false,
+        "style": {
+          "background": {
+            "useColorExpression": false,
+            "color": {
+              "index": -1,
+              "color": "#F5F9FC"
+            }
+          }
         }
       },
       {
@@ -177,15 +200,22 @@
         },
         "qExtendsId": "",
         "visualization": "kpi",
-        "title": "Ordini",
+        "title": "ORDINI",
         "showTitles": true,
         "qHyperCubeDef": {
           "qDimensions": [],
           "qMeasures": [
             {
               "qDef": {
-                "qLabel": "Ordini",
-                "qDef": "Num(Count(DISTINCT OrderID),'#,##0')"
+                "qLabel": "ORDINI",
+                "qDef": "Num(Count(DISTINCT OrderID),'#,##0')",
+                "conditionalColoring": {
+                  "useConditionalColoring": false,
+                  "paletteSingleColor": {
+                    "index": -1,
+                    "color": "#142B49"
+                  }
+                }
               }
             }
           ],
@@ -197,6 +227,22 @@
               "qHeight": 1
             }
           ]
+        },
+        "subtitle": "",
+        "version": "1.0.0",
+        "showDetails": false,
+        "textAlign": "left",
+        "layoutBehavior": "Responsive",
+        "fontSize": "M",
+        "showMeasureTitle": false,
+        "style": {
+          "background": {
+            "useColorExpression": false,
+            "color": {
+              "index": -1,
+              "color": "#F5F9FC"
+            }
+          }
         }
       },
       {
@@ -206,15 +252,22 @@
         },
         "qExtendsId": "",
         "visualization": "kpi",
-        "title": "Margine",
+        "title": "MARGINE LORDO",
         "showTitles": true,
         "qHyperCubeDef": {
           "qDimensions": [],
           "qMeasures": [
             {
               "qDef": {
-                "qLabel": "Margine",
-                "qDef": "Num(Sum(Margin),'€ #,##0')"
+                "qLabel": "MARGINE LORDO",
+                "qDef": "='€ ' & Num(Sum(Margin)/1000000,'0.00') & 'M'",
+                "conditionalColoring": {
+                  "useConditionalColoring": false,
+                  "paletteSingleColor": {
+                    "index": -1,
+                    "color": "#0E7490"
+                  }
+                }
               }
             }
           ],
@@ -226,6 +279,22 @@
               "qHeight": 1
             }
           ]
+        },
+        "subtitle": "",
+        "version": "1.0.0",
+        "showDetails": false,
+        "textAlign": "left",
+        "layoutBehavior": "Responsive",
+        "fontSize": "M",
+        "showMeasureTitle": false,
+        "style": {
+          "background": {
+            "useColorExpression": false,
+            "color": {
+              "index": -1,
+              "color": "#F5F9FC"
+            }
+          }
         }
       },
       {
@@ -235,15 +304,22 @@
         },
         "qExtendsId": "",
         "visualization": "kpi",
-        "title": "Margine %",
+        "title": "MARGINE %",
         "showTitles": true,
         "qHyperCubeDef": {
           "qDimensions": [],
           "qMeasures": [
             {
               "qDef": {
-                "qLabel": "Margine %",
-                "qDef": "Num(If(Sum(Revenue)>0,Sum(Margin)/Sum(Revenue),0),'0.0%')"
+                "qLabel": "MARGINE %",
+                "qDef": "Num(If(Sum(Revenue)>0,Sum(Margin)/Sum(Revenue),0),'0.0%')",
+                "conditionalColoring": {
+                  "useConditionalColoring": false,
+                  "paletteSingleColor": {
+                    "index": -1,
+                    "color": "#15803D"
+                  }
+                }
               }
             }
           ],
@@ -255,6 +331,22 @@
               "qHeight": 1
             }
           ]
+        },
+        "subtitle": "",
+        "version": "1.0.0",
+        "showDetails": false,
+        "textAlign": "left",
+        "layoutBehavior": "Responsive",
+        "fontSize": "M",
+        "showMeasureTitle": false,
+        "style": {
+          "background": {
+            "useColorExpression": false,
+            "color": {
+              "index": -1,
+              "color": "#F5F9FC"
+            }
+          }
         }
       },
       {
@@ -264,7 +356,7 @@
         },
         "qExtendsId": "",
         "visualization": "linechart",
-        "title": "Andamento fatturato mensile",
+        "title": "EVOLUZIONE DEL FATTURATO",
         "showTitles": true,
         "qHyperCubeDef": {
           "qDimensions": [
@@ -276,16 +368,33 @@
                 ],
                 "qFieldLabels": [
                   "Anno / mese"
+                ],
+                "autoSort": false,
+                "qSortCriterias": [
+                  {
+                    "qSortByNumeric": 1,
+                    "qSortByAscii": 0
+                  }
                 ]
-              }
+              },
+              "qLibraryId": "",
+              "qNullSuppression": true
             }
           ],
           "qMeasures": [
             {
               "qDef": {
                 "qLabel": "Fatturato",
-                "qDef": "Sum(Revenue)"
-              }
+                "qDef": "Sum(Revenue)",
+                "qGrouping": "N",
+                "qNumFormat": {
+                  "qType": "M",
+                  "qFmt": "€ #,##0",
+                  "qDec": ".",
+                  "qThou": ","
+                }
+              },
+              "qLibraryId": ""
             }
           ],
           "qInitialDataFetch": [
@@ -295,8 +404,61 @@
               "qWidth": 2,
               "qHeight": 100
             }
+          ],
+          "qStateName": "$",
+          "qMode": "S",
+          "qSuppressMissing": true,
+          "qSuppressZero": false,
+          "qInterColumnSortOrder": [
+            0,
+            1
           ]
-        }
+        },
+        "version": "1.0.0",
+        "subtitle": "Ricavi mensili · confronto nel tempo",
+        "showDetails": false,
+        "showDisclaimer": false,
+        "legend": {
+          "show": false,
+          "showTitle": false,
+          "dock": "auto"
+        },
+        "color": {
+          "auto": false,
+          "mode": "primary",
+          "useBaseColors": "off",
+          "paletteColor": {
+            "index": -1,
+            "color": "#0E7490"
+          }
+        },
+        "lineType": "line",
+        "preferContinuousAxis": false,
+        "dimensionAxis": {
+          "show": "labels",
+          "label": "auto",
+          "continuousAuto": false
+        },
+        "measureAxis": {
+          "show": "labels",
+          "autoMinMax": true
+        },
+        "dataPoint": {
+          "show": true,
+          "showLabels": false
+        },
+        "components": [
+          {
+            "key": "line",
+            "style": {
+              "dataPointSize": 6,
+              "lineThickness": 3,
+              "lineType": "solid",
+              "lineCurve": "monotone"
+            }
+          }
+        ],
+        "nullMode": "gap"
       },
       {
         "qInfo": {
@@ -305,7 +467,7 @@
         },
         "qExtendsId": "",
         "visualization": "barchart",
-        "title": "Fatturato per mercato",
+        "title": "RICAVI PER MERCATO",
         "showTitles": true,
         "qHyperCubeDef": {
           "qDimensions": [
@@ -317,16 +479,35 @@
                 ],
                 "qFieldLabels": [
                   "Mercato"
+                ],
+                "autoSort": false,
+                "qSortCriterias": [
+                  {
+                    "qSortByExpression": -1,
+                    "qExpression": {
+                      "qv": "Sum(Revenue)"
+                    }
+                  }
                 ]
-              }
+              },
+              "qLibraryId": "",
+              "qNullSuppression": true
             }
           ],
           "qMeasures": [
             {
               "qDef": {
                 "qLabel": "Fatturato",
-                "qDef": "Sum(Revenue)"
-              }
+                "qDef": "Sum(Revenue)",
+                "qGrouping": "N",
+                "qNumFormat": {
+                  "qType": "M",
+                  "qFmt": "€ #,##0",
+                  "qDec": ".",
+                  "qThou": ","
+                }
+              },
+              "qLibraryId": ""
             }
           ],
           "qInitialDataFetch": [
@@ -336,8 +517,57 @@
               "qWidth": 2,
               "qHeight": 100
             }
+          ],
+          "qStateName": "$",
+          "qMode": "S",
+          "qSuppressMissing": true,
+          "qSuppressZero": false,
+          "qInterColumnSortOrder": [
+            1,
+            0
           ]
-        }
+        },
+        "version": "1.0.0",
+        "subtitle": "Classifica commerciale · valori in EUR",
+        "showDetails": false,
+        "showDisclaimer": false,
+        "legend": {
+          "show": false,
+          "showTitle": false,
+          "dock": "auto"
+        },
+        "color": {
+          "auto": false,
+          "mode": "primary",
+          "useBaseColors": "off",
+          "paletteColor": {
+            "index": -1,
+            "color": "#0E7490"
+          }
+        },
+        "orientation": "horizontal",
+        "preferContinuousAxis": false,
+        "barGrouping": {
+          "grouping": "grouped"
+        },
+        "dataPoint": {
+          "showLabels": true,
+          "showSegmentLabels": false,
+          "showTotalLabels": false
+        },
+        "gridLine": {
+          "auto": false,
+          "spacing": 1
+        },
+        "dimensionAxis": {
+          "show": "labels",
+          "label": "auto"
+        },
+        "measureAxis": {
+          "show": "labels",
+          "autoMinMax": true
+        },
+        "scrollbar": "none"
       }
     ]
   }
