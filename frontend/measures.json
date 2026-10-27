@@ -1,1 +1,78 @@
-[]
+[
+  {
+    "qInfo": {
+      "qId": "qlikgpt_m_revenue",
+      "qType": "measure"
+    },
+    "qMeasure": {
+      "qLabel": "Fatturato",
+      "qDef": "Sum(Revenue)",
+      "qGrouping": "N"
+    },
+    "qMetaDef": {
+      "title": "Fatturato",
+      "description": "Somma Revenue",
+      "tags": [
+        "QlikGPT",
+        "Sales"
+      ]
+    }
+  },
+  {
+    "qInfo": {
+      "qId": "qlikgpt_m_orders",
+      "qType": "measure"
+    },
+    "qMeasure": {
+      "qLabel": "Numero ordini",
+      "qDef": "Count(DISTINCT OrderID)",
+      "qGrouping": "N"
+    },
+    "qMetaDef": {
+      "title": "Numero ordini",
+      "description": "Conteggio ordini distinti",
+      "tags": [
+        "QlikGPT",
+        "Sales"
+      ]
+    }
+  },
+  {
+    "qInfo": {
+      "qId": "qlikgpt_m_margin",
+      "qType": "measure"
+    },
+    "qMeasure": {
+      "qLabel": "Margine",
+      "qDef": "Sum(Margin)",
+      "qGrouping": "N"
+    },
+    "qMetaDef": {
+      "title": "Margine",
+      "description": "Somma margine",
+      "tags": [
+        "QlikGPT",
+        "Sales"
+      ]
+    }
+  },
+  {
+    "qInfo": {
+      "qId": "qlikgpt_m_margin_pct",
+      "qType": "measure"
+    },
+    "qMeasure": {
+      "qLabel": "Margine %",
+      "qDef": "If(Sum(Revenue)>0,Sum(Margin)/Sum(Revenue),0)",
+      "qGrouping": "N"
+    },
+    "qMetaDef": {
+      "title": "Margine %",
+      "description": "Margine sul fatturato",
+      "tags": [
+        "QlikGPT",
+        "Sales"
+      ]
+    }
+  }
+]
