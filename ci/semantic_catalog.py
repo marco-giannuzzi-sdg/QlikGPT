@@ -324,7 +324,7 @@ def deploy_governed_sheets(qix: Qix, doc: int, manifest: dict) -> None:
         ref = props_read["qHyperCubeDef"]["qMeasures"][0].get("qLibraryId")
         if ref != measure_id or cube.get("qSize", {}).get("qcy", 0) < 1:
             raise RuntimeError(f"Native KPI {cid} did not bind to master measure {measure_id}")
-        print(f"[{manifest[\'appKey\']}] KPI {cid} linked to qLibraryId={measure_id}", flush=True)
+        print(f"[{manifest['appKey']}] KPI {cid} linked to qLibraryId={measure_id}", flush=True)
 
 
 def orchestrate_semantic_catalog(state: dict, *, run: Callable,
