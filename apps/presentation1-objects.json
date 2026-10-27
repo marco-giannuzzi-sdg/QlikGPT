@@ -1,0 +1,589 @@
+[
+  {
+    "qInfo": {
+      "qId": "qlikgpt_sales_overview",
+      "qType": "sheet"
+    },
+    "qExtendsId": "",
+    "qMetaDef": {
+      "title": "Sales Intelligence | QlikGPT",
+      "description": "Executive dashboard · 12 mesi completi · dati dimostrativi"
+    },
+    "title": "Sales Intelligence | QlikGPT",
+    "description": "Executive dashboard · 12 mesi completi · dati dimostrativi",
+    "rank": 0,
+    "columns": 24,
+    "rows": 12,
+    "gridMode": "edit",
+    "cells": [
+      {
+        "name": "qlikgpt_brand_header",
+        "type": "text-image",
+        "col": 0,
+        "row": 0,
+        "colspan": 11,
+        "rowspan": 1,
+        "bounds": {
+          "x": 0,
+          "y": 0,
+          "width": 45.83333333333333,
+          "height": 8.333333333333332
+        }
+      },
+      {
+        "name": "qlikgpt_filter_panel",
+        "type": "filterpane",
+        "col": 11,
+        "row": 0,
+        "colspan": 13,
+        "rowspan": 1,
+        "bounds": {
+          "x": 45.83333333333333,
+          "y": 0,
+          "width": 54.166666666666664,
+          "height": 8.333333333333332
+        }
+      },
+      {
+        "name": "qlikgpt_kpi_revenue",
+        "type": "kpi",
+        "col": 0,
+        "row": 1,
+        "colspan": 6,
+        "rowspan": 2,
+        "bounds": {
+          "x": 0,
+          "y": 8.333333333333332,
+          "width": 25,
+          "height": 16.666666666666664
+        }
+      },
+      {
+        "name": "qlikgpt_kpi_orders",
+        "type": "kpi",
+        "col": 6,
+        "row": 1,
+        "colspan": 6,
+        "rowspan": 2,
+        "bounds": {
+          "x": 25,
+          "y": 8.333333333333332,
+          "width": 25,
+          "height": 16.666666666666664
+        }
+      },
+      {
+        "name": "qlikgpt_kpi_margin",
+        "type": "kpi",
+        "col": 12,
+        "row": 1,
+        "colspan": 6,
+        "rowspan": 2,
+        "bounds": {
+          "x": 50,
+          "y": 8.333333333333332,
+          "width": 25,
+          "height": 16.666666666666664
+        }
+      },
+      {
+        "name": "qlikgpt_kpi_margin_pct",
+        "type": "kpi",
+        "col": 18,
+        "row": 1,
+        "colspan": 6,
+        "rowspan": 2,
+        "bounds": {
+          "x": 75,
+          "y": 8.333333333333332,
+          "width": 25,
+          "height": 16.666666666666664
+        }
+      },
+      {
+        "name": "qlikgpt_chart_month",
+        "type": "linechart",
+        "col": 0,
+        "row": 3,
+        "colspan": 15,
+        "rowspan": 9,
+        "bounds": {
+          "x": 0,
+          "y": 25,
+          "width": 62.5,
+          "height": 75
+        }
+      },
+      {
+        "name": "qlikgpt_chart_market",
+        "type": "barchart",
+        "col": 15,
+        "row": 3,
+        "colspan": 9,
+        "rowspan": 9,
+        "bounds": {
+          "x": 62.5,
+          "y": 25,
+          "width": 37.5,
+          "height": 75
+        }
+      }
+    ],
+    "qChildListDef": {
+      "qData": {
+        "title": "/title",
+        "description": "/description",
+        "type": "/qInfo/qType",
+        "id": "/qInfo/qId"
+      }
+    },
+    "qChildren": [
+      {
+        "qInfo": {
+          "qId": "qlikgpt_brand_header",
+          "qType": "text-image"
+        },
+        "qExtendsId": "",
+        "visualization": "text-image",
+        "title": "QlikGPT  |  Sales Intelligence",
+        "showTitles": false,
+        "markdown": "## ◈ QlikGPT\n**SALES INTELLIGENCE**  ·  Executive Overview",
+        "images": [],
+        "responsive": true,
+        "background": {
+          "color": "#142B49"
+        }
+      },
+      {
+        "qInfo": {
+          "qId": "qlikgpt_filter_panel",
+          "qType": "filterpane"
+        },
+        "qExtendsId": "",
+        "visualization": "filterpane",
+        "title": "Filtri · seleziona per restringere",
+        "showTitles": false,
+        "qChildListDef": {
+          "qData": {
+            "title": "/title",
+            "id": "/qInfo/qId",
+            "type": "/qInfo/qType"
+          }
+        },
+        "style": {
+          "background": {
+            "useColorExpression": false,
+            "color": {
+              "index": -1,
+              "color": "#F5F8FC"
+            }
+          }
+        }
+      },
+      {
+        "qInfo": {
+          "qId": "qlikgpt_kpi_revenue",
+          "qType": "kpi"
+        },
+        "qExtendsId": "",
+        "visualization": "kpi",
+        "title": "Fatturato",
+        "showTitles": true,
+        "qHyperCubeDef": {
+          "qDimensions": [],
+          "qMeasures": [
+            {
+              "qLibraryId": "qlikgpt_shared_revenue",
+              "qType": "measure",
+              "qDef": {
+                "qDef": "",
+                "qLabel": "Fatturato"
+              }
+            }
+          ],
+          "qInitialDataFetch": [
+            {
+              "qLeft": 0,
+              "qTop": 0,
+              "qWidth": 1,
+              "qHeight": 1
+            }
+          ]
+        },
+        "subtitle": "",
+        "version": "1.0.0",
+        "showDetails": false,
+        "textAlign": "left",
+        "layoutBehavior": "Responsive",
+        "fontSize": "S",
+        "showMeasureTitle": false,
+        "style": {
+          "background": {
+            "useColorExpression": false,
+            "color": {
+              "index": -1,
+              "color": "#F5F8FC"
+            }
+          }
+        }
+      },
+      {
+        "qInfo": {
+          "qId": "qlikgpt_kpi_orders",
+          "qType": "kpi"
+        },
+        "qExtendsId": "",
+        "visualization": "kpi",
+        "title": "Ordini",
+        "showTitles": true,
+        "qHyperCubeDef": {
+          "qDimensions": [],
+          "qMeasures": [
+            {
+              "qLibraryId": "qlikgpt_shared_orders",
+              "qType": "measure",
+              "qDef": {
+                "qDef": "",
+                "qLabel": "Ordini"
+              }
+            }
+          ],
+          "qInitialDataFetch": [
+            {
+              "qLeft": 0,
+              "qTop": 0,
+              "qWidth": 1,
+              "qHeight": 1
+            }
+          ]
+        },
+        "subtitle": "",
+        "version": "1.0.0",
+        "showDetails": false,
+        "textAlign": "left",
+        "layoutBehavior": "Responsive",
+        "fontSize": "S",
+        "showMeasureTitle": false,
+        "style": {
+          "background": {
+            "useColorExpression": false,
+            "color": {
+              "index": -1,
+              "color": "#F5F8FC"
+            }
+          }
+        }
+      },
+      {
+        "qInfo": {
+          "qId": "qlikgpt_kpi_margin",
+          "qType": "kpi"
+        },
+        "qExtendsId": "",
+        "visualization": "kpi",
+        "title": "Margine lordo",
+        "showTitles": true,
+        "qHyperCubeDef": {
+          "qDimensions": [],
+          "qMeasures": [
+            {
+              "qLibraryId": "qlikgpt_shared_margin",
+              "qType": "measure",
+              "qDef": {
+                "qDef": "",
+                "qLabel": "Margine lordo"
+              }
+            }
+          ],
+          "qInitialDataFetch": [
+            {
+              "qLeft": 0,
+              "qTop": 0,
+              "qWidth": 1,
+              "qHeight": 1
+            }
+          ]
+        },
+        "subtitle": "",
+        "version": "1.0.0",
+        "showDetails": false,
+        "textAlign": "left",
+        "layoutBehavior": "Responsive",
+        "fontSize": "S",
+        "showMeasureTitle": false,
+        "style": {
+          "background": {
+            "useColorExpression": false,
+            "color": {
+              "index": -1,
+              "color": "#F5F8FC"
+            }
+          }
+        }
+      },
+      {
+        "qInfo": {
+          "qId": "qlikgpt_kpi_margin_pct",
+          "qType": "kpi"
+        },
+        "qExtendsId": "",
+        "visualization": "kpi",
+        "title": "Margine %",
+        "showTitles": true,
+        "qHyperCubeDef": {
+          "qDimensions": [],
+          "qMeasures": [
+            {
+              "qLibraryId": "qlikgpt_shared_margin_pct",
+              "qType": "measure",
+              "qDef": {
+                "qDef": "",
+                "qLabel": "Margine %"
+              }
+            }
+          ],
+          "qInitialDataFetch": [
+            {
+              "qLeft": 0,
+              "qTop": 0,
+              "qWidth": 1,
+              "qHeight": 1
+            }
+          ]
+        },
+        "subtitle": "",
+        "version": "1.0.0",
+        "showDetails": false,
+        "textAlign": "left",
+        "layoutBehavior": "Responsive",
+        "fontSize": "S",
+        "showMeasureTitle": false,
+        "style": {
+          "background": {
+            "useColorExpression": false,
+            "color": {
+              "index": -1,
+              "color": "#F5F8FC"
+            }
+          }
+        }
+      },
+      {
+        "qInfo": {
+          "qId": "qlikgpt_chart_month",
+          "qType": "linechart"
+        },
+        "qExtendsId": "",
+        "visualization": "linechart",
+        "title": "TREND DEL FATTURATO",
+        "showTitles": true,
+        "qHyperCubeDef": {
+          "qDimensions": [
+            {
+              "qDef": {
+                "qGrouping": "N",
+                "qFieldDefs": [
+                  "YearMonth"
+                ],
+                "qFieldLabels": [
+                  "Anno / mese"
+                ],
+                "autoSort": false,
+                "qSortCriterias": [
+                  {
+                    "qSortByNumeric": 1
+                  }
+                ]
+              },
+              "qLibraryId": "",
+              "qNullSuppression": true
+            }
+          ],
+          "qMeasures": [
+            {
+              "qLibraryId": "qlikgpt_shared_revenue",
+              "qType": "measure",
+              "qDef": {
+                "qDef": "",
+                "qLabel": "TREND DEL FATTURATO"
+              }
+            }
+          ],
+          "qInitialDataFetch": [
+            {
+              "qLeft": 0,
+              "qTop": 0,
+              "qWidth": 2,
+              "qHeight": 100
+            }
+          ],
+          "qStateName": "$",
+          "qMode": "S",
+          "qSuppressMissing": true,
+          "qSuppressZero": false,
+          "qInterColumnSortOrder": [
+            0,
+            1
+          ]
+        },
+        "version": "1.0.0",
+        "subtitle": "Ultimi 12 mesi completi · ottobre 2025 – settembre 2026",
+        "showDetails": false,
+        "showDisclaimer": false,
+        "legend": {
+          "show": false,
+          "showTitle": false,
+          "dock": "auto"
+        },
+        "color": {
+          "auto": false,
+          "mode": "primary",
+          "useBaseColors": "off",
+          "paletteColor": {
+            "index": -1,
+            "color": "#0E7490"
+          }
+        },
+        "lineType": "line",
+        "preferContinuousAxis": false,
+        "dimensionAxis": {
+          "show": "labels",
+          "label": "auto",
+          "continuousAuto": false,
+          "dock": "near",
+          "axisDisplayMode": "auto"
+        },
+        "measureAxis": {
+          "show": "labels",
+          "autoMinMax": true,
+          "dock": "near"
+        },
+        "dataPoint": {
+          "show": true,
+          "showLabels": false
+        },
+        "components": [
+          {
+            "key": "line",
+            "style": {
+              "dataPointSize": 6,
+              "lineThickness": 3,
+              "lineType": "solid",
+              "lineCurve": "monotone"
+            }
+          }
+        ],
+        "nullMode": "gap",
+        "gridLine": {
+          "auto": false,
+          "spacing": 2
+        }
+      },
+      {
+        "qInfo": {
+          "qId": "qlikgpt_chart_market",
+          "qType": "barchart"
+        },
+        "qExtendsId": "",
+        "visualization": "barchart",
+        "title": "RICAVI PER MERCATO",
+        "showTitles": true,
+        "qHyperCubeDef": {
+          "qDimensions": [
+            {
+              "qDef": {
+                "qGrouping": "N",
+                "qFieldDefs": [
+                  "Market"
+                ],
+                "qFieldLabels": [
+                  "Mercato"
+                ],
+                "autoSort": false,
+                "qSortCriterias": [
+                  {
+                    "qSortByExpression": -1,
+                    "qExpression": {
+                      "qv": "Sum(Revenue)"
+                    }
+                  }
+                ]
+              },
+              "qLibraryId": "",
+              "qNullSuppression": true
+            }
+          ],
+          "qMeasures": [
+            {
+              "qLibraryId": "qlikgpt_shared_revenue",
+              "qType": "measure",
+              "qDef": {
+                "qDef": "",
+                "qLabel": "RICAVI PER MERCATO"
+              }
+            }
+          ],
+          "qInitialDataFetch": [
+            {
+              "qLeft": 0,
+              "qTop": 0,
+              "qWidth": 2,
+              "qHeight": 100
+            }
+          ],
+          "qStateName": "$",
+          "qMode": "S",
+          "qSuppressMissing": true,
+          "qSuppressZero": false,
+          "qInterColumnSortOrder": [
+            0,
+            1
+          ]
+        },
+        "version": "1.0.0",
+        "subtitle": "Classifica · valore in EUR",
+        "showDetails": false,
+        "showDisclaimer": false,
+        "legend": {
+          "show": false,
+          "showTitle": false,
+          "dock": "auto"
+        },
+        "color": {
+          "auto": false,
+          "mode": "primary",
+          "useBaseColors": "off",
+          "paletteColor": {
+            "index": -1,
+            "color": "#0E7490"
+          }
+        },
+        "orientation": "horizontal",
+        "preferContinuousAxis": false,
+        "barGrouping": {
+          "grouping": "grouped"
+        },
+        "dataPoint": {
+          "showLabels": true,
+          "showSegmentLabels": false,
+          "showTotalLabels": false
+        },
+        "gridLine": {
+          "auto": false,
+          "spacing": 1
+        },
+        "dimensionAxis": {
+          "show": "labels",
+          "label": "auto",
+          "dock": "near"
+        },
+        "measureAxis": {
+          "show": "labels",
+          "autoMinMax": true,
+          "dock": "near"
+        },
+        "scrollbar": "none"
+      }
+    ]
+  }
+]

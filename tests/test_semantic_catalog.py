@@ -18,15 +18,54 @@ class CatalogValidationTests(unittest.TestCase):
 
     def test_valid_catalog(self):
         values = sc.validate_catalog(self.catalog, self.manifests)
-        self.assertEqual(len(values), 3)
+        self.assertEqual(len(values), 5)
         self.assertEqual(
             set(self.manifests["presentation"]["catalogMeasures"]),
-            {"qlikgpt_shared_revenue", "qlikgpt_shared_orders"},
+            {"qlikgpt_shared_revenue", "qlikgpt_shared_orders",
+             "qlikgpt_shared_margin", "qlikgpt_shared_margin_pct"},
         )
         self.assertEqual(
             set(self.manifests["presentation2"]["catalogMeasures"]),
             {"qlikgpt_shared_revenue", "qlikgpt_shared_margin_pct"},
         )
+
+    def test_unassigned_measure_is_valid_and_unaffected(self):
+        catalog = sc.validate_catalog(self.catalog, self.manifests)
+        self.assertIn("qlikgpt_shared_average_order", catalog)
+        self.assertFalse(any(
+            "qlikgpt_shared_average_order" in m["catalogMeasures"]
+            for m in self.manifests.values()
+        ))
+        with patch.object(sc, "changed_metric_ids", return_value={"qlikgpt_shared_average_order"}):
+            affected = sc.determine_impacted(
+                catalog, self.manifests, {"catalog/measures.json"}, False, False)
+        self.assertEqual(affected, set())
+
+    def test_future_subscription_activates_existing_catalog_metric(self):
+        catalog = sc.validate_catalog(self.catalog, self.manifests)
+        future = deepcopy(self.manifests)
+        future["presentation2"]["catalogMeasures"].append("qlikgpt_shared_average_order")
+        self.assertEqual(
+            sc.determine_impacted(catalog, future, {"apps/presentation2.json"}, False, False),
+            {"presentation2"},
+        )
+
+    def test_inline_measure_in_app_is_rejected(self):
+        invalid = deepcopy(self.manifests)
+        # The actual dashboard JSON validation should fail if a qLibraryId
+        # is missing, rather than silently allowing duplicated expressions.
+        from unittest.mock import mock_open
+        original = Path.read_text
+        def read(path, *args, **kwargs):
+            if str(path).endswith("apps/presentation1-objects.json"):
+                content = json.loads(original(path, *args, **kwargs))
+                visual = next(v for v in content[0]["qChildren"] if v.get("qHyperCubeDef"))
+                visual["qHyperCubeDef"]["qMeasures"][0] = {"qDef":{"qDef":"Sum(Revenue)"}}
+                return json.dumps(content)
+            return original(path, *args, **kwargs)
+        with patch.object(Path, "read_text", read):
+            with self.assertRaisesRegex(ValueError, "inline measure"):
+                sc.validate_catalog(self.catalog, invalid)
 
     def test_duplicate_id_rejected(self):
         invalid = deepcopy(self.catalog)

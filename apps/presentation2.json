@@ -7,5 +7,5 @@
     "qlikgpt_shared_margin_pct"
   ],
   "dashboardSource": "apps/presentation2-objects.json",
-  "description": "Presentation 2 showcases shared revenue and margin-rate library measures."
+  "description": "Catalog-governed native KPIs linked with qLibraryId."
 }

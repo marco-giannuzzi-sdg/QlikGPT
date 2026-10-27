@@ -79,10 +79,21 @@ def validate_catalog(catalog: dict, manifests: dict) -> dict:
             raise ValueError(f"{app_key}: unapproved loadScript")
         if app_key == "presentation2" and manifest.get("dashboardSource") != "apps/presentation2-objects.json":
             raise ValueError("Unexpected second presentation dashboard file")
-    local = json.loads((ROOT / "frontend" / "measures.json").read_text(encoding="utf-8"))
-    local_ids = {m.get("qInfo", {}).get("qId") for m in local}
-    if local_ids & set(by_id):
-        raise ValueError("Shared measure IDs collide with local Presentation 1 measures")
+    # Every KPI/chart measure must be an approved catalog subscription. This
+    # forbids private JSON/inline master-measure definitions in both apps.
+    for app_key, manifest in manifests.items():
+        visuals = json.loads((ROOT / manifest["dashboardSource"]).read_text())
+        for sheet in visuals:
+            for child in sheet.get("qChildren", []):
+                if child.get("qInfo", {}).get("qType") == "measure":
+                    raise ValueError(f"{app_key}: master measures belong in catalog")
+                for item in child.get("qHyperCubeDef", {}).get("qMeasures", []):
+                    mid = item.get("qLibraryId")
+                    if not mid or mid not in manifest["catalogMeasures"]:
+                        raise ValueError(
+                            f"{app_key}: visual {child.get('qInfo',{}).get('qId')} "
+                            "has inline measure or missing catalog subscription"
+                        )
     return by_id
 
 

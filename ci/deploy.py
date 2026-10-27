@@ -183,43 +183,32 @@ def nonempty_json_array(relative: str) -> bool:
     return bool(parsed)
 
 
-def deploy_frontend(app_id: str) -> None:
-    # The frontend lives as versioned JSON, and is applied ONLY to Presentation.
-    # Empty [] means "not designed yet", rather than deleting user objects.
-    types = (
-        ("dimensions", "frontend/dimensions.json"),
-        ("measures", "frontend/measures.json"),
-        ("objects", "frontend/objects.json"),
-    )
-    options = []
-    for flag, path in types:
-        if nonempty_json_array(path):
-            options.extend([f"--{flag}", path])
-    if not options:
-        print("No frontend definitions yet. Skipping sheet/chart deployment.")
-        return
-    run("app", "build", "--app", app_id, "--no-reload", *options)
-    print("Frontend JSON applied to the Presentation app.")
-
+def deploy_dimensions(app_id: str) -> None:
+    # Master measures are never imported from local JSON: the Semantic Catalog
+    # and QIX synchronize them for each app independently.
+    path = "apps/presentation1-dimensions.json"
+    if nonempty_json_array(path):
+        run("app", "build", "--app", app_id, "--no-reload",
+            "--dimensions", path)
+        print("Presentation 1 dimensions synchronized.", flush=True)
 
 
 def validate_frontend(app_id: str) -> None:
     """Round-trip the Presentation app through Qlik CLI to confirm persisted objects."""
-    expected_ids = {
-        "qlikgpt_sales_overview",
-        "qlikgpt_brand_header",
-        "qlikgpt_kpi_revenue", "qlikgpt_kpi_orders",
-        "qlikgpt_kpi_margin", "qlikgpt_kpi_margin_pct",
-        "qlikgpt_chart_month", "qlikgpt_chart_market",
-        "qlikgpt_filter_panel",
-        "qlikgpt_list_year", "qlikgpt_list_market",
-        "qlikgpt_list_channel",
-        "qlikgpt_m_revenue", "qlikgpt_m_orders",
-        "qlikgpt_m_margin", "qlikgpt_m_margin_pct",
-        "qlikgpt_d_market", "qlikgpt_d_yearmonth",
-        "qlikgpt_d_category", "qlikgpt_d_year",
-        "qlikgpt_d_channel",
-    }
+    # Dynamic: expected catalog measures + all native objects and dimensions
+    # declared in the app manifest. No fixed list of legacy master items.
+    manifest = json.loads((ROOT / "apps/presentation1.json").read_text())
+    sheets = json.loads((ROOT / manifest["dashboardSource"]).read_text())
+    filters = json.loads((ROOT / manifest["filterSource"]).read_text())
+    dimensions = json.loads((ROOT / manifest["dimensionSource"]).read_text())
+    expected_ids = set(manifest["catalogMeasures"])
+    expected_ids.update(d["qInfo"]["qId"] for d in dimensions)
+    for sheet in sheets:
+        expected_ids.add(sheet["qInfo"]["qId"])
+        expected_ids.update(child["qInfo"]["qId"]
+                            for child in sheet.get("qChildren", []))
+    expected_ids.update(f["id"] for f in filters)
+
 
     ids: set[str] = set()
     with tempfile.TemporaryDirectory(prefix="qlikgpt-audit-") as directory:
@@ -301,7 +290,7 @@ def main() -> None:
             for path in files_changed)
     )
     if refresh_p1_frontend:
-        deploy_frontend(state["presentation"])
+        deploy_dimensions(state["presentation"])
         # Qlik CLI does not fully materialize nested sheet children.
         subprocess.run(
             [sys.executable, "ci/deploy_filters.py", state["presentation"]],

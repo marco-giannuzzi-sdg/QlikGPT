@@ -4,9 +4,12 @@
   "loadScript": "scripts/presentation.qvs",
   "catalogMeasures": [
     "qlikgpt_shared_revenue",
-    "qlikgpt_shared_orders"
+    "qlikgpt_shared_orders",
+    "qlikgpt_shared_margin",
+    "qlikgpt_shared_margin_pct"
   ],
-  "localMeasuresSource": "frontend/measures.json",
-  "dashboardSource": "frontend/objects.json",
-  "description": "Presentation 1 retains its existing four app-local master measures and Sales Overview dashboard."
+  "dashboardSource": "apps/presentation1-objects.json",
+  "description": "All master measures catalog governed; every KPI/chart uses subscribed qLibraryId.",
+  "dimensionSource": "apps/presentation1-dimensions.json",
+  "filterSource": "apps/presentation1-filters.json"
 }

@@ -1,0 +1,117 @@
+[
+  {
+    "qInfo": {
+      "qId": "qlikgpt_d_market",
+      "qType": "dimension"
+    },
+    "qDim": {
+      "qGrouping": "N",
+      "qFieldDefs": [
+        "Market"
+      ],
+      "qFieldLabels": [
+        "Mercato"
+      ]
+    },
+    "qMetaDef": {
+      "title": "Mercato",
+      "description": "Dimensione Market",
+      "tags": [
+        "QlikGPT",
+        "Sales"
+      ]
+    }
+  },
+  {
+    "qInfo": {
+      "qId": "qlikgpt_d_yearmonth",
+      "qType": "dimension"
+    },
+    "qDim": {
+      "qGrouping": "N",
+      "qFieldDefs": [
+        "YearMonth"
+      ],
+      "qFieldLabels": [
+        "Anno / Mese"
+      ]
+    },
+    "qMetaDef": {
+      "title": "Anno / Mese",
+      "description": "Dimensione YearMonth",
+      "tags": [
+        "QlikGPT",
+        "Sales"
+      ]
+    }
+  },
+  {
+    "qInfo": {
+      "qId": "qlikgpt_d_category",
+      "qType": "dimension"
+    },
+    "qDim": {
+      "qGrouping": "N",
+      "qFieldDefs": [
+        "ProductCategory"
+      ],
+      "qFieldLabels": [
+        "Categoria"
+      ]
+    },
+    "qMetaDef": {
+      "title": "Categoria",
+      "description": "Dimensione ProductCategory",
+      "tags": [
+        "QlikGPT",
+        "Sales"
+      ]
+    }
+  },
+  {
+    "qInfo": {
+      "qId": "qlikgpt_d_year",
+      "qType": "dimension"
+    },
+    "qDim": {
+      "qGrouping": "N",
+      "qFieldDefs": [
+        "SalesYear"
+      ],
+      "qFieldLabels": [
+        "Anno"
+      ]
+    },
+    "qMetaDef": {
+      "title": "Anno",
+      "description": "Dimensione SalesYear",
+      "tags": [
+        "QlikGPT",
+        "Sales"
+      ]
+    }
+  },
+  {
+    "qInfo": {
+      "qId": "qlikgpt_d_channel",
+      "qType": "dimension"
+    },
+    "qDim": {
+      "qGrouping": "N",
+      "qFieldDefs": [
+        "Channel"
+      ],
+      "qFieldLabels": [
+        "Canale"
+      ]
+    },
+    "qMetaDef": {
+      "title": "Canale",
+      "description": "Dimensione Channel",
+      "tags": [
+        "QlikGPT",
+        "Sales"
+      ]
+    }
+  }
+]

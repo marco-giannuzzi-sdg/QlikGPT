@@ -3,14 +3,14 @@
   "governance": {
     "owner": "BI Architecture",
     "deletePolicy": "explicit-approval-only",
-    "contract": "Normalized sales fields from Sales_Clean.qvd"
+    "contract": "Every app master measure is catalog-governed; unassigned definitions stay available."
   },
   "measures": [
     {
       "id": "qlikgpt_shared_revenue",
-      "title": "Ricavi condivisi",
+      "title": "Fatturato",
       "expression": "RangeSum(Sum(Revenue), 0)",
-      "description": "Ricavi complessivi condivisi, versione governata 1.0.1 (formulazione equivalente)",
+      "description": "Fatturato totale con filtri associativi.",
       "format": {
         "qType": "M",
         "qFmt": "€ #,##0.00",
@@ -23,15 +23,15 @@
       "tags": [
         "Semantic Catalog",
         "Sales",
-        "Shared"
+        "Governed"
       ],
       "version": "1.0.1"
     },
     {
       "id": "qlikgpt_shared_orders",
-      "title": "Ordini condivisi",
+      "title": "Numero ordini",
       "expression": "Count(DISTINCT OrderID)",
-      "description": "Numero di ordini univoci",
+      "description": "Numero ordini distinti.",
       "format": {
         "qType": "F",
         "qFmt": "#,##0",
@@ -44,15 +44,36 @@
       "tags": [
         "Semantic Catalog",
         "Sales",
-        "Shared"
+        "Governed"
+      ],
+      "version": "1.0.0"
+    },
+    {
+      "id": "qlikgpt_shared_margin",
+      "title": "Margine lordo",
+      "expression": "Sum(Margin)",
+      "description": "Somma dei margini commerciali.",
+      "format": {
+        "qType": "M",
+        "qFmt": "€ #,##0.00",
+        "qDec": ",",
+        "qThou": "."
+      },
+      "requiredFields": [
+        "Margin"
+      ],
+      "tags": [
+        "Semantic Catalog",
+        "Sales",
+        "Governed"
       ],
       "version": "1.0.0"
     },
     {
       "id": "qlikgpt_shared_margin_pct",
-      "title": "Margine percentuale condiviso",
+      "title": "Margine %",
       "expression": "If(Sum(Revenue)>0,Sum(Margin)/Sum(Revenue),0)",
-      "description": "Margine commerciale percentuale governato; solo Presentation 2 è iscritta a questa metrica.",
+      "description": "Marginalità commerciale percentuale.",
       "format": {
         "qType": "F",
         "qFmt": "0.0%",
@@ -66,9 +87,31 @@
       "tags": [
         "Semantic Catalog",
         "Sales",
-        "Shared"
+        "Governed"
       ],
       "version": "1.0.1"
+    },
+    {
+      "id": "qlikgpt_shared_average_order",
+      "title": "Valore medio ordine",
+      "expression": "If(Count(DISTINCT OrderID)>0,Sum(Revenue)/Count(DISTINCT OrderID),0)",
+      "description": "Disponibile per future sottoscrizioni; nessuna app la utilizza oggi.",
+      "format": {
+        "qType": "M",
+        "qFmt": "€ #,##0.00",
+        "qDec": ",",
+        "qThou": "."
+      },
+      "requiredFields": [
+        "Revenue",
+        "OrderID"
+      ],
+      "tags": [
+        "Semantic Catalog",
+        "Sales",
+        "Available"
+      ],
+      "version": "1.0.0"
     }
   ]
 }

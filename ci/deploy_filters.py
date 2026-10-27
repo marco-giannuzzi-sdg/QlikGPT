@@ -13,7 +13,7 @@ import urllib.parse
 import websocket
 
 ROOT = Path(__file__).resolve().parents[1]
-CONFIG = ROOT / "frontend" / "filters.json"
+CONFIG = ROOT / "apps" / "presentation1-filters.json"
 
 
 class Qix:
@@ -76,13 +76,13 @@ def main() -> None:
     if not isinstance(definitions, list):
         raise TypeError("frontend/filters.json must be an array")
 
-    source = json.loads((ROOT / "frontend" / "objects.json").read_text(encoding="utf-8"))
+    source = json.loads((ROOT / "apps" / "presentation1-objects.json").read_text(encoding="utf-8"))
     target = next(
         (obj for obj in source if obj.get("qInfo", {}).get("qId") == "qlikgpt_sales_overview"),
         None,
     )
     if target is None:
-        raise RuntimeError("Missing Sales Overview in frontend/objects.json")
+        raise RuntimeError("Missing Sales Overview in apps/presentation1-objects.json")
 
     qix = Qix(sys.argv[1])
     try:
