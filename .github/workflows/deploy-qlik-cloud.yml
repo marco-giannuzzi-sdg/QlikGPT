@@ -2,6 +2,21 @@ name: QlikGPT — Governed Qlik Cloud deployments
 
 on:
   workflow_dispatch:
+    inputs:
+      operation:
+        description: "Operazione: distribuisci script senza reload, reload singolo o catena"
+        type: choice
+        required: true
+        default: deploy-only
+        options:
+          - deploy-only
+          - reload-app
+          - reload-chain
+      target_app:
+        description: "Chiave app QlikGPT (etl1, etl2, presentation, presentation2)"
+        type: string
+        required: true
+        default: etl2
   push:
     branches: [main]
     paths:
@@ -23,7 +38,7 @@ permissions:
 
 jobs:
   qlik-deploy:
-    name: ETL and governed Presentation deployment
+    name: Script deploy and explicit reload control
     # To prevent accidental runs before credentials are configured.
     if: ${{ vars.QLIK_CICD_ENABLED == 'true' }}
     runs-on: ubuntu-latest
@@ -32,6 +47,9 @@ jobs:
       QLIK_TENANT: https://sdggroup-it.eu.qlikcloud.com
       QLIK_API_KEY: ${{ secrets.QLIK_API_KEY }}
       QLIK_SPACE_ID: ${{ vars.QLIK_SPACE_ID }}
+      QLIK_DEPLOY_OPERATION: ${{ github.event_name == 'workflow_dispatch' && inputs.operation || 'deploy-only' }}
+      QLIK_DEPLOY_TARGET: ${{ github.event_name == 'workflow_dispatch' && inputs.target_app || '' }}
+      GITHUB_EVENT_NAME: ${{ github.event_name }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -74,7 +92,7 @@ jobs:
         shell: bash
         run: |
           python3 -m unittest discover -s tests -v
-          python3 -m py_compile ci/semantic_catalog.py ci/semantic_assets.py ci/catalog_report.py ci/app_lineage.py ci/deploy.py ci/deploy_visuals.py
+          python3 -m py_compile ci/semantic_catalog.py ci/semantic_assets.py ci/catalog_report.py ci/app_lineage.py ci/deployment_plan.py ci/reload_chain.py ci/deploy.py ci/deploy_visuals.py
 
       - name: Authenticate to Qlik Cloud
         shell: bash
@@ -86,28 +104,27 @@ jobs:
           qlik user me >/dev/null
           echo "Qlik Cloud authentication confirmed."
 
-      - name: Choose full or frontend-only deployment
+      - name: Enforce explicit script deployment / data-reload separation
         shell: bash
         run: |
           set -euo pipefail
-          scope=full
-          if [ "${{ github.event_name }}" = "push" ]; then
-            changed="$(git diff --name-only HEAD^ HEAD 2>/dev/null || true)"
-            if [ -n "$changed" ] && ! printf '%s\n' "$changed" | grep -Eq '^scripts/'; then
-              scope=frontend
-            fi
+          if [ "$GITHUB_EVENT_NAME" = "push" ]; then
+            test "$QLIK_DEPLOY_OPERATION" = "deploy-only"
+            test -z "$QLIK_DEPLOY_TARGET"
+            echo "Push: deploy changed scripts with --no-reload; NEVER reload data."
+          else
+            test -n "$QLIK_DEPLOY_TARGET"
+            echo "Manual operation: $QLIK_DEPLOY_OPERATION; target: $QLIK_DEPLOY_TARGET"
           fi
-          echo "QLIK_DEPLOY_SCOPE=$scope" >> "$GITHUB_ENV"
-          echo "Deployment scope: $scope"
 
-      - name: Create or reuse apps, deploy QVS and frontend JSON
+      - name: Deploy scripts without reload, then run ONLY explicitly requested reloads
         shell: bash
         run: |
           set -euo pipefail
           python3 ci/deploy.py
 
       - name: Persist App Lineage, Semantic Catalog report and app IDs to GitHub
-        # Persist even if ETL2 / Presentation reload fails, avoiding duplicates on retry.
+        # Persist reports and IDs even when an explicitly requested reload fails.
         if: ${{ always() && vars.QLIK_CICD_ENABLED == 'true' }}
         shell: bash
         run: |

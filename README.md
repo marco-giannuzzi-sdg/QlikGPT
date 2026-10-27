@@ -66,7 +66,7 @@ Le app del PoC rimangono distinte:
 - **Presentation 1**: [Sales Overview](https://sdggroup-it.eu.qlikcloud.com/sense/app/07dfa926-4895-4fb2-af4c-eac90e9eb2cb);
 - **Presentation 2**: [Shared Semantic Measures](https://sdggroup-it.eu.qlikcloud.com/sense/app/04280b14-6ba5-4fe9-90d6-2ff8fa1c994f).
 
-Ogni modifica a `catalog/measures.json` avvia un **frontend-only deployment**, senza reload ETL1/ETL2. L'analisi Git identifica le sole app sottoscritte alla misura modificata. Una modifica agli script ETL provoca il reload completo; la creazione di una nuova Presentation include il caricamento iniziale.
+Ogni modifica a `catalog/measures.json` avvia un **frontend-only deployment**, senza reload ETL1/ETL2. L'analisi Git identifica le sole app sottoscritte alla misura modificata. **Le modifiche ai QVS di app già esistenti distribuiscono soltanto lo script, senza reload automatico.** Il reload di un'app o di una catena downstream è avviato soltanto tramite richiesta manuale esplicita da GitHub Actions. L'inizializzazione di una Presentation completamente nuova rimane un caso distinto di bootstrap.
 
 ### Convenzioni
 
@@ -78,6 +78,29 @@ Ogni modifica a `catalog/measures.json` avvia un **frontend-only deployment**, s
 - **Rollback**: compensazione *best effort*; non esiste una transazione atomica tra app Qlik diverse.
 - **Sicurezza**: nessuna API key nel repository; conservare `QLIK_API_KEY` soltanto come GitHub Actions secret. Per uso aziendale, repository privato, PR, approvazioni e promozione verso produzione.
 
+## Script deployment e reload: due operazioni distinte
+
+Per le app esistenti ogni **push su `main`** applica i soli script QVS modificati tramite `qlik app build --script ... --no-reload`. Nessun reload, nessuna rigenerazione dei QVD. Il nuovo script è verificato con QIX `GetScript`.
+
+Per ricaricare apri **[GitHub Actions — QlikGPT](https://github.com/marco-giannuzzi-sdg/QlikGPT/actions/workflows/deploy-qlik-cloud.yml)** → **Run workflow**, indica l'operazione e il target (ad esempio `etl2`).
+
+| Operazione | App interessate | Ricaricamento dati |
+| --- | --- | --- |
+| `deploy-only` | Soli QVS modificati (push) o target scelto (manuale) | **No** |
+| `reload-app` | Solo target selezionato | **Sì, soltanto il target** |
+| `reload-chain` | Target e app downstream individuate da [App Lineage](lineage/APP_LINEAGE.md) | **Sì, in ordine topologico** |
+
+### Caso pratico: modifica allo script ETL2
+
+1. Modifica `scripts/etl2.qvs` su GitHub e fai commit su `main`: lo script viene distribuito su ETL2 senza reload. ETL1, Presentation 1 e Presentation 2 non vengono ricaricate.
+2. Per applicare la modifica soltanto al QVD di ETL2 avvia `reload-app` con target `etl2`.
+3. Per propagare i nuovi dati fino ai report avvia `reload-chain` con target `etl2`. L'ordine sarà ETL2 → Presentation 1 → Presentation 2. **ETL1 non rientra nella catena.**
+
+Il sistema accoda un job Qlik REST per volta, verifica `SUCCEEDED` e **blocca i passaggi a valle in caso di errore o timeout**.
+
+**Nota:** distribuire un nuovo QVS non aggiorna i campi del modello dati fino al successivo reload. Ricaricare solo ETL2 può aggiornare il QVD senza aggiornare le Presentation: occorre la modalità `reload-chain` quando si vuole propagare il nuovo dato ai report. Il bootstrap di nuove app viene gestito separatamente.
+
+Implementazione: [pianificatore](ci/deployment_plan.py) e [motore reload](ci/reload_chain.py). La sorgente ufficiale resta GitHub; nessun Reverse Sync.
 ## Ripetere i test
 
 Con Python 3.12 e dipendenza `websocket-client`:

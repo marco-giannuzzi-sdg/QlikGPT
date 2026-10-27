@@ -252,29 +252,61 @@ def main() -> None:
         ensure_app(state, kind, name)
     persist(state)
 
-    # Frontend-only commits must not regenerate synthetic orders.
-    # This keeps sales KPI numbers stable while styling the Qlik dashboard.
-    scope = os.environ.get("QLIK_DEPLOY_SCOPE", "full")
-    if scope not in {"full", "frontend"}:
-        raise ValueError("Unknown QLIK_DEPLOY_SCOPE: " + scope)
-    if scope == "full":
-        for kind, name, script in APPS:
-            print(f"=== Deploying {name} ===", flush=True)
-            run("app", "build", "--app", state[kind], "--script", script)
-    else:
-        print("Frontend-only deployment: retaining ETL1, ETL2 and Presentation data.", flush=True)
+    # HARD GUARANTEE: no commit to GitHub ever implicitly reloads an
+    # existing application. Manual modes must explicitly request it.
+    operation = os.environ.get("QLIK_DEPLOY_OPERATION", "deploy-only")
+    target_app = os.environ.get("QLIK_DEPLOY_TARGET", "").strip()
+    event = os.environ.get("GITHUB_EVENT_NAME", "push")
+    if event != "workflow_dispatch" and operation != "deploy-only":
+        raise ValueError("Data reload requires explicit GitHub workflow_dispatch")
+    if event == "push" and target_app:
+        raise ValueError("A Git push cannot specify a reload/deployment target")
 
-    # Multi-app governed master measures; creates second Presentation on first run.
     from semantic_catalog import orchestrate_semantic_catalog, changed_paths
+    from app_lineage import build as build_lineage, registry as app_registry
+    from deployment_plan import plan as create_plan, describe as describe_plan
+    from reload_chain import run_chain
     files_changed = changed_paths()
+
+    # Master items and visuals are synchronized without a data reload.
+    # The existing bootstrap of a *brand-new* Presentation is intentionally
+    # handled separately in the semantic orchestrator.
     orchestrate_semantic_catalog(
-        state, run=run, ensure_app=ensure_app, persist=persist, scope=scope
+        state, run=run, ensure_app=ensure_app, persist=persist, scope="frontend"
     )
+
+    graph = build_lineage(app_registry())
+    execution = create_plan(graph, files_changed, operation, target_app)
+    print(describe_plan(execution), flush=True)
+    for key in execution["scripts"]:
+        app = graph["apps"][key]
+        if not app.get("appId"):
+            raise RuntimeError(f"{key}: missing registered Qlik App ID")
+        path = app["script"]
+        print(f"DEPLOY SCRIPT ONLY [{key}] {path} (NO DATA RELOAD)", flush=True)
+        run("app", "build", "--app", state[key], "--script", path, "--no-reload")
+
+        # Separate QIX readback: commit must really reach the application's
+        # load-script editor, independent of the loaded data model.
+        from deploy_visuals import Qix
+        check = Qix(state[key])
+        try:
+            doc = check.call(-1, "OpenDoc", {"qDocName":state[key]})["qReturn"]["qHandle"]
+            actual = check.call(doc, "GetScript", []).get("qScript")
+            expected = (ROOT / path).read_text(encoding="utf-8")
+            norm = lambda x: x.replace("\r\n", "\n").strip() if isinstance(x, str) else None
+            if norm(actual) != norm(expected):
+                raise RuntimeError(f"{key}: persisted Qlik script differs from GitHub {path}")
+            print(f"SCRIPT VERIFIED [{key}]: QIX GetScript matches GitHub",flush=True)
+        finally:
+            check.close()
+    if not execution["reloads"]:
+        print("DATA RELOADS: 0 (deploy-only)", flush=True)
 
     # A catalog-only commit deploys ONLY to the subscribed apps.
     # Rebuild the original Sales Overview only when its own frontend or CI changes.
     refresh_p1_frontend = (
-        scope == "full" or not files_changed or
+        not files_changed or
         any(path.startswith(("apps/presentation1", "ci/", ".github/"))
             for path in files_changed)
     )
@@ -305,6 +337,12 @@ def main() -> None:
 
     else:
         print("Skipping Presentation 1 frontend: catalog/manifests-only change.", flush=True)
+    # Reloads are a separate, explicitly opted-in workflow operation.
+    # REST status is checked before enqueueing the next dependent app.
+    if execution["reloads"]:
+        print(f"EXPLICIT DATA RELOAD: {operation} target={target_app}", flush=True)
+        run_chain(graph["apps"], execution["reloads"], qlik_rest)
+
     print("=== Presentation Count(OrderID) ===", flush=True)
     run("app", "eval", "Count(OrderID)", "--app", state["presentation"])
     print(f"Presentation app: {TENANT}/sense/app/{state['presentation']}", flush=True)
