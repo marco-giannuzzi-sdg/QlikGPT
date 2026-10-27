@@ -93,6 +93,7 @@ def main() -> None:
             # Keep properties minimal to mirror the native Engine example.
             properties = {
                 "qInfo": {"qId": item_id, "qType": "listbox"},
+                "qExtendsId": "",
                 "visualization": "listbox",
                 "title": label,
                 "qListObjectDef": {
