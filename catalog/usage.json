@@ -1,0 +1,407 @@
+{
+  "schemaVersion": 2,
+  "source": "GitHub declarations (not QIX runtime usage)",
+  "apps": {
+    "presentation": {
+      "name": "QlikGPT - 03 PRESENTATION",
+      "appId": "07dfa926-4895-4fb2-af4c-eac90e9eb2cb",
+      "manifest": "apps/presentation1.json"
+    },
+    "presentation2": {
+      "name": "QlikGPT - 04 PRESENTATION SHARED",
+      "appId": "04280b14-6ba5-4fe9-90d6-2ff8fa1c994f",
+      "manifest": "apps/presentation2.json"
+    }
+  },
+  "items": [
+    {
+      "kind": "measure",
+      "id": "qlikgpt_shared_revenue",
+      "name": "Fatturato",
+      "version": "1.0.2",
+      "apps": [
+        "presentation",
+        "presentation2"
+      ],
+      "visuals": [
+        {
+          "app": "presentation",
+          "sheet": "Sales Intelligence | QlikGPT",
+          "visualId": "qlikgpt_kpi_revenue",
+          "visualType": "kpi"
+        },
+        {
+          "app": "presentation",
+          "sheet": "Sales Intelligence | QlikGPT",
+          "visualId": "qlikgpt_chart_month",
+          "visualType": "linechart"
+        },
+        {
+          "app": "presentation",
+          "sheet": "Sales Intelligence | QlikGPT",
+          "visualId": "qlikgpt_chart_market",
+          "visualType": "barchart"
+        },
+        {
+          "app": "presentation2",
+          "sheet": "Shared Semantic Measures",
+          "visualId": "qlikgpt_p2_kpi_revenue",
+          "visualType": "kpi"
+        }
+      ],
+      "definitions": {
+        "id": "qlikgpt_shared_revenue",
+        "title": "Fatturato",
+        "expression": "Sum(Revenue)",
+        "description": "Fatturato totale con filtri associativi; definizione canonica del catalogo.",
+        "requiredFields": [
+          "Revenue"
+        ],
+        "tags": [
+          "Semantic Catalog",
+          "Sales",
+          "Governed"
+        ],
+        "version": "1.0.2",
+        "formatPreset": "currency_eur_2",
+        "compactFormatPreset": "currency_millions",
+        "colorRole": "revenue"
+      }
+    },
+    {
+      "kind": "measure",
+      "id": "qlikgpt_shared_orders",
+      "name": "Numero ordini",
+      "version": "1.0.0",
+      "apps": [
+        "presentation"
+      ],
+      "visuals": [
+        {
+          "app": "presentation",
+          "sheet": "Sales Intelligence | QlikGPT",
+          "visualId": "qlikgpt_kpi_orders",
+          "visualType": "kpi"
+        }
+      ],
+      "definitions": {
+        "id": "qlikgpt_shared_orders",
+        "title": "Numero ordini",
+        "expression": "Count(DISTINCT OrderID)",
+        "description": "Numero ordini distinti.",
+        "requiredFields": [
+          "OrderID"
+        ],
+        "tags": [
+          "Semantic Catalog",
+          "Sales",
+          "Governed"
+        ],
+        "version": "1.0.0",
+        "formatPreset": "integer_0",
+        "colorRole": "orders"
+      }
+    },
+    {
+      "kind": "measure",
+      "id": "qlikgpt_shared_margin",
+      "name": "Margine lordo",
+      "version": "1.0.0",
+      "apps": [
+        "presentation"
+      ],
+      "visuals": [
+        {
+          "app": "presentation",
+          "sheet": "Sales Intelligence | QlikGPT",
+          "visualId": "qlikgpt_kpi_margin",
+          "visualType": "kpi"
+        }
+      ],
+      "definitions": {
+        "id": "qlikgpt_shared_margin",
+        "title": "Margine lordo",
+        "expression": "Sum(Margin)",
+        "description": "Somma dei margini commerciali.",
+        "requiredFields": [
+          "Margin"
+        ],
+        "tags": [
+          "Semantic Catalog",
+          "Sales",
+          "Governed"
+        ],
+        "version": "1.0.0",
+        "formatPreset": "currency_eur_2",
+        "compactFormatPreset": "currency_millions",
+        "colorRole": "margin"
+      }
+    },
+    {
+      "kind": "measure",
+      "id": "qlikgpt_shared_margin_pct",
+      "name": "Margine %",
+      "version": "1.0.1",
+      "apps": [
+        "presentation",
+        "presentation2"
+      ],
+      "visuals": [
+        {
+          "app": "presentation",
+          "sheet": "Sales Intelligence | QlikGPT",
+          "visualId": "qlikgpt_kpi_margin_pct",
+          "visualType": "kpi"
+        },
+        {
+          "app": "presentation2",
+          "sheet": "Shared Semantic Measures",
+          "visualId": "qlikgpt_p2_kpi_marginpct",
+          "visualType": "kpi"
+        }
+      ],
+      "definitions": {
+        "id": "qlikgpt_shared_margin_pct",
+        "title": "Margine %",
+        "expression": "If(Sum(Revenue)>0,Sum(Margin)/Sum(Revenue),0)",
+        "description": "Marginalità commerciale percentuale.",
+        "requiredFields": [
+          "Revenue",
+          "Margin"
+        ],
+        "tags": [
+          "Semantic Catalog",
+          "Sales",
+          "Governed"
+        ],
+        "version": "1.0.1",
+        "formatPreset": "percent_1",
+        "colorRole": "positive"
+      }
+    },
+    {
+      "kind": "measure",
+      "id": "qlikgpt_shared_average_order",
+      "name": "Valore medio ordine",
+      "version": "1.0.0",
+      "apps": [],
+      "visuals": [],
+      "definitions": {
+        "id": "qlikgpt_shared_average_order",
+        "title": "Valore medio ordine",
+        "expression": "If(Count(DISTINCT OrderID)>0,Sum(Revenue)/Count(DISTINCT OrderID),0)",
+        "description": "Disponibile per future sottoscrizioni; nessuna app la utilizza oggi.",
+        "requiredFields": [
+          "Revenue",
+          "OrderID"
+        ],
+        "tags": [
+          "Semantic Catalog",
+          "Sales",
+          "Available"
+        ],
+        "version": "1.0.0",
+        "formatPreset": "currency_eur_2",
+        "colorRole": "revenue"
+      }
+    },
+    {
+      "kind": "dimension",
+      "id": "qlikgpt_d_market",
+      "name": "Mercato",
+      "version": "1.0.0",
+      "apps": [
+        "presentation",
+        "presentation2"
+      ],
+      "visuals": [],
+      "definitions": {
+        "id": "qlikgpt_d_market",
+        "title": "Mercato",
+        "fields": [
+          "Market"
+        ],
+        "labels": [
+          "Mercato"
+        ],
+        "description": "Dimensione Market",
+        "tags": [
+          "Semantic Catalog",
+          "Sales",
+          "Governed"
+        ],
+        "version": "1.0.0"
+      }
+    },
+    {
+      "kind": "dimension",
+      "id": "qlikgpt_d_yearmonth",
+      "name": "Anno / Mese",
+      "version": "1.0.0",
+      "apps": [
+        "presentation",
+        "presentation2"
+      ],
+      "visuals": [],
+      "definitions": {
+        "id": "qlikgpt_d_yearmonth",
+        "title": "Anno / Mese",
+        "fields": [
+          "YearMonth"
+        ],
+        "labels": [
+          "Anno / Mese"
+        ],
+        "description": "Dimensione YearMonth",
+        "tags": [
+          "Semantic Catalog",
+          "Sales",
+          "Governed"
+        ],
+        "version": "1.0.0"
+      }
+    },
+    {
+      "kind": "dimension",
+      "id": "qlikgpt_d_category",
+      "name": "Categoria",
+      "version": "1.0.0",
+      "apps": [
+        "presentation"
+      ],
+      "visuals": [],
+      "definitions": {
+        "id": "qlikgpt_d_category",
+        "title": "Categoria",
+        "fields": [
+          "ProductCategory"
+        ],
+        "labels": [
+          "Categoria"
+        ],
+        "description": "Dimensione ProductCategory",
+        "tags": [
+          "Semantic Catalog",
+          "Sales",
+          "Governed"
+        ],
+        "version": "1.0.0"
+      }
+    },
+    {
+      "kind": "dimension",
+      "id": "qlikgpt_d_year",
+      "name": "Anno",
+      "version": "1.0.0",
+      "apps": [
+        "presentation"
+      ],
+      "visuals": [],
+      "definitions": {
+        "id": "qlikgpt_d_year",
+        "title": "Anno",
+        "fields": [
+          "SalesYear"
+        ],
+        "labels": [
+          "Anno"
+        ],
+        "description": "Dimensione SalesYear",
+        "tags": [
+          "Semantic Catalog",
+          "Sales",
+          "Governed"
+        ],
+        "version": "1.0.0"
+      }
+    },
+    {
+      "kind": "dimension",
+      "id": "qlikgpt_d_channel",
+      "name": "Canale",
+      "version": "1.0.0",
+      "apps": [
+        "presentation"
+      ],
+      "visuals": [],
+      "definitions": {
+        "id": "qlikgpt_d_channel",
+        "title": "Canale",
+        "fields": [
+          "Channel"
+        ],
+        "labels": [
+          "Canale"
+        ],
+        "description": "Dimensione Channel",
+        "tags": [
+          "Semantic Catalog",
+          "Sales",
+          "Governed"
+        ],
+        "version": "1.0.0"
+      }
+    },
+    {
+      "kind": "dimension",
+      "id": "qlikgpt_d_quarter",
+      "name": "Trimestre",
+      "version": "1.0.0",
+      "apps": [],
+      "visuals": [],
+      "definitions": {
+        "id": "qlikgpt_d_quarter",
+        "title": "Trimestre",
+        "fields": [
+          "YearQuarter"
+        ],
+        "labels": [
+          "Trimestre"
+        ],
+        "description": "Riservata per nuove dashboard e sottoscrizioni future.",
+        "tags": [
+          "Semantic Catalog",
+          "Available"
+        ],
+        "version": "1.0.0"
+      }
+    },
+    {
+      "kind": "variable",
+      "id": "qlikgpt_v_target_margin",
+      "name": "vQlikGPTTargetMargin",
+      "version": "1.0.0",
+      "apps": [
+        "presentation",
+        "presentation2"
+      ],
+      "visuals": [],
+      "definitions": {
+        "id": "qlikgpt_v_target_margin",
+        "name": "vQlikGPTTargetMargin",
+        "definition": "0.40",
+        "description": "Soglia di riferimento di marginalità utilizzabile dalle app sottoscritte.",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "kind": "variable",
+      "id": "qlikgpt_v_currency_label",
+      "name": "vQlikGPTCurrencyLabel",
+      "version": "1.0.0",
+      "apps": [],
+      "visuals": [],
+      "definitions": {
+        "id": "qlikgpt_v_currency_label",
+        "name": "vQlikGPTCurrencyLabel",
+        "definition": "EUR",
+        "description": "Etichetta valuta disponibile per utilizzo futuro.",
+        "version": "1.0.0"
+      }
+    }
+  ],
+  "warnings": [
+    "presentation · qlikgpt_chart_month: dimensione inline (YearMonth) non collegata a master dimension",
+    "presentation · qlikgpt_chart_market: dimensione inline (Market) non collegata a master dimension"
+  ]
+}
