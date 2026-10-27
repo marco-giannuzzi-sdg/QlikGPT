@@ -1,0 +1,23 @@
+// ===============================================================
+// ETL2 - Transformation layer
+// Cleans raw orders and calculates Revenue and Cost.
+// Requires ETL1 to have loaded RawSales.
+// ===============================================================
+
+Sales_Staging:
+NoConcatenate
+LOAD
+    OrderID,
+    OrderDate,
+    Market,
+    ProductCategory,
+    Channel,
+    CustomerID,
+    Quantity,
+    UnitPrice,
+    Round(Quantity * UnitPrice, 0.01)             AS Revenue,
+    Round(Quantity * UnitPrice * CostRatio, 0.01) AS Cost
+RESIDENT RawSales
+WHERE Quantity > 0 AND UnitPrice > 0;
+
+DROP TABLE RawSales;
