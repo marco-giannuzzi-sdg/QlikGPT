@@ -1,7 +1,7 @@
-# Generated load script; source of truth is scripts/*.qvs
-dist/
+# Local Qlik Cloud app IDs and temporary files
+.local/
 
-# Never commit credentials or local CLI configuration
+# Sensitive files: never commit Qlik API keys, OAuth secrets or contexts
 .env
 .env.*
 *.key
@@ -9,7 +9,11 @@ dist/
 config.yml
 qlik.exe
 
-# Local editor / OS files
+# Generated outputs
+dist/
+*.qvd
+
+# Local IDE or operating-system files
 .vscode/
 .idea/
 Thumbs.db
