@@ -33,14 +33,14 @@
         {
           "uri": "lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd",
           "format": "qvd",
-          "line": 14
+          "line": 16
         }
       ],
       "writes": [
         {
           "uri": "lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd",
           "format": "qvd",
-          "line": 36,
+          "line": 38,
           "table": "SalesClean"
         }
       ],
@@ -105,7 +105,7 @@
           "script": "scripts/etl2.qvs",
           "uri": "lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd",
           "format": "qvd",
-          "line": 14
+          "line": 16
         }
       ],
       "writes": [
@@ -150,7 +150,7 @@
           "script": "scripts/etl2.qvs",
           "uri": "lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd",
           "format": "qvd",
-          "line": 36,
+          "line": 38,
           "table": "SalesClean"
         }
       ]
