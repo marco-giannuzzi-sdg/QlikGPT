@@ -50,7 +50,7 @@
       ]
     }
   ],
-  "note": "Native Qlik sheet, 4 KPI, 2 charts, 3 filter fields and master items deployed. The frontend must be QA-inspected visually to confirm appearance, but real QIX hierarchy and persistence are verified.",
+  "note": "Native QIX model and hypercube dimensions/measures verified. Client-side chart rendering needs visual QA.",
   "deployment": {
     "dataApps": [
       "etl1",
@@ -61,5 +61,14 @@
     "mode": "GitHub Actions + Qlik CLI + QIX Engine API",
     "validatedNativeObjects": 20,
     "validatedRecordCount": 5000
-  }
+  },
+  "designVersion": "Executive Clean v2",
+  "palette": {
+    "navy": "#142B49",
+    "teal": "#0E7490",
+    "green": "#15803D",
+    "blue": "#2563EB",
+    "cardBackground": "#F5F9FC"
+  },
+  "visualAcceptance": "Pending screenshot validation in Qlik Cloud browser for both charts and spacing"
 }
