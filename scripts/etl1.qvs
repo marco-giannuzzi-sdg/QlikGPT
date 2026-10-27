@@ -1,6 +1,6 @@
 // ================================================================
 // QlikGPT - ETL1 / RAW
-// Extract layer: generates test orders and writes the RAW QVD.
+// Extract layer: generates 5,000 orders over twelve full months (Oct 2025 to Sep 2026).
 // The three apps must live in the SAME Qlik Cloud space.
 // ================================================================
 
@@ -13,7 +13,7 @@ SET DateFormat='YYYY-MM-DD';
 RawOrders:
 LOAD
     'ORD-' & Num(RecNo(), '000000')                       AS OrderID,
-    Date(MakeDate(2025, 1, 1) + Floor(Rand() * 600))     AS OrderDate,
+    Date(MakeDate(2025, 10, 1) + Floor(Rand() * 365))     AS OrderDate,
     Pick(1 + Floor(Rand() * 4),
         'Italy', 'France', 'Germany', 'Spain')              AS Market,
     Pick(1 + Floor(Rand() * 4),
