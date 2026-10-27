@@ -76,34 +76,45 @@ def main() -> None:
     if not isinstance(definitions, list):
         raise TypeError("frontend/filters.json must be an array")
 
+    source = json.loads((ROOT / "frontend" / "objects.json").read_text(encoding="utf-8"))
+    target = next(
+        (obj for obj in source if obj.get("qInfo", {}).get("qId") == "qlikgpt_sales_overview"),
+        None,
+    )
+    if target is None:
+        raise RuntimeError("Missing Sales Overview in frontend/objects.json")
+
     qix = Qix(sys.argv[1])
     try:
         doc = qix.call(-1, "OpenDoc", {"qDocName": sys.argv[1]})["qReturn"]["qHandle"]
         sheet = qix.call(doc, "GetObject", {"qId": "qlikgpt_sales_overview"})["qReturn"]["qHandle"]
-        for object_id in ("qlikgpt_kpi_revenue", "qlikgpt_filter_panel"):
-            result = qix.call(sheet, "GetChild", {"qId": object_id})
-            print("QIX sheet child %s: %s" % (object_id, result.get("qReturn")), flush=True)
-        pane_result = qix.call(sheet, "GetChild", {"qId": "qlikgpt_filter_panel"})
-        pane = pane_result.get("qReturn", {}).get("qHandle")
-        if pane is None:
-            # Qlik CLI may store this object at the app level instead of
-            # linking it as a child. Resolve by ID before attempting updates.
-            alternate = qix.call(doc, "GetObject", {"qId": "qlikgpt_filter_panel"})
-            print("QIX app object filterpane: %s" % alternate.get("qReturn"), flush=True)
-            pane = alternate.get("qReturn", {}).get("qHandle")
-        if pane is None:
-            raise RuntimeError("Filter pane is not addressable via QIX as sheet child or app object")
-        print("QIX handles: doc=%s sheet=%s pane=%s" % (doc, sheet, pane), flush=True)
+        if sheet is None:
+            raise RuntimeError("Qlik Sales Overview sheet not found")
 
+        # qlik app build may store an embedded qChildren JSON array without
+        # creating native QIX children. Ensure actual Engine relationships.
+        for props in target.get("qChildren", []):
+            child_id = props["qInfo"]["qId"]
+            native = find_child(qix, sheet, child_id)
+            qix_properties = {k: v for k, v in props.items() if k != "qChildren"}
+            qix_properties.setdefault("qExtendsId", "")
+            if native is None:
+                qix.call(sheet, "CreateChild", [qix_properties])
+                native = find_child(qix, sheet, child_id)
+                if native is None:
+                    raise RuntimeError(f"QIX did not create native sheet object: {child_id}")
+                print(f"Created native sheet object: {child_id}", flush=True)
+            else:
+                print(f"Native sheet object exists: {child_id}", flush=True)
+                qix.call(native, "SetProperties", [qix_properties])
+
+        pane = find_child(qix, sheet, "qlikgpt_filter_panel")
+        if pane is None:
+            raise RuntimeError("Native filterpane was not linked to sheet by QIX")
         for item in definitions:
             item_id, field, label = item["id"], item["field"], item["label"]
             if not item_id.startswith("qlikgpt_list_"):
                 raise ValueError(f"Unexpected listbox ID: {item_id}")
-            if find_child(qix, pane, item_id) is not None:
-                print(f"Filter already exists: {label} ({item_id})")
-                continue
-            # Qlik documents CreateChild with positional JSON-RPC params.
-            # Keep properties minimal to mirror the native Engine example.
             properties = {
                 "qInfo": {"qId": item_id, "qType": "listbox"},
                 "qExtendsId": "",
@@ -112,33 +123,36 @@ def main() -> None:
                 "qListObjectDef": {
                     "qStateName": "$",
                     "qLibraryId": "",
-                    "qDef": {
-                        "qFieldDefs": [field],
-                        "qFieldLabels": [label],
-                        "qSortCriterias": [{"qSortByLoadOrder": 1}],
-                    },
+                    "qDef": {"qFieldDefs": [field], "qFieldLabels": [label]},
                     "qInitialDataFetch": [
                         {"qTop": 0, "qHeight": 100, "qLeft": 0, "qWidth": 1}
                     ],
                 },
             }
-            # Test the minimal CreateChild request first; apply listbox config
-            # separately using SetProperties after the handle exists.
-            qix.call(pane, "CreateChild", [{"qInfo": properties["qInfo"], "qExtendsId": ""}])
-            child_handle = find_child(qix, pane, item_id)
-            if child_handle is None:
-                raise RuntimeError("Minimal CreateChild did not return a child handle")
-            qix.call(child_handle, "SetProperties", {"qProp": properties})
-            if find_child(qix, pane, item_id) is None:
-                raise RuntimeError(f"QIX did not register created child: {item_id}")
-            print(f"Created native Qlik filter: {label} ({item_id})")
+            existing = find_child(qix, pane, item_id)
+            if existing is None:
+                qix.call(pane, "CreateChild", [properties])
+                existing = find_child(qix, pane, item_id)
+                if existing is None:
+                    raise RuntimeError(f"QIX did not create listbox: {item_id}")
+                print(f"Created native Qlik filter: {label}", flush=True)
+            else:
+                qix.call(existing, "SetProperties", [properties])
+                print(f"Updated native Qlik filter: {label}", flush=True)
 
-        needed = {d["id"] for d in definitions}
-        missing = [child_id for child_id in needed if find_child(qix, pane, child_id) is None]
-        if missing:
-            raise RuntimeError("Missing filterpane children: " + ", ".join(missing))
-        qix.call(doc, "DoSave")
-        print(f"QIX filterpane verified: {len(needed)} native listboxes saved.")
+        # Verify the live Engine hierarchy, not only JSON exported by Qlik CLI.
+        for props in target.get("qChildren", []):
+            if find_child(qix, sheet, props["qInfo"]["qId"]) is None:
+                raise RuntimeError(f"Sheet child missing: {props['qInfo']['qId']}")
+        for item in definitions:
+            if find_child(qix, pane, item["id"]) is None:
+                raise RuntimeError(f"Filter child missing: {item['id']}")
+        qix.call(doc, "DoSave", [])
+        print(
+            f"QIX hierarchy verified: {len(target['qChildren'])} sheet children, "
+            f"{len(definitions)} nested listboxes; app saved.",
+            flush=True,
+        )
     finally:
         qix.close()
 
