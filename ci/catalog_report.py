@@ -23,7 +23,7 @@ def load(path):
 
 
 def read_catalog(kind):
-    file = C / (kind + ".json")
+    file = C / ({"measure": "measures.json", "dimension": "dimensions.json", "variable": "variables.json"}[kind])
     key = {"measure":"measures","dimension":"dimensions","variable":"variables"}[kind]
     arr = load(file)[key]
     ids = [m["id"] for m in arr]
@@ -128,7 +128,7 @@ def render(report):
         "",
         "> Report **generato dai manifest e dagli oggetti versionati su GitHub**. "
         "Le sottoscrizioni rappresentano master item attesi nelle app; le visualizzazioni "
-        "sono ricavate dai riferimenti \`qLibraryId\` dichiarati, non da telemetria QIX runtime.",
+        "sono ricavate dai riferimenti `qLibraryId` dichiarati, non da telemetria QIX runtime.",
         "",
         "## Applicazioni",
         "",
@@ -144,16 +144,16 @@ def render(report):
     for e in report["items"]:
         subs=["✓" if app in e["apps"] else "—" for app in apps]
         count=len({(v["app"],v["visualId"]) for v in e["visuals"]})
-        lines.append(f"| {e['kind']} | \`{e['id']}\` — {e['name']} | "+
+        lines.append(f"| {e['kind']} | `{e['id']}` — {e['name']} | "+
             " | ".join(subs)+f" | {count} |")
     lines.extend(["", "## Impatto per oggetto", "",
                   "In caso di modifica, il deployment sincronizza **solo le app sottoscritte**. "
-                  "Le visualizzazioni che usano \`qLibraryId\` ereditano la definizione aggiornata.", ""])
+                  "Le visualizzazioni che usano `qLibraryId` ereditano la definizione aggiornata.", ""])
     for e in report["items"]:
         links=", ".join(f"[{key}]({TENANT}/sense/app/{apps[key]['appId']})"
                         for key in e["apps"]) or "Nessuna (disponibile per uso futuro)"
-        ids=", ".join(f"\`{x['app']}/{x['visualId']}\`" for x in e["visuals"]) or "Nessuna referenza diretta"
-        lines.extend([f"### {e['name']} · \`{e['id']}\`",
+        ids=", ".join(f"`{x['app']}/{x['visualId']}`" for x in e["visuals"]) or "Nessuna referenza diretta"
+        lines.extend([f"### {e['name']} · `{e['id']}`",
             f"**Tipo:** {e['kind']} · **Versione:** {e['version']}",
             f"**Applicazioni:** {links}",
             f"**Visualizzazioni collegate:** {ids}", ""])

@@ -107,7 +107,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          git add -- deployment/app-ids.json catalog/USAGE.md catalog/usage.json
+          git add -- deployment/app-ids.json
+          if [ -f catalog/USAGE.md ] && [ -f catalog/usage.json ]; then
+            git add -- catalog/USAGE.md catalog/usage.json
+          fi
           if git diff --cached --quiet; then
             echo "App IDs and Semantic Catalog report unchanged."
             exit 0
