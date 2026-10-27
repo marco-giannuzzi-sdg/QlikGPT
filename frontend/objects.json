@@ -17,15 +17,29 @@
     "gridMode": "edit",
     "cells": [
       {
+        "name": "qlikgpt_filter_panel",
+        "type": "filterpane",
+        "col": 0,
+        "row": 0,
+        "colspan": 24,
+        "rowspan": 2,
+        "bounds": {
+          "x": 0,
+          "y": 0,
+          "width": 100,
+          "height": 16.666666666666664
+        }
+      },
+      {
         "name": "qlikgpt_kpi_revenue",
         "type": "kpi",
         "col": 0,
-        "row": 0,
+        "row": 2,
         "colspan": 6,
         "rowspan": 3,
         "bounds": {
           "x": 0,
-          "y": 0,
+          "y": 16.666666666666664,
           "width": 25,
           "height": 25
         }
@@ -34,12 +48,12 @@
         "name": "qlikgpt_kpi_orders",
         "type": "kpi",
         "col": 6,
-        "row": 0,
+        "row": 2,
         "colspan": 6,
         "rowspan": 3,
         "bounds": {
           "x": 25,
-          "y": 0,
+          "y": 16.666666666666664,
           "width": 25,
           "height": 25
         }
@@ -48,12 +62,12 @@
         "name": "qlikgpt_kpi_margin",
         "type": "kpi",
         "col": 12,
-        "row": 0,
+        "row": 2,
         "colspan": 6,
         "rowspan": 3,
         "bounds": {
           "x": 50,
-          "y": 0,
+          "y": 16.666666666666664,
           "width": 25,
           "height": 25
         }
@@ -62,12 +76,12 @@
         "name": "qlikgpt_kpi_margin_pct",
         "type": "kpi",
         "col": 18,
-        "row": 0,
+        "row": 2,
         "colspan": 6,
         "rowspan": 3,
         "bounds": {
           "x": 75,
-          "y": 0,
+          "y": 16.666666666666664,
           "width": 25,
           "height": 25
         }
@@ -76,28 +90,28 @@
         "name": "qlikgpt_chart_month",
         "type": "linechart",
         "col": 0,
-        "row": 3,
+        "row": 5,
         "colspan": 14,
-        "rowspan": 9,
+        "rowspan": 7,
         "bounds": {
           "x": 0,
-          "y": 25,
+          "y": 41.66666666666667,
           "width": 58.333333333333336,
-          "height": 75
+          "height": 58.333333333333336
         }
       },
       {
         "name": "qlikgpt_chart_market",
         "type": "barchart",
         "col": 14,
-        "row": 3,
+        "row": 5,
         "colspan": 10,
-        "rowspan": 9,
+        "rowspan": 7,
         "bounds": {
           "x": 58.333333333333336,
-          "y": 25,
-          "width": 41.666666666666664,
-          "height": 75
+          "y": 41.66666666666667,
+          "width": 41.66666666666667,
+          "height": 58.333333333333336
         }
       }
     ],
@@ -110,6 +124,113 @@
       }
     },
     "qChildren": [
+      {
+        "qInfo": {
+          "qId": "qlikgpt_filter_panel",
+          "qType": "filterpane"
+        },
+        "qExtendsId": "",
+        "visualization": "filterpane",
+        "title": "Filtri",
+        "showTitles": false,
+        "qChildListDef": {
+          "qData": {
+            "title": "/title",
+            "id": "/qInfo/qId",
+            "type": "/qInfo/qType",
+            "qListObjectDef": "/qListObjectDef"
+          }
+        },
+        "qChildren": [
+          {
+            "qInfo": {
+              "qId": "qlikgpt_list_year",
+              "qType": "listbox"
+            },
+            "qExtendsId": "",
+            "visualization": "listbox",
+            "title": "Anno",
+            "qListObjectDef": {
+              "qDef": {
+                "qGrouping": "N",
+                "qFieldDefs": [
+                  "SalesYear"
+                ],
+                "qFieldLabels": [
+                  "Anno"
+                ]
+              },
+              "qShowAlternatives": true,
+              "qInitialDataFetch": [
+                {
+                  "qTop": 0,
+                  "qLeft": 0,
+                  "qWidth": 1,
+                  "qHeight": 100
+                }
+              ]
+            }
+          },
+          {
+            "qInfo": {
+              "qId": "qlikgpt_list_market",
+              "qType": "listbox"
+            },
+            "qExtendsId": "",
+            "visualization": "listbox",
+            "title": "Mercato",
+            "qListObjectDef": {
+              "qDef": {
+                "qGrouping": "N",
+                "qFieldDefs": [
+                  "Market"
+                ],
+                "qFieldLabels": [
+                  "Mercato"
+                ]
+              },
+              "qShowAlternatives": true,
+              "qInitialDataFetch": [
+                {
+                  "qTop": 0,
+                  "qLeft": 0,
+                  "qWidth": 1,
+                  "qHeight": 100
+                }
+              ]
+            }
+          },
+          {
+            "qInfo": {
+              "qId": "qlikgpt_list_channel",
+              "qType": "listbox"
+            },
+            "qExtendsId": "",
+            "visualization": "listbox",
+            "title": "Canale",
+            "qListObjectDef": {
+              "qDef": {
+                "qGrouping": "N",
+                "qFieldDefs": [
+                  "Channel"
+                ],
+                "qFieldLabels": [
+                  "Canale"
+                ]
+              },
+              "qShowAlternatives": true,
+              "qInitialDataFetch": [
+                {
+                  "qTop": 0,
+                  "qLeft": 0,
+                  "qWidth": 1,
+                  "qHeight": 100
+                }
+              ]
+            }
+          }
+        ]
+      },
       {
         "qInfo": {
           "qId": "qlikgpt_kpi_revenue",
