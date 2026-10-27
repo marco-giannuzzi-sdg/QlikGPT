@@ -1,23 +1,39 @@
-// ===============================================================
-// ETL2 - Transformation layer
-// Cleans raw orders and calculates Revenue and Cost.
-// Requires ETL1 to have loaded RawSales.
-// ===============================================================
+// ================================================================
+// QlikGPT - ETL2 / TRANSFORM
+// Reads ETL1's RAW QVD, cleans rows and calculates commercial KPIs.
+// Produces an independent, transformed QVD.
+// ================================================================
 
-Sales_Staging:
+SET ErrorMode=1;
+SET ThousandSep=',';
+SET DecimalSep='.';
+SET DateFormat='YYYY-MM-DD';
+
+RawOrders:
+LOAD *
+FROM [lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd] (qvd);
+
+SalesClean:
 NoConcatenate
 LOAD
     OrderID,
-    OrderDate,
+    Date(Floor(OrderDate))                               AS OrderDate,
     Market,
     ProductCategory,
     Channel,
     CustomerID,
     Quantity,
     UnitPrice,
-    Round(Quantity * UnitPrice, 0.01)             AS Revenue,
-    Round(Quantity * UnitPrice * CostRatio, 0.01) AS Cost
-RESIDENT RawSales
-WHERE Quantity > 0 AND UnitPrice > 0;
+    Round(Quantity * UnitPrice, 0.01)                    AS Revenue,
+    Round(Quantity * UnitPrice * CostRatio, 0.01)        AS Cost
+RESIDENT RawOrders
+WHERE Len(Trim(OrderID)) > 0
+  AND Quantity > 0
+  AND UnitPrice > 0;
 
-DROP TABLE RawSales;
+DROP TABLE RawOrders;
+
+STORE SalesClean
+INTO [lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd] (qvd);
+
+TRACE QlikGPT ETL2 completed: TRANSFORM QVD generated.;
