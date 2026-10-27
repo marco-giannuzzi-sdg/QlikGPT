@@ -107,7 +107,7 @@ class DeploymentPlanTests(unittest.TestCase):
             ),
         )
         self.assertEqual([x["status"] for x in result],["SUCCEEDED","SUCCEEDED"])
-        self.assertLess(events.index("poll:a",events.index("start:b")))
+        self.assertLess(events.index("poll:a"), events.index("start:b"))
         self.assertEqual(events.count("poll:a"),2)
 
     def test_failed_reload_never_starts_downstream(self):
