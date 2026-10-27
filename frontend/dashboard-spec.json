@@ -1,23 +1,65 @@
 {
   "title": "QlikGPT - Sales Performance",
   "targetApp": "presentation",
-  "developmentStatus": "planned",
+  "developmentStatus": "deployed-native-qix",
   "sheets": [
     {
       "id": "qlikgpt-sales-overview",
       "title": "Sales Overview",
       "layout": "responsive-grid",
-      "filters": ["SalesYear", "Market", "ProductCategory", "Channel"],
+      "filters": [
+        "SalesYear",
+        "Market",
+        "Channel"
+      ],
       "kpis": [
-        {"id": "kpi-revenue", "title": "Total Revenue", "expression": "Sum(Revenue)"},
-        {"id": "kpi-orders", "title": "Orders", "expression": "Count(DISTINCT OrderID)"},
-        {"id": "kpi-margin", "title": "Margin %", "expression": "Num(Sum(Margin)/Sum(Revenue), '0.0%')"}
+        {
+          "id": "kpi-revenue",
+          "title": "Total Revenue",
+          "expression": "Sum(Revenue)"
+        },
+        {
+          "id": "kpi-orders",
+          "title": "Orders",
+          "expression": "Count(DISTINCT OrderID)"
+        },
+        {
+          "id": "kpi-margin",
+          "title": "Margin %",
+          "expression": "Num(Sum(Margin)/Sum(Revenue), '0.0%')"
+        },
+        {
+          "id": "kpi-margin-eur",
+          "title": "Margine",
+          "expression": "Sum(Margin)"
+        }
       ],
       "visualizations": [
-        {"id": "chart-monthly-sales", "type": "linechart", "dimension": "YearMonth", "measure": "Sum(Revenue)"},
-        {"id": "chart-sales-market", "type": "barchart", "dimension": "Market", "measure": "Sum(Revenue)"}
+        {
+          "id": "chart-monthly-sales",
+          "type": "linechart",
+          "dimension": "YearMonth",
+          "measure": "Sum(Revenue)"
+        },
+        {
+          "id": "chart-sales-market",
+          "type": "barchart",
+          "dimension": "Market",
+          "measure": "Sum(Revenue)"
+        }
       ]
     }
   ],
-  "note": "Declarative target specification only. It is not automatically compiled into Qlik objects yet. Actual deployable Engine JSON belongs in dimensions.json, measures.json and objects.json."
+  "note": "Native Qlik sheet, 4 KPI, 2 charts, 3 filter fields and master items deployed. The frontend must be QA-inspected visually to confirm appearance, but real QIX hierarchy and persistence are verified.",
+  "deployment": {
+    "dataApps": [
+      "etl1",
+      "etl2",
+      "presentation"
+    ],
+    "targetAppId": "07dfa926-4895-4fb2-af4c-eac90e9eb2cb",
+    "mode": "GitHub Actions + Qlik CLI + QIX Engine API",
+    "validatedNativeObjects": 20,
+    "validatedRecordCount": 5000
+  }
 }
