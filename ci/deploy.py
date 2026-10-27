@@ -126,7 +126,7 @@ def main() -> None:
     if state["tenant"].rstrip("/") != TENANT:
         raise RuntimeError("Saved App IDs belong to another Qlik tenant")
     saved_space = state.get("spaceId", "")
-    if saved_space and saved_space != SPACE_ID:
+    if any(state.get(kind) for kind, _, _ in APPS) and saved_space != SPACE_ID:
         raise RuntimeError("Saved apps belong to a different space")
     state["spaceId"] = SPACE_ID
 
