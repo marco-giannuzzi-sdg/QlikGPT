@@ -1,0 +1,119 @@
+[
+  {
+    "qInfo": {
+      "qId": "qlikgpt_p2_sheet",
+      "qType": "sheet"
+    },
+    "qExtendsId": "",
+    "qMetaDef": {
+      "title": "Shared Semantic Measures",
+      "description": "Master measures distribuite dal catalogo GitHub centrale"
+    },
+    "title": "Shared Semantic Measures",
+    "description": "Ricavi e Margine % collegati via qLibraryId",
+    "rank": 0,
+    "columns": 24,
+    "rows": 8,
+    "gridMode": "edit",
+    "cells": [
+      {
+        "name": "qlikgpt_p2_kpi_revenue",
+        "type": "kpi",
+        "col": 0,
+        "row": 0,
+        "colspan": 12,
+        "rowspan": 4,
+        "bounds": {
+          "x": 0,
+          "y": 0,
+          "width": 50,
+          "height": 50
+        }
+      },
+      {
+        "name": "qlikgpt_p2_kpi_marginpct",
+        "type": "kpi",
+        "col": 12,
+        "row": 0,
+        "colspan": 12,
+        "rowspan": 4,
+        "bounds": {
+          "x": 50,
+          "y": 0,
+          "width": 50,
+          "height": 50
+        }
+      }
+    ],
+    "qChildListDef": {
+      "qData": {
+        "title": "/title",
+        "description": "/description",
+        "type": "/qInfo/qType",
+        "id": "/qInfo/qId"
+      }
+    },
+    "qChildren": [
+      {
+        "qInfo": {
+          "qId": "qlikgpt_p2_kpi_revenue",
+          "qType": "kpi"
+        },
+        "qExtendsId": "",
+        "visualization": "kpi",
+        "title": "RICAVI GOVERNATI",
+        "showTitles": true,
+        "showDetails": false,
+        "fontSize": "M",
+        "textAlign": "center",
+        "qHyperCubeDef": {
+          "qDimensions": [],
+          "qMeasures": [
+            {
+              "qLibraryId": "qlikgpt_shared_revenue",
+              "qType": "measure"
+            }
+          ],
+          "qInitialDataFetch": [
+            {
+              "qLeft": 0,
+              "qTop": 0,
+              "qWidth": 1,
+              "qHeight": 1
+            }
+          ]
+        }
+      },
+      {
+        "qInfo": {
+          "qId": "qlikgpt_p2_kpi_marginpct",
+          "qType": "kpi"
+        },
+        "qExtendsId": "",
+        "visualization": "kpi",
+        "title": "MARGINE % GOVERNATO",
+        "showTitles": true,
+        "showDetails": false,
+        "fontSize": "M",
+        "textAlign": "center",
+        "qHyperCubeDef": {
+          "qDimensions": [],
+          "qMeasures": [
+            {
+              "qLibraryId": "qlikgpt_shared_margin_pct",
+              "qType": "measure"
+            }
+          ],
+          "qInitialDataFetch": [
+            {
+              "qLeft": 0,
+              "qTop": 0,
+              "qWidth": 1,
+              "qHeight": 1
+            }
+          ]
+        }
+      }
+    ]
+  }
+]

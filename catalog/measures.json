@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "governance": {
+    "owner": "BI Architecture",
+    "deletePolicy": "explicit-approval-only",
+    "contract": "Normalized sales fields from Sales_Clean.qvd"
+  },
+  "measures": [
+    {
+      "id": "qlikgpt_shared_revenue",
+      "title": "Ricavi condivisi",
+      "expression": "Sum(Revenue)",
+      "description": "Ricavi complessivi dalla tabella FactSales",
+      "format": {
+        "qType": "M",
+        "qFmt": "€ #,##0.00",
+        "qDec": ",",
+        "qThou": "."
+      },
+      "requiredFields": [
+        "Revenue"
+      ],
+      "tags": [
+        "Semantic Catalog",
+        "Sales",
+        "Shared"
+      ],
+      "version": "1.0.0"
+    },
+    {
+      "id": "qlikgpt_shared_orders",
+      "title": "Ordini condivisi",
+      "expression": "Count(DISTINCT OrderID)",
+      "description": "Numero di ordini univoci",
+      "format": {
+        "qType": "F",
+        "qFmt": "#,##0",
+        "qDec": ",",
+        "qThou": "."
+      },
+      "requiredFields": [
+        "OrderID"
+      ],
+      "tags": [
+        "Semantic Catalog",
+        "Sales",
+        "Shared"
+      ],
+      "version": "1.0.0"
+    },
+    {
+      "id": "qlikgpt_shared_margin_pct",
+      "title": "Margine percentuale condiviso",
+      "expression": "If(Sum(Revenue)>0,Sum(Margin)/Sum(Revenue),0)",
+      "description": "Margine commerciale rispetto al fatturato",
+      "format": {
+        "qType": "F",
+        "qFmt": "0.0%",
+        "qDec": ",",
+        "qThou": "."
+      },
+      "requiredFields": [
+        "Revenue",
+        "Margin"
+      ],
+      "tags": [
+        "Semantic Catalog",
+        "Sales",
+        "Shared"
+      ],
+      "version": "1.0.0"
+    }
+  ]
+}

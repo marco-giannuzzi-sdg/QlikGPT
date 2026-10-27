@@ -1,0 +1,318 @@
+#!/usr/bin/env python3
+"""Git-governed Qlik master measures for multiple Presentation apps.
+
+The catalog and app manifests are source-of-truth. Engine QIX APIs create,
+update, read back, and evaluate shared measures. No local workstation.
+No implicit deletion of existing master items.
+"""
+from __future__ import annotations
+
+from copy import deepcopy
+import json
+import os
+from pathlib import Path
+import re
+import subprocess
+from typing import Callable
+
+from deploy_filters import Qix, find_child
+
+ROOT = Path(__file__).resolve().parents[1]
+CATALOG = ROOT / "catalog" / "measures.json"
+MANIFESTS = {
+    "presentation": ROOT / "apps" / "presentation1.json",
+    "presentation2": ROOT / "apps" / "presentation2.json",
+}
+ALLOWED_FIELDS = {"Revenue", "Margin", "Cost", "OrderID", "Quantity", "Market",
+                  "OrderDate", "Channel", "CustomerID", "SalesYear"}
+
+
+def read_json(path: Path) -> dict:
+    data = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(data, dict):
+        raise ValueError(f"{path.name} must be a JSON object")
+    return data
+
+
+def validate_catalog(catalog: dict, manifests: dict) -> dict:
+    if catalog.get("schemaVersion") != 1:
+        raise ValueError("Unsupported semantic catalog schemaVersion")
+    definitions = catalog.get("measures")
+    if not isinstance(definitions, list) or not definitions:
+        raise ValueError("Catalog requires a nonempty measures array")
+    by_id = {}
+    for item in definitions:
+        if not isinstance(item, dict):
+            raise ValueError("Catalog measure must be an object")
+        measure_id = item.get("id", "")
+        if not isinstance(measure_id, str) or not re.fullmatch(r"qlikgpt_shared_[a-z0-9_]+", measure_id):
+            raise ValueError(f"Invalid or non-namespaced shared metric ID: {measure_id}")
+        if measure_id in by_id:
+            raise ValueError(f"Duplicate shared metric ID: {measure_id}")
+        for field in ("title", "expression", "description", "version"):
+            if not isinstance(item.get(field), str) or not item[field].strip():
+                raise ValueError(f"{measure_id}: {field} must be a nonempty string")
+        expr = item["expression"]
+        if len(expr) > 1200 or ";" in expr or "\n" in expr or "\r" in expr:
+            raise ValueError(f"{measure_id}: invalid/multiline expression")
+        fields = item.get("requiredFields")
+        if not isinstance(fields, list) or not fields or any(
+            not isinstance(f, str) or f not in ALLOWED_FIELDS for f in fields
+        ):
+            raise ValueError(f"{measure_id}: unsupported or empty requiredFields")
+        if not isinstance(item.get("format"), dict) or not item["format"].get("qFmt"):
+            raise ValueError(f"{measure_id}: missing Qlik qNumFormat")
+        if not isinstance(item.get("tags"), list):
+            raise ValueError(f"{measure_id}: tags must be an array")
+        by_id[measure_id] = item
+
+    for app_key, manifest in manifests.items():
+        if manifest.get("appKey") != app_key:
+            raise ValueError(f"Manifest appKey must equal {app_key}")
+        refs = manifest.get("catalogMeasures")
+        if not isinstance(refs, list) or len(refs) != len(set(refs)):
+            raise ValueError(f"{app_key}: duplicate or invalid subscriptions")
+        missing = set(refs) - set(by_id)
+        if missing:
+            raise ValueError(f"{app_key}: unknown subscribed measures: {sorted(missing)}")
+        if not manifest.get("loadScript") == "scripts/presentation.qvs":
+            raise ValueError(f"{app_key}: unapproved loadScript")
+        if app_key == "presentation2" and manifest.get("dashboardSource") != "apps/presentation2-objects.json":
+            raise ValueError("Unexpected second presentation dashboard file")
+    local = json.loads((ROOT / "frontend" / "measures.json").read_text(encoding="utf-8"))
+    local_ids = {m.get("qInfo", {}).get("qId") for m in local}
+    if local_ids & set(by_id):
+        raise ValueError("Shared measure IDs collide with local Presentation 1 measures")
+    return by_id
+
+
+def changed_paths() -> set[str]:
+    try:
+        output = subprocess.check_output(
+            ["git", "diff", "--name-only", "HEAD^", "HEAD"],
+            cwd=ROOT, text=True, stderr=subprocess.DEVNULL
+        )
+        return set(output.splitlines())
+    except (OSError, subprocess.CalledProcessError):
+        return set()  # On a shallow/manual run, use the safe full-sync fallback.
+
+
+def changed_metric_ids(current: dict) -> set[str]:
+    """Diff the canonical measure definitions using git history."""
+    try:
+        old_data = subprocess.check_output(
+            ["git", "show", "HEAD^:catalog/measures.json"],
+            cwd=ROOT, text=True, stderr=subprocess.DEVNULL,
+        )
+        previous = json.loads(old_data)
+    except (OSError, subprocess.CalledProcessError, json.JSONDecodeError):
+        return set(current)
+    old_by_id = {m["id"]: m for m in previous.get("measures", [])}
+    return {mid for mid, definition in current.items()
+            if old_by_id.get(mid) != definition}
+
+
+def determine_impacted(catalog: dict, manifests: dict, changed: set[str],
+                       full: bool, new_app: bool) -> set[str]:
+    if full or new_app or not changed:
+        return set(manifests)
+    affected = set()
+    if "catalog/measures.json" in changed:
+        modified = changed_metric_ids(catalog)
+        affected |= {key for key, manifest in manifests.items()
+                     if modified.intersection(manifest["catalogMeasures"])}
+    for key in manifests:
+        suffix = "1" if key == "presentation" else "2"
+        if f"apps/presentation{suffix}.json" in changed:
+            affected.add(key)
+    if "apps/presentation2-objects.json" in changed:
+        affected.add("presentation2")
+    if any(path.startswith("ci/") or path.startswith(".github/") for path in changed):
+        affected |= set(manifests)
+    return affected
+
+
+def qix_metric_properties(item: dict) -> dict:
+    return {
+        "qInfo": {"qId": item["id"], "qType": "measure"},
+        "qMeasure": {
+            "qLabel": item["title"],
+            "qDef": item["expression"],
+            "qGrouping": "N",
+            "qNumFormat": item["format"],
+        },
+        "qMetaDef": {
+            "title": item["title"],
+            "description": item["description"],
+            "tags": list(item["tags"]),
+        },
+    }
+
+
+def actual_measure(qix: Qix, doc: int, measure_id: str) -> tuple[int | None, dict | None]:
+    response = qix.call(doc, "GetMeasure", {"qId": measure_id})
+    handle = response.get("qReturn", {}).get("qHandle")
+    if handle is None:
+        return None, None
+    return handle, qix.call(handle, "GetProperties", [])["qProp"]
+
+
+def validate_required_fields(qix: Qix, doc: int, item: dict) -> None:
+    for field in item["requiredFields"]:
+        lookup = qix.call(doc, "GetField", {"qFieldName": field})
+        if lookup.get("qReturn", {}).get("qHandle") is None:
+            raise RuntimeError(
+                f"Data contract mismatch: field {field!r} absent for {item['id']}"
+            )
+
+
+def sync_one(qix: Qix, doc: int, appkey: str, item: dict, changes: list) -> None:
+    wanted = qix_metric_properties(item)
+    mid = item["id"]
+    validate_required_fields(qix, doc, item)
+    handle, previous = actual_measure(qix, doc, mid)
+    if handle is None:
+        result = qix.call(doc, "CreateMeasure", {"qProp": wanted})
+        handle = result.get("qReturn", {}).get("qHandle")
+        if handle is None:
+            raise RuntimeError(f"CreateMeasure failed for {mid}")
+        changes.append((qix, doc, mid, None))
+        print(f"[{appkey}] CREATED {mid}", flush=True)
+    else:
+        if (previous.get("qMeasure", {}).get("qDef") == item["expression"]
+                and previous.get("qMeasure", {}).get("qLabel") == item["title"]
+                and previous.get("qMetaDef", {}).get("description") == item["description"]
+                and previous.get("qMeasure", {}).get("qNumFormat", {}).get("qFmt")
+                    == item["format"]["qFmt"]):
+            print(f"[{appkey}] unchanged {mid}", flush=True)
+        else:
+            changes.append((qix, doc, mid, deepcopy(previous)))
+            updated = deepcopy(previous)
+            updated["qMeasure"].update(wanted["qMeasure"])
+            updated["qMetaDef"] = wanted["qMetaDef"]
+            qix.call(handle, "SetProperties", [updated])
+            print(f"[{appkey}] UPDATED {mid}: {item['expression']}", flush=True)
+
+    # Read-back is mandatory. A successful write call alone is not sufficient.
+    check_handle, check_props = actual_measure(qix, doc, mid)
+    if check_handle is None:
+        raise RuntimeError(f"[{appkey}] {mid} missing after sync")
+    actual = check_props.get("qMeasure", {})
+    if actual.get("qDef") != item["expression"] or actual.get("qLabel") != item["title"]:
+        raise RuntimeError(f"[{appkey}] {mid} failed exact-definition read-back")
+    print(f"[{appkey}] VERIFIED {mid} => {actual['qDef']}", flush=True)
+
+
+def rollback(changes: list) -> None:
+    # Best-effort multi-app compensation; Qlik has no global transaction here.
+    for qix, doc, mid, old_props in reversed(changes):
+        try:
+            handle, _ = actual_measure(qix, doc, mid)
+            if old_props is None:
+                qix.call(doc, "DestroyMeasure", {"qId": mid})
+            elif handle is not None:
+                qix.call(handle, "SetProperties", [old_props])
+            qix.call(doc, "DoSave", [])
+            print(f"ROLLBACK compensated {mid}", flush=True)
+        except Exception as exc:
+            print(f"WARNING: manual rollback required for {mid}: {exc}", flush=True)
+
+
+def deploy_secondary_sheet(qix: Qix, doc: int) -> None:
+    definitions = json.loads(
+        (ROOT / "apps" / "presentation2-objects.json").read_text(encoding="utf-8")
+    )
+    props = definitions[0]
+    sheet_id = props["qInfo"]["qId"]
+    opened = qix.call(doc, "GetObject", {"qId": sheet_id})
+    sheet = opened.get("qReturn", {}).get("qHandle")
+    if sheet is None:
+        created = qix.call(doc, "CreateObject", {"qProp": {k:v for k,v in props.items() if k != "qChildren"}})
+        sheet = created.get("qReturn", {}).get("qHandle")
+        if sheet is None:
+            raise RuntimeError("Unable to create secondary native Qlik sheet")
+    else:
+        # Update sheet grid and header without discarding existing native children.
+        old = qix.call(sheet, "GetProperties", [])["qProp"]
+        changed = deepcopy(old)
+        changed.update({k:v for k,v in props.items() if k not in {"qChildren", "qInfo"}})
+        qix.call(sheet, "SetProperties", [changed])
+
+    for child in props["qChildren"]:
+        cid = child["qInfo"]["qId"]
+        h = find_child(qix, sheet, cid)
+        if h is None:
+            created = qix.call(sheet, "CreateChild", [child])
+            h = created.get("qReturn", {}).get("qHandle")
+            if h is None:
+                raise RuntimeError(f"Unable to create native linked KPI {cid}")
+        else:
+            qix.call(h, "SetProperties", [child])
+        layout = qix.call(h, "GetLayout", [])["qLayout"]
+        cube = layout.get("qHyperCube", {})
+        measure_id = child["qHyperCubeDef"]["qMeasures"][0]["qLibraryId"]
+        props_read = qix.call(h, "GetProperties", [])["qProp"]
+        ref = props_read["qHyperCubeDef"]["qMeasures"][0].get("qLibraryId")
+        if ref != measure_id or cube.get("qSize", {}).get("qcy", 0) < 1:
+            raise RuntimeError(f"Native KPI {cid} did not bind to master measure {measure_id}")
+        print(f"[presentation2] KPI {cid} linked to qLibraryId={measure_id}", flush=True)
+
+
+def orchestrate_semantic_catalog(state: dict, *, run: Callable,
+                                 ensure_app: Callable, persist: Callable,
+                                 scope: str) -> None:
+    catalog = read_json(CATALOG)
+    manifests = {key: read_json(path) for key, path in MANIFESTS.items()}
+    definitions = validate_catalog(catalog, manifests)  # no side effects
+    changed = changed_paths()
+
+    is_new = not bool(state.get("presentation2"))
+    app2 = ensure_app(state, "presentation2", manifests["presentation2"]["appName"])
+    persist(state)
+
+    # A newly created Presentation must have a data model before measures exist.
+    if is_new or scope == "full":
+        print("=== Deploying second Presentation model from transformed QVD ===", flush=True)
+        run("app", "build", "--app", app2, "--script",
+            manifests["presentation2"]["loadScript"])
+    impacted = determine_impacted(
+        definitions, manifests, changed, full=(scope == "full"), new_app=is_new
+    )
+    print(f"SEMANTIC-CATALOG impacted={sorted(impacted)} "
+          f"changed={sorted(changed)}", flush=True)
+    if not impacted:
+        return
+
+    connections: list[tuple[Qix, int]] = []
+    changes: list = []
+    try:
+        for key in sorted(impacted):
+            qix = Qix(state[key])
+            doc = qix.call(-1, "OpenDoc", {"qDocName": state[key]})["qReturn"]["qHandle"]
+            connections.append((qix, doc))
+            for mid in manifests[key]["catalogMeasures"]:
+                sync_one(qix, doc, key, definitions[mid], changes)
+            if key == "presentation2":
+                deploy_secondary_sheet(qix, doc)
+        for qix, doc in connections:
+            qix.call(doc, "DoSave", [])
+        # Validate all subscribed expressions from independent Engine sessions.
+        for key in sorted(impacted):
+            audit = Qix(state[key])
+            try:
+                doc = audit.call(-1, "OpenDoc", {"qDocName": state[key]})["qReturn"]["qHandle"]
+                for mid in manifests[key]["catalogMeasures"]:
+                    _, props = actual_measure(audit, doc, mid)
+                    if not props or props["qMeasure"]["qDef"] != definitions[mid]["expression"]:
+                        raise RuntimeError(f"{key}: persisted measure {mid} differs from Git")
+                    # Engine evaluation confirms the formula is calculable in each app.
+                    run("app", "eval", definitions[mid]["expression"], "--app", state[key])
+            finally:
+                audit.close()
+        print("SEMANTIC-CATALOG SUCCESS: impacted apps synchronized and audited", flush=True)
+    except Exception:
+        rollback(changes)
+        raise
+    finally:
+        for qix, _doc in connections:
+            qix.close()

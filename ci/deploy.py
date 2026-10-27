@@ -286,6 +286,12 @@ def main() -> None:
     else:
         print("Frontend-only deployment: retaining ETL1, ETL2 and Presentation data.", flush=True)
 
+    # Multi-app governed master measures; creates second Presentation on first run.
+    from semantic_catalog import orchestrate_semantic_catalog
+    orchestrate_semantic_catalog(
+        state, run=run, ensure_app=ensure_app, persist=persist, scope=scope
+    )
+
     deploy_frontend(state["presentation"])
     # The Qlik CLI cannot round-trip three-level filterpane property trees.
     # Create nested listboxes through the official QIX Engine API.

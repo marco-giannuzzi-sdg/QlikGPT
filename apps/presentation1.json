@@ -1,0 +1,12 @@
+{
+  "appKey": "presentation",
+  "appName": "QlikGPT - 03 PRESENTATION",
+  "loadScript": "scripts/presentation.qvs",
+  "catalogMeasures": [
+    "qlikgpt_shared_revenue",
+    "qlikgpt_shared_orders"
+  ],
+  "localMeasuresSource": "frontend/measures.json",
+  "dashboardSource": "frontend/objects.json",
+  "description": "Presentation 1 retains its existing four app-local master measures and Sales Overview dashboard."
+}

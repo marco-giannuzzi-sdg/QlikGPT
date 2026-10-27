@@ -7,6 +7,9 @@ on:
     paths:
       - 'scripts/**'
       - 'frontend/**'
+      - 'catalog/**'
+      - 'apps/**'
+      - 'tests/**'
       - 'ci/**'
       - '.github/workflows/deploy-qlik-cloud.yml'
 
@@ -58,6 +61,12 @@ jobs:
         shell: bash
         run: |
           python3 -m pip install --disable-pip-version-check --no-cache-dir websocket-client==1.8.0
+
+      - name: Unit-test and compile the Semantic Catalog
+        shell: bash
+        run: |
+          python3 -m unittest discover -s tests -v
+          python3 -m py_compile ci/semantic_catalog.py ci/deploy.py ci/deploy_filters.py
 
       - name: Authenticate to Qlik Cloud
         shell: bash
