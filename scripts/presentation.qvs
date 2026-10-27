@@ -1,14 +1,19 @@
-// ===============================================================
-// PRESENTATION - Analytics layer
-// Final star-like model for Qlik charts: Sales + Calendar.
-// Requires ETL2 to have loaded Sales_Staging.
-// ===============================================================
+// ================================================================
+// QlikGPT - PRESENTATION / ASSOCIATIVE DATA MODEL
+// Loads only transformed QVDs and prepares the analytics model.
+// Dashboard objects (sheets/charts/KPIs) are a separate next step.
+// ================================================================
 
-Sales:
-NoConcatenate
+SET ErrorMode=1;
+SET ThousandSep=',';
+SET DecimalSep='.';
+SET MoneyFormat='#,##0.00';
+SET DateFormat='YYYY-MM-DD';
+
+FactSales:
 LOAD
     OrderID,
-    OrderDate,
+    Date(Floor(OrderDate))                                AS OrderDate,
     Market,
     ProductCategory,
     Channel,
@@ -17,17 +22,19 @@ LOAD
     UnitPrice,
     Revenue,
     Cost,
-    Round(Revenue - Cost, 0.01) AS Margin
-RESIDENT Sales_Staging;
+    Round(Revenue - Cost, 0.01)                           AS Margin,
+    If(Revenue > 0, (Revenue - Cost) / Revenue, 0)         AS MarginPct
+FROM [lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd] (qvd);
 
-DROP TABLE Sales_Staging;
-
-// Calendar relates to Sales through OrderDate only.
+// The sole shared key between FactSales and Calendar is OrderDate.
+// This avoids a synthetic key for the final associative model.
 Calendar:
 LOAD DISTINCT
     OrderDate,
-    Year(OrderDate)        AS SalesYear,
-    Month(OrderDate)       AS SalesMonth,
-    MonthName(OrderDate)   AS YearMonth,
-    QuarterName(OrderDate) AS YearQuarter
-RESIDENT Sales;
+    Year(OrderDate)         AS SalesYear,
+    Month(OrderDate)        AS SalesMonth,
+    MonthName(OrderDate)    AS YearMonth,
+    QuarterName(OrderDate)  AS YearQuarter
+RESIDENT FactSales;
+
+TRACE QlikGPT PRESENTATION completed: FactSales and Calendar loaded.;
