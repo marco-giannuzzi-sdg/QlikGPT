@@ -7,6 +7,10 @@ import os
 from pathlib import Path
 import re
 import subprocess
+import time
+from urllib import error as urlerror
+from urllib import parse as urlparse
+from urllib import request as urlrequest
 import sys
 import uuid
 
@@ -51,35 +55,119 @@ def valid_uuid(value: str) -> bool:
         return False
 
 
-def ensure_app(state: dict, kind: str, name: str) -> str:
-    previous_id = state.get(kind, "")
-    if previous_id:
-        if not valid_uuid(previous_id):
-            raise ValueError(f"Invalid saved App ID for {kind}")
-        # Never silently create duplicates if access/tenant changed.
-        run("app", "get", previous_id)
-        print(f"Reusing {name}: {previous_id}", flush=True)
-        return previous_id
-
-    command = [
-        "app", "create", "--attributes-name", name,
-        "--attributes-usage", "ANALYTICS",
-        "--attributes-description", "QlikGPT GitHub CI/CD - " + kind,
-        "--quiet",
-    ]
-    if SPACE_ID:
-        command.extend(["--attributes-spaceId", SPACE_ID])
-    output = run(*command)
-    matches = re.findall(
-        r"\b[0-9a-fA-F]{8}-(?:[0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}\b",
-        output,
+def qlik_rest(method: str, resource: str, payload: dict | None = None) -> dict:
+    """Call official Qlik REST API; the token never appears in logs or command args."""
+    token = os.environ.get("QLIK_API_KEY", "")
+    if not token:
+        raise RuntimeError("QLIK_API_KEY GitHub secret is missing")
+    if not resource.startswith("/api/v1/"):
+        raise ValueError("Only Qlik API paths are permitted")
+    data = json.dumps(payload).encode("utf-8") if payload is not None else None
+    request = urlrequest.Request(
+        TENANT + resource,
+        data=data,
+        method=method,
+        headers={
+            "Authorization": "Bearer " + token,
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+        },
     )
-    if not matches:
-        raise RuntimeError("Creation command did not return a UUID for " + name)
-    app_id = matches[-1]
+    try:
+        with urlrequest.urlopen(request, timeout=35) as response:
+            raw = response.read()
+            return json.loads(raw) if raw.strip() else {}
+    except urlerror.HTTPError as exc:
+        response_body = exc.read().decode("utf-8", errors="replace")[:1500]
+        raise RuntimeError(
+            f"Qlik REST {method} {resource.split('?')[0]} returned HTTP "
+            f"{exc.code}: {response_body}"
+        ) from None
+
+
+def find_existing_owned_app(name: str) -> str | None:
+    """Reuse only an exact-name app owned by this identity in the target space."""
+    me = qlik_rest("GET", "/api/v1/users/me")
+    user_id = me.get("id")
+    if not user_id:
+        raise RuntimeError("Cannot resolve owner ID via Qlik users/me")
+
+    search = urlparse.urlencode({
+        "resourceType": "app",
+        "name": name,
+        "ownerId": user_id,
+        "spaceId": SPACE_ID or "personal",
+        "limit": 100,
+        "noActions": "true",
+    })
+    response = qlik_rest("GET", "/api/v1/items?" + search)
+    apps = [
+        item for item in response.get("data", [])
+        if item.get("name") == name
+        and item.get("resourceType") == "app"
+        and item.get("ownerId") == user_id
+    ]
+    if len(apps) > 1:
+        raise RuntimeError(
+            f"More than one owned app named {name!r} found in the target space; "
+            "refusing to choose or create another"
+        )
+    if not apps:
+        return None
+    app_id = apps[0].get("resourceId")
+    if not valid_uuid(app_id):
+        raise RuntimeError(f"Existing app {name!r} has an invalid resourceId")
+    return app_id
+
+
+def ensure_app(state: dict, kind: str, name: str) -> str:
+    app_id = state.get(kind, "")
+    if app_id:
+        if not valid_uuid(app_id):
+            raise ValueError(f"Invalid saved App ID for {kind}")
+        run("app", "get", app_id)
+        print(f"Reusing {name}: {app_id}", flush=True)
+        return app_id
+
+    # This lookup prevents duplicates if Qlik CLI previously failed while
+    # parsing a response after the server created the app.
+    existing = find_existing_owned_app(name)
+    if existing:
+        run("app", "get", existing)
+        state[kind] = existing
+        persist(state)
+        print(f"Recovered existing {name}: {existing}", flush=True)
+        return existing
+
+    attributes = {
+        "name": name,
+        "usage": "ANALYTICS",
+        "description": "QlikGPT GitHub CI/CD - " + kind,
+    }
+    if SPACE_ID:
+        attributes["spaceId"] = SPACE_ID
+
+    print(f"Creating {name} via official Qlik REST API...", flush=True)
+    result = qlik_rest("POST", "/api/v1/apps", {"attributes": attributes})
+    app_id = result.get("attributes", {}).get("id") or result.get("id")
+
+    # Defensive recovery: if Qlik accepted the request but did not return
+    # a usable JSON ID, DO NOT send another create request.
+    if not valid_uuid(app_id):
+        for pause in (1, 2, 3):
+            time.sleep(pause)
+            app_id = find_existing_owned_app(name)
+            if app_id:
+                break
+    if not valid_uuid(app_id):
+        raise RuntimeError(
+            f"Qlik create request for {name!r} did not return an App ID; "
+            "do not retry without checking Qlik Cloud"
+        )
+
     run("app", "get", app_id)
     state[kind] = app_id
-    persist(state)  # record each successful create immediately
+    persist(state)
     print(f"Created {name}: {app_id}", flush=True)
     return app_id
 
