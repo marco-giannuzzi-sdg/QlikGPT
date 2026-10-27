@@ -1,0 +1,16 @@
+# Generated load script; source of truth is scripts/*.qvs
+dist/
+
+# Never commit credentials or local CLI configuration
+.env
+.env.*
+*.key
+*.pem
+config.yml
+qlik.exe
+
+# Local editor / OS files
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
