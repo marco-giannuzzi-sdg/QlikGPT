@@ -1,5 +1,36 @@
 # QlikGPT — Native Qlik Sense SaaS as Code
 
+## Shared Semantic Catalog — two governed Presentation apps
+
+QlikGPT now has a **central, versioned measures catalog** that distributes reusable native Qlik master measures across different Presentation apps.
+
+| Resource | Purpose |
+| --- | --- |
+| [catalog/measures.json](catalog/measures.json) | Single source of truth: ID, formula, label, number format, version, required fields |
+| [apps/presentation1.json](apps/presentation1.json) | Subscribes to shared Revenue and Orders; retains 4 original local measures |
+| [apps/presentation2.json](apps/presentation2.json) | Subscribes to shared Revenue and Margin % |
+| [apps/presentation2-objects.json](apps/presentation2-objects.json) | Native KPIs linked via `qLibraryId` to the shared metrics |
+| [ci/semantic_catalog.py](ci/semantic_catalog.py) | Dependency analysis, QIX create/update, exact formula read-back, numeric evaluation, best-effort compensation |
+| [tests/test_semantic_catalog.py](tests/test_semantic_catalog.py) | Offline schema, duplicate-ID and dependency-routing regression tests |
+
+**Live Qlik apps:** [Presentation 1](https://sdggroup-it.eu.qlikcloud.com/sense/app/07dfa926-4895-4fb2-af4c-eac90e9eb2cb) · [Presentation 2](https://sdggroup-it.eu.qlikcloud.com/sense/app/04280b14-6ba5-4fe9-90d6-2ff8fa1c994f)
+
+### How to update a globally shared metric
+
+Edit **only** the matching entry in `catalog/measures.json` (e.g., `qlikgpt_shared_revenue`), keep the stable `id`, and commit to `main`. GitHub Actions determines which Presentation manifests reference that ID; it updates only those apps via QIX, reads each persisted definition back, and evaluates the measure expression. No workstation and no data reload for catalog-only edits.
+
+- [CI run #40](https://github.com/marco-giannuzzi-sdg/QlikGPT/actions/runs/40496905086) verified changing the shared Revenue formula in **both** Presentations.
+- [CI run #42](https://github.com/marco-giannuzzi-sdg/QlikGPT/actions/runs/40497167350) verified updating **only Presentation 2** for a measure to which Presentation 1 is not subscribed.
+- Existing app-specific measures and objects remain intact. Removing a metric from a JSON file does not automatically delete a Qlik master item.
+- This is governed **CI synchronization**, not a live cross-app Qlik metadata link. Qlik apps own their master items independently.
+- An app's chart must use a master measure's `qLibraryId` for that chart to inherit changes; inline expressions do not.
+- The compensation/rollback is **best effort**, not a guaranteed distributed transaction. For production add a staging/promotion process and approval before changing published apps.
+
+[Detailed catalog instructions](catalog/README.md)
+
+---
+
+
 This PoC separates **three Qlik Cloud applications** following the classic Qlik extract/transform/presentation architecture, and supports a **PC-free GitHub Actions CI/CD** workflow, including a path for **native Qlik frontend development via JSON**.
 
 ## Architecture
