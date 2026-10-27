@@ -20,11 +20,11 @@
 | measure | `qlikgpt_shared_margin` — Margine lordo | ✓ | — | 1 |
 | measure | `qlikgpt_shared_margin_pct` — Margine % | ✓ | ✓ | 2 |
 | measure | `qlikgpt_shared_average_order` — Valore medio ordine | — | — | 0 |
-| dimension | `qlikgpt_d_market` — Mercato | ✓ | ✓ | 0 |
-| dimension | `qlikgpt_d_yearmonth` — Anno / Mese | ✓ | ✓ | 0 |
+| dimension | `qlikgpt_d_market` — Mercato | ✓ | ✓ | 2 |
+| dimension | `qlikgpt_d_yearmonth` — Anno / Mese | ✓ | ✓ | 1 |
 | dimension | `qlikgpt_d_category` — Categoria | ✓ | — | 0 |
-| dimension | `qlikgpt_d_year` — Anno | ✓ | — | 0 |
-| dimension | `qlikgpt_d_channel` — Canale | ✓ | — | 0 |
+| dimension | `qlikgpt_d_year` — Anno | ✓ | — | 1 |
+| dimension | `qlikgpt_d_channel` — Canale | ✓ | — | 1 |
 | dimension | `qlikgpt_d_quarter` — Trimestre | — | — | 0 |
 | variable | `qlikgpt_v_target_margin` — vQlikGPTTargetMargin | ✓ | ✓ | 0 |
 | variable | `qlikgpt_v_currency_label` — vQlikGPTCurrencyLabel | — | — | 0 |
@@ -61,12 +61,12 @@ In caso di modifica, il deployment sincronizza **solo le app sottoscritte**. Le 
 ### Mercato · `qlikgpt_d_market`
 **Tipo:** dimension · **Versione:** 1.0.0
 **Applicazioni:** [presentation](https://sdggroup-it.eu.qlikcloud.com/sense/app/07dfa926-4895-4fb2-af4c-eac90e9eb2cb), [presentation2](https://sdggroup-it.eu.qlikcloud.com/sense/app/04280b14-6ba5-4fe9-90d6-2ff8fa1c994f)
-**Visualizzazioni collegate:** Nessuna referenza diretta
+**Visualizzazioni collegate:** `presentation/qlikgpt_chart_market`, `presentation/qlikgpt_list_market`
 
 ### Anno / Mese · `qlikgpt_d_yearmonth`
 **Tipo:** dimension · **Versione:** 1.0.0
 **Applicazioni:** [presentation](https://sdggroup-it.eu.qlikcloud.com/sense/app/07dfa926-4895-4fb2-af4c-eac90e9eb2cb), [presentation2](https://sdggroup-it.eu.qlikcloud.com/sense/app/04280b14-6ba5-4fe9-90d6-2ff8fa1c994f)
-**Visualizzazioni collegate:** Nessuna referenza diretta
+**Visualizzazioni collegate:** `presentation/qlikgpt_chart_month`
 
 ### Categoria · `qlikgpt_d_category`
 **Tipo:** dimension · **Versione:** 1.0.0
@@ -76,12 +76,12 @@ In caso di modifica, il deployment sincronizza **solo le app sottoscritte**. Le 
 ### Anno · `qlikgpt_d_year`
 **Tipo:** dimension · **Versione:** 1.0.0
 **Applicazioni:** [presentation](https://sdggroup-it.eu.qlikcloud.com/sense/app/07dfa926-4895-4fb2-af4c-eac90e9eb2cb)
-**Visualizzazioni collegate:** Nessuna referenza diretta
+**Visualizzazioni collegate:** `presentation/qlikgpt_list_year`
 
 ### Canale · `qlikgpt_d_channel`
 **Tipo:** dimension · **Versione:** 1.0.0
 **Applicazioni:** [presentation](https://sdggroup-it.eu.qlikcloud.com/sense/app/07dfa926-4895-4fb2-af4c-eac90e9eb2cb)
-**Visualizzazioni collegate:** Nessuna referenza diretta
+**Visualizzazioni collegate:** `presentation/qlikgpt_list_channel`
 
 ### Trimestre · `qlikgpt_d_quarter`
 **Tipo:** dimension · **Versione:** 1.0.0
@@ -97,11 +97,6 @@ In caso di modifica, il deployment sincronizza **solo le app sottoscritte**. Le 
 **Tipo:** variable · **Versione:** 1.0.0
 **Applicazioni:** Nessuna (disponibile per uso futuro)
 **Visualizzazioni collegate:** Nessuna referenza diretta
-
-## Riferimenti non centralizzati (da valutare)
-
-- presentation · qlikgpt_chart_month: dimensione inline (YearMonth) non collegata a master dimension
-- presentation · qlikgpt_chart_market: dimensione inline (Market) non collegata a master dimension
 
 ## Come si usa
 

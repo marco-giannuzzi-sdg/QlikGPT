@@ -214,7 +214,20 @@
         "presentation",
         "presentation2"
       ],
-      "visuals": [],
+      "visuals": [
+        {
+          "app": "presentation",
+          "sheet": "Sales Intelligence | QlikGPT",
+          "visualId": "qlikgpt_chart_market",
+          "visualType": "barchart"
+        },
+        {
+          "app": "presentation",
+          "sheet": "Filtri",
+          "visualId": "qlikgpt_list_market",
+          "visualType": "listbox"
+        }
+      ],
       "definitions": {
         "id": "qlikgpt_d_market",
         "title": "Mercato",
@@ -242,7 +255,14 @@
         "presentation",
         "presentation2"
       ],
-      "visuals": [],
+      "visuals": [
+        {
+          "app": "presentation",
+          "sheet": "Sales Intelligence | QlikGPT",
+          "visualId": "qlikgpt_chart_month",
+          "visualType": "linechart"
+        }
+      ],
       "definitions": {
         "id": "qlikgpt_d_yearmonth",
         "title": "Anno / Mese",
@@ -296,7 +316,14 @@
       "apps": [
         "presentation"
       ],
-      "visuals": [],
+      "visuals": [
+        {
+          "app": "presentation",
+          "sheet": "Filtri",
+          "visualId": "qlikgpt_list_year",
+          "visualType": "listbox"
+        }
+      ],
       "definitions": {
         "id": "qlikgpt_d_year",
         "title": "Anno",
@@ -323,7 +350,14 @@
       "apps": [
         "presentation"
       ],
-      "visuals": [],
+      "visuals": [
+        {
+          "app": "presentation",
+          "sheet": "Filtri",
+          "visualId": "qlikgpt_list_channel",
+          "visualType": "listbox"
+        }
+      ],
       "definitions": {
         "id": "qlikgpt_d_channel",
         "title": "Canale",
@@ -400,8 +434,5 @@
       }
     }
   ],
-  "warnings": [
-    "presentation · qlikgpt_chart_month: dimensione inline (YearMonth) non collegata a master dimension",
-    "presentation · qlikgpt_chart_market: dimensione inline (Market) non collegata a master dimension"
-  ]
+  "warnings": []
 }
