@@ -1,18 +1,19 @@
-// ===============================================================
-// ETL1 - RAW layer
-// PoC QlikGPT: 5,000 synthetic orders, no external data sources.
-// ===============================================================
+// ================================================================
+// QlikGPT - ETL1 / RAW
+// Extract layer: generates test orders and writes the RAW QVD.
+// The three apps must live in the SAME Qlik Cloud space.
+// ================================================================
 
+SET ErrorMode=1;
 SET ThousandSep=',';
 SET DecimalSep='.';
-SET MoneyThousandSep=',';
 SET MoneyDecimalSep='.';
-SET DateFormat='DD/MM/YYYY';
+SET DateFormat='YYYY-MM-DD';
 
-RawSales:
+RawOrders:
 LOAD
     'ORD-' & Num(RecNo(), '000000')                       AS OrderID,
-    Date(MakeDate(2025, 1, 1) + Floor(Rand() * 650))      AS OrderDate,
+    Date(MakeDate(2025, 1, 1) + Floor(Rand() * 600))     AS OrderDate,
     Pick(1 + Floor(Rand() * 4),
         'Italy', 'France', 'Germany', 'Spain')              AS Market,
     Pick(1 + Floor(Rand() * 4),
@@ -24,3 +25,10 @@ LOAD
     Round(40 + Rand() * 500, 0.01)                        AS UnitPrice,
     Round(0.45 + Rand() * 0.30, 0.0001)                   AS CostRatio
 AUTOGENERATE 5000;
+
+// Qlik Cloud creates the target folder during STORE if necessary.
+// An unqualified DataFiles connection points to the app's space.
+STORE RawOrders
+INTO [lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd] (qvd);
+
+TRACE QlikGPT ETL1 completed: RAW QVD generated.;
