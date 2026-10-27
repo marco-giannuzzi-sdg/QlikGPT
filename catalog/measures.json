@@ -52,7 +52,7 @@
       "id": "qlikgpt_shared_margin_pct",
       "title": "Margine percentuale condiviso",
       "expression": "If(Sum(Revenue)>0,Sum(Margin)/Sum(Revenue),0)",
-      "description": "Margine commerciale rispetto al fatturato",
+      "description": "Margine commerciale percentuale governato; solo Presentation 2 è iscritta a questa metrica.",
       "format": {
         "qType": "F",
         "qFmt": "0.0%",
@@ -68,7 +68,7 @@
         "Sales",
         "Shared"
       ],
-      "version": "1.0.0"
+      "version": "1.0.1"
     }
   ]
 }
