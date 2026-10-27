@@ -181,6 +181,49 @@ def actual_measure(qix: Qix, doc: int, measure_id: str) -> tuple[int | None, dic
     return handle, qix.call(handle, "GetProperties", [])["qProp"]
 
 
+LEGACY_APP1_IDS = {
+    "qlikgpt_m_revenue",
+    "qlikgpt_m_orders",
+    "qlikgpt_m_margin",
+    "qlikgpt_m_margin_pct",
+}
+
+
+def prune_unsubscribed_measures(qix: Qix, doc: int, app_key: str,
+                                all_catalog_ids: set[str],
+                                subscriptions: set[str],
+                                *, legacy: bool = False) -> None:
+    """Conservative removal: only catalog-owned or four known PoC legacy IDs.
+
+    Never remove a measure that QIX reports as linked to any native object.
+    A future unassigned metric stays in Git and is provisioned on subscription.
+    """
+    candidates = all_catalog_ids - subscriptions
+    if legacy:
+        candidates |= LEGACY_APP1_IDS
+    deleted = []
+    for mid in sorted(candidates):
+        handle, _props = actual_measure(qix, doc, mid)
+        if handle is None:
+            continue
+        links = qix.call(handle, "GetLinkedObjects", [])
+        if links.get("qItems", []):
+            raise RuntimeError(
+                f"[{app_key}] REFUSING deletion of referenced measure {mid}: "
+                f"{len(links['qItems'])} Qlik-linked objects"
+            )
+        result = qix.call(doc, "DestroyMeasure", {"qId": mid})
+        if not result.get("qSuccess", False):
+            raise RuntimeError(f"[{app_key}] failed to delete inactive measure {mid}")
+        check, _ = actual_measure(qix, doc, mid)
+        if check is not None:
+            raise RuntimeError(f"[{app_key}] inactive measure still exists after deletion: {mid}")
+        deleted.append(mid)
+    if deleted:
+        qix.call(doc, "DoSave", [])
+    print(f"[{app_key}] catalog reconciliation: removed {len(deleted)} inactive/legacy measures: {deleted}", flush=True)
+
+
 def validate_required_fields(qix: Qix, doc: int, item: dict) -> None:
     for field in item["requiredFields"]:
         lookup = qix.call(doc, "GetField", {"qFieldName": field})
