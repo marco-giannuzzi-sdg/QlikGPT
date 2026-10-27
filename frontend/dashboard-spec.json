@@ -50,7 +50,7 @@
       ]
     }
   ],
-  "note": "Native QIX model and hypercube dimensions/measures verified. Client-side chart rendering needs visual QA.",
+  "note": "Native text-image brand header plus compact associative filter pane, 4 KPI and 2 charts. ETL1 uses 12 full historical months to avoid misleading partial-month drops.",
   "deployment": {
     "dataApps": [
       "etl1",
@@ -62,7 +62,7 @@
     "validatedNativeObjects": 20,
     "validatedRecordCount": 5000
   },
-  "designVersion": "Executive Clean v2",
+  "designVersion": "Executive Clean v3",
   "palette": {
     "navy": "#142B49",
     "teal": "#0E7490",
@@ -70,5 +70,5 @@
     "blue": "#2563EB",
     "cardBackground": "#F5F9FC"
   },
-  "visualAcceptance": "Pending screenshot validation in Qlik Cloud browser for both charts and spacing"
+  "visualAcceptance": "Pending browser visual QA after Qlik Cloud deployment"
 }
