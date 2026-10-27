@@ -1,0 +1,23 @@
+{
+  "title": "QlikGPT - Sales Performance",
+  "targetApp": "presentation",
+  "developmentStatus": "planned",
+  "sheets": [
+    {
+      "id": "qlikgpt-sales-overview",
+      "title": "Sales Overview",
+      "layout": "responsive-grid",
+      "filters": ["SalesYear", "Market", "ProductCategory", "Channel"],
+      "kpis": [
+        {"id": "kpi-revenue", "title": "Total Revenue", "expression": "Sum(Revenue)"},
+        {"id": "kpi-orders", "title": "Orders", "expression": "Count(DISTINCT OrderID)"},
+        {"id": "kpi-margin", "title": "Margin %", "expression": "Num(Sum(Margin)/Sum(Revenue), '0.0%')"}
+      ],
+      "visualizations": [
+        {"id": "chart-monthly-sales", "type": "linechart", "dimension": "YearMonth", "measure": "Sum(Revenue)"},
+        {"id": "chart-sales-market", "type": "barchart", "dimension": "Market", "measure": "Sum(Revenue)"}
+      ]
+    }
+  ],
+  "note": "Declarative target specification only. It is not automatically compiled into Qlik objects yet. Actual deployable Engine JSON belongs in dimensions.json, measures.json and objects.json."
+}
