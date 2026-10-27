@@ -383,6 +383,10 @@ def orchestrate_semantic_catalog(state: dict, *, run: Callable,
                         raise RuntimeError(f"{key}: persisted measure {mid} differs from Git")
                     # Engine evaluation confirms the formula is calculable in each app.
                     run("app", "eval", definitions[mid]["expression"], "--app", state[key])
+                prune_unsubscribed_measures(
+                    audit, doc, key, set(definitions),
+                    set(manifests[key]["catalogMeasures"])
+                )
             finally:
                 audit.close()
         print("SEMANTIC-CATALOG SUCCESS: impacted apps synchronized and audited", flush=True)
