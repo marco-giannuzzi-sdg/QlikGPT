@@ -80,14 +80,20 @@ def main() -> None:
     try:
         doc = qix.call(-1, "OpenDoc", {"qDocName": sys.argv[1]})["qReturn"]["qHandle"]
         sheet = qix.call(doc, "GetObject", {"qId": "qlikgpt_sales_overview"})["qReturn"]["qHandle"]
-        pane = qix.call(sheet, "GetChild", {"qId": "qlikgpt_filter_panel"})["qReturn"]["qHandle"]
+        for object_id in ("qlikgpt_kpi_revenue", "qlikgpt_filter_panel"):
+            result = qix.call(sheet, "GetChild", {"qId": object_id})
+            print("QIX sheet child %s: %s" % (object_id, result.get("qReturn")), flush=True)
+        pane_result = qix.call(sheet, "GetChild", {"qId": "qlikgpt_filter_panel"})
+        pane = pane_result.get("qReturn", {}).get("qHandle")
+        if pane is None:
+            # Qlik CLI may store this object at the app level instead of
+            # linking it as a child. Resolve by ID before attempting updates.
+            alternate = qix.call(doc, "GetObject", {"qId": "qlikgpt_filter_panel"})
+            print("QIX app object filterpane: %s" % alternate.get("qReturn"), flush=True)
+            pane = alternate.get("qReturn", {}).get("qHandle")
+        if pane is None:
+            raise RuntimeError("Filter pane is not addressable via QIX as sheet child or app object")
         print("QIX handles: doc=%s sheet=%s pane=%s" % (doc, sheet, pane), flush=True)
-        for handle_name, handle in (("sheet", sheet), ("pane", pane)):
-            try:
-                info = qix.call(handle, "GetInfo")
-                print("QIX %s info: %s" % (handle_name, info.get("qInfo")), flush=True)
-            except RuntimeError as exc:
-                print("QIX %s GetInfo diagnostic: %s" % (handle_name, exc), flush=True)
 
         for item in definitions:
             item_id, field, label = item["id"], item["field"], item["label"]
