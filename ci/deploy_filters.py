@@ -144,6 +144,25 @@ def main() -> None:
                 qix.call(existing, "SetProperties", [properties])
                 print(f"Updated native Qlik filter: {label}", flush=True)
 
+        # Contract check: every chart/KPI must actually reference a catalog
+        # master measure, not merely contain a valid-looking qLibraryId in JSON.
+        for visual in target.get("qChildren", []):
+            wanted = visual.get("qHyperCubeDef", {}).get("qMeasures", [])
+            if not wanted:
+                continue
+            hid = find_child(qix, sheet, visual["qInfo"]["qId"])
+            props_read = qix.call(hid, "GetProperties", [])["qProp"]
+            actual = props_read.get("qHyperCubeDef", {}).get("qMeasures", [])
+            if len(actual) != len(wanted):
+                raise RuntimeError("Wrong number of visual measures")
+            for expected, observed in zip(wanted, actual):
+                mid = expected.get("qLibraryId")
+                if not mid or observed.get("qLibraryId") != mid:
+                    raise RuntimeError("Visual is not using catalog master: " + visual["qInfo"]["qId"])
+                if observed.get("qDef", {}).get("qDef", "").strip():
+                    raise RuntimeError("Inline master formula found in " + visual["qInfo"]["qId"])
+            print("Catalog qLibraryId verified for " + visual["qInfo"]["qId"], flush=True)
+
         # The visual brand block must carry real markdown, not just a title.
         brand_handle = find_child(qix, sheet, "qlikgpt_brand_header")
         if brand_handle is None:
