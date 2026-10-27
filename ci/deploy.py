@@ -207,6 +207,7 @@ def validate_frontend(app_id: str) -> None:
     """Round-trip the Presentation app through Qlik CLI to confirm persisted objects."""
     expected_ids = {
         "qlikgpt_sales_overview",
+        "qlikgpt_brand_header",
         "qlikgpt_kpi_revenue", "qlikgpt_kpi_orders",
         "qlikgpt_kpi_margin", "qlikgpt_kpi_margin_pct",
         "qlikgpt_chart_month", "qlikgpt_chart_market",
