@@ -7,6 +7,7 @@ on:
     paths:
       - 'scripts/**'
       - 'catalog/**'
+      - 'lineage/**'
       - 'apps/**'
       - 'tests/**'
       - 'ci/**'
@@ -65,11 +66,15 @@ jobs:
         shell: bash
         run: python3 ci/catalog_report.py
 
+      - name: Generate App Lineage and downstream impact maps
+        shell: bash
+        run: python3 ci/app_lineage.py
+
       - name: Unit-test and compile the Semantic Catalog
         shell: bash
         run: |
           python3 -m unittest discover -s tests -v
-          python3 -m py_compile ci/semantic_catalog.py ci/semantic_assets.py ci/catalog_report.py ci/deploy.py ci/deploy_visuals.py
+          python3 -m py_compile ci/semantic_catalog.py ci/semantic_assets.py ci/catalog_report.py ci/app_lineage.py ci/deploy.py ci/deploy_visuals.py
 
       - name: Authenticate to Qlik Cloud
         shell: bash
@@ -101,7 +106,7 @@ jobs:
           set -euo pipefail
           python3 ci/deploy.py
 
-      - name: Persist app IDs and Semantic Catalog report to GitHub
+      - name: Persist App Lineage, Semantic Catalog report and app IDs to GitHub
         # Persist even if ETL2 / Presentation reload fails, avoiding duplicates on retry.
         if: ${{ always() && vars.QLIK_CICD_ENABLED == 'true' }}
         shell: bash
@@ -111,11 +116,14 @@ jobs:
           if [ -f catalog/USAGE.md ] && [ -f catalog/usage.json ]; then
             git add -- catalog/USAGE.md catalog/usage.json
           fi
+          if [ -f lineage/APP_LINEAGE.md ] && [ -f lineage/graph.json ]; then
+            git add -- lineage/APP_LINEAGE.md lineage/graph.json
+          fi
           if git diff --cached --quiet; then
-            echo "App IDs and Semantic Catalog report unchanged."
+            echo "App IDs, Semantic Catalog and App Lineage reports unchanged."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "chore(qlik): refresh semantic usage report and app IDs [skip ci]"
+          git commit -m "chore(qlik): refresh semantic usage and app lineage reports [skip ci]"
           git push origin HEAD:main

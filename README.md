@@ -13,6 +13,16 @@ Il report fotografa le **dipendenze dichiarate nei JSON GitHub**, non gli oggett
 
 **Unico Semantic Catalog per tutte le master measures**: GitHub è la fonte di verità, ogni Presentation sceglie le misure tramite il proprio manifest. Nessuna master measure è definita in file app-specifici.
 
+## App Lineage e dipendenze tra applicazioni
+
+Il **[Report App Lineage](lineage/APP_LINEAGE.md)** documenta le dipendenze tra le app ETL e Presentation, i QVD prodotti/consumati e l'impatto a valle di ogni modifica. Il report viene aggiornato automaticamente da GitHub Actions leggendo gli **script QVS effettivi**, senza dover predisporre manualmente un elenco di dipendenze.
+
+- **[App Lineage — mappa interattiva Mermaid su GitHub](lineage/APP_LINEAGE.md)**: flusso ETL1 → ETL2 → Presentation 1 e 2, evidenze QVS e analisi degli upstream/downstream.
+- **[Grafo lineage JSON](lineage/graph.json)**: nodi app e QVD, collegamenti e impatti diretti/indiretti per eventuali automazioni.
+- **[Semantic Catalog — Usage & Impact](catalog/USAGE.md)**: complementarmente, mostra quali master measures e master dimensions vengono usate dai singoli grafici e filtri.
+
+Il lineage è **statico e dichiarativo**: riconosce `FROM` e `STORE` negli script del repository, ma non pretende di rappresentare modifiche eseguite direttamente in Qlik Cloud, sorgenti dinamiche o gli ultimi reload reali. La lettura dello stesso URI `lib://DataFiles` implica una dipendenza solo quando il percorso fa riferimento alla stessa risorsa condivisa tra le app.
+
 ## Architettura
 
 ```
