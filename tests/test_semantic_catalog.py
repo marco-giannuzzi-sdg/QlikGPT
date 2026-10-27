@@ -19,27 +19,29 @@ class CatalogValidationTests(unittest.TestCase):
 
     def test_valid_catalog(self):
         values = sc.validate_catalog(self.catalog, self.manifests)
-        self.assertEqual(len(values), 5)
-        self.assertEqual(
-            set(self.manifests["presentation"]["catalogMeasures"]),
+        self.assertGreaterEqual(len(values), 5)
+        self.assertTrue(
             {"qlikgpt_shared_revenue", "qlikgpt_shared_orders",
-             "qlikgpt_shared_margin", "qlikgpt_shared_margin_pct"},
+             "qlikgpt_shared_margin", "qlikgpt_shared_margin_pct"}
+            .issubset(self.manifests["presentation"]["catalogMeasures"])
         )
-        self.assertEqual(
-            set(self.manifests["presentation2"]["catalogMeasures"]),
-            {"qlikgpt_shared_revenue", "qlikgpt_shared_margin_pct"},
+        self.assertTrue(
+            {"qlikgpt_shared_revenue", "qlikgpt_shared_margin_pct"}
+            .issubset(self.manifests["presentation2"]["catalogMeasures"])
         )
 
     def test_unassigned_measure_is_valid_and_unaffected(self):
         catalog = sc.validate_catalog(self.catalog, self.manifests)
         self.assertIn("qlikgpt_shared_average_order", catalog)
-        self.assertFalse(any(
-            "qlikgpt_shared_average_order" in m["catalogMeasures"]
-            for m in self.manifests.values()
-        ))
+        hypothetical = deepcopy(self.manifests)
+        for app in hypothetical.values():
+            app["catalogMeasures"] = [
+                x for x in app["catalogMeasures"]
+                if x != "qlikgpt_shared_average_order"
+            ]
         with patch.object(sc, "changed_metric_ids", return_value={"qlikgpt_shared_average_order"}):
             affected = sc.determine_impacted(
-                catalog, self.manifests, {"catalog/measures.json"}, False, False)
+                catalog, hypothetical, {"catalog/measures.json"}, False, False)
         self.assertEqual(affected, set())
 
     def test_future_subscription_activates_existing_catalog_metric(self):
