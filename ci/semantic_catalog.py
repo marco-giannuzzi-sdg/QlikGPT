@@ -19,6 +19,7 @@ from deploy_visuals import Qix, find_child
 
 ROOT = Path(__file__).resolve().parents[1]
 CATALOG = ROOT / "catalog" / "measures.json"
+FORMATTING = ROOT / "catalog" / "formatting.json"
 # Additional apps are onboarded by adding apps/presentation3.json,
 # apps/presentation3-objects.json, etc. No Python routing table to edit.
 MANIFESTS = {
@@ -37,6 +38,88 @@ def read_json(path: Path) -> dict:
     return data
 
 
+def formatting_contract() -> dict:
+    """Return versioned Italian number-format and semantic-color presets."""
+    config = read_json(FORMATTING)
+    if config.get("schemaVersion") != 1 or config.get("locale") != "it-IT":
+        raise ValueError("Unsupported semantic formatting contract")
+    presets, palette = config.get("presets"), config.get("palette")
+    if not isinstance(presets, dict) or not presets or not isinstance(palette, dict):
+        raise ValueError("Formatting contract requires presets and palette")
+    for name, fmt in presets.items():
+        if not isinstance(fmt, dict) or set(fmt) != {
+            "qType", "qnDec", "qUseThou", "qFmt", "qDec", "qThou"
+        }:
+            raise ValueError(f"Malformed QIX format preset: {name}")
+        if fmt["qType"] not in ("M", "I", "F") or not isinstance(fmt["qnDec"], int) or not 0 <= fmt["qnDec"] <= 15:
+            raise ValueError(f"Invalid QIX type/decimals: {name}")
+        if fmt["qUseThou"] not in (0, 1) or not fmt["qFmt"]:
+            raise ValueError(f"Invalid grouping or pattern: {name}")
+        if fmt["qDec"] != "," or fmt["qThou"] != ".":
+            raise ValueError(f"Preset {name} must use Italian decimal and thousands separators")
+        if fmt["qUseThou"] and "." not in fmt["qFmt"]:
+            raise ValueError(f"Preset {name} must show thousands grouping in qFmt")
+        if fmt["qnDec"] and fmt["qFmt"].count(",") != 1:
+            raise ValueError(f"Preset {name} needs an Italian decimal point in qFmt")
+        if not fmt["qnDec"] and "," in fmt["qFmt"]:
+            raise ValueError(f"Integer preset {name} must not have decimals")
+        if fmt["qType"] == "M" and "€" not in fmt["qFmt"]:
+            raise ValueError(f"EUR preset {name} must contain a currency symbol")
+    for role, color in palette.items():
+        if not isinstance(color, str) or not re.fullmatch(r"#[0-9A-Fa-f]{6}", color):
+            raise ValueError(f"Invalid semantic color {role}: {color!r}")
+    for key, cfg in config.get("compactPresets", {}).items():
+        if (not isinstance(cfg, dict) or not isinstance(cfg.get("scale"), (int, float))
+                or cfg["scale"] <= 0 or not isinstance(cfg.get("decimals"), int)
+                or not 0 <= cfg["decimals"] <= 4
+                or not isinstance(cfg.get("prefix"), str)
+                or not isinstance(cfg.get("suffix"), str)):
+            raise ValueError(f"Invalid optional compact format preset: {key}")
+    return config
+
+
+def metric_style(item: dict) -> dict:
+    """Resolve authoritative full-precision QIX format and semantic color."""
+    settings = formatting_contract()
+    return {
+        "format": deepcopy(settings["presets"][item["formatPreset"]]),
+        "color": settings["palette"][item["colorRole"]],
+    }
+
+
+QIX_FORMAT_KEYS = ("qType", "qnDec", "qUseThou", "qFmt", "qDec", "qThou")
+
+
+def comparison_fields(measure_props: dict) -> dict:
+    """Read back the complete effective Qlik master-item formatting contract."""
+    m = measure_props.get("qMeasure", {})
+    meta = measure_props.get("qMetaDef", {})
+    fmt = m.get("qNumFormat", {})
+    coloring = m.get("coloring", {})
+    return {
+        "expression": m.get("qDef"), "title": m.get("qLabel"),
+        "format": {key: fmt.get(key) for key in QIX_FORMAT_KEYS},
+        "color": coloring.get("baseColor", {}).get("color"),
+        "description": meta.get("description"),
+        "tags": meta.get("tags", []),
+    }
+
+
+def expected_fields(item: dict) -> dict:
+    resolved = metric_style(item)
+    return {
+        "expression": item["expression"], "title": item["title"],
+        "format": resolved["format"], "color": resolved["color"],
+        "description": item["description"], "tags": item["tags"],
+    }
+
+
+def format_differences(actual: dict, item: dict) -> list[str]:
+    expected = expected_fields(item)
+    found = comparison_fields(actual)
+    return [key for key in expected if found[key] != expected[key]]
+
+
 def validate_catalog(catalog: dict, manifests: dict) -> dict:
     if catalog.get("schemaVersion") != 1:
         raise ValueError("Unsupported semantic catalog schemaVersion")
@@ -44,6 +127,7 @@ def validate_catalog(catalog: dict, manifests: dict) -> dict:
     if not isinstance(definitions, list) or not definitions:
         raise ValueError("Catalog requires a nonempty measures array")
     by_id = {}
+    formatting = formatting_contract()
     for item in definitions:
         if not isinstance(item, dict):
             raise ValueError("Catalog measure must be an object")
@@ -63,8 +147,14 @@ def validate_catalog(catalog: dict, manifests: dict) -> dict:
             not isinstance(f, str) or f not in ALLOWED_FIELDS for f in fields
         ):
             raise ValueError(f"{measure_id}: unsupported or empty requiredFields")
-        if not isinstance(item.get("format"), dict) or not item["format"].get("qFmt"):
-            raise ValueError(f"{measure_id}: missing Qlik qNumFormat")
+        if item.get("formatPreset") not in formatting["presets"]:
+            raise ValueError(f"{measure_id}: unknown formatPreset")
+        if item.get("colorRole") not in formatting["palette"]:
+            raise ValueError(f"{measure_id}: unknown semantic colorRole")
+        if "compactFormatPreset" in item and item["compactFormatPreset"] not in formatting.get("compactPresets", {}):
+            raise ValueError(f"{measure_id}: unknown compactFormatPreset")
+        if "format" in item:
+            raise ValueError(f"{measure_id}: inline number format forbidden; use formatPreset")
         if not isinstance(item.get("tags"), list):
             raise ValueError(f"{measure_id}: tags must be an array")
         by_id[measure_id] = item
@@ -139,6 +229,8 @@ def determine_impacted(catalog: dict, manifests: dict, changed: set[str],
     if full or new_app or not changed:
         return set(manifests)
     affected = set()
+    if "catalog/formatting.json" in changed:
+        affected |= set(manifests)
     if "catalog/measures.json" in changed:
         modified = changed_metric_ids(catalog)
         affected |= {key for key, manifest in manifests.items()
@@ -157,13 +249,17 @@ def determine_impacted(catalog: dict, manifests: dict, changed: set[str],
 
 
 def qix_metric_properties(item: dict) -> dict:
+    style = metric_style(item)
     return {
         "qInfo": {"qId": item["id"], "qType": "measure"},
         "qMeasure": {
             "qLabel": item["title"],
             "qDef": item["expression"],
             "qGrouping": "N",
-            "qNumFormat": item["format"],
+            "qNumFormat": style["format"],
+            "coloring": {"baseColor": {"color": style["color"], "index": -1}},
+            "isCustomFormatted": True,
+            "numFormatFromTemplate": False,
         },
         "qMetaDef": {
             "title": item["title"],
@@ -244,15 +340,10 @@ def detect_catalog_drift(state: dict, manifests: dict,
                     drift.add(app_key)
                     print(f"DRIFT [{app_key}]: missing {mid}", flush=True)
                     break
-                measure = props.get("qMeasure", {})
-                meta = props.get("qMetaDef", {})
-                if (measure.get("qDef") != definition["expression"] or
-                    measure.get("qLabel") != definition["title"] or
-                    measure.get("qNumFormat", {}).get("qFmt")
-                        != definition["format"]["qFmt"] or
-                    meta.get("description") != definition["description"]):
+                mismatches = format_differences(props, definition)
+                if mismatches:
                     drift.add(app_key)
-                    print(f"DRIFT [{app_key}]: changed properties for {mid}", flush=True)
+                    print(f"DRIFT [{app_key}]: {mid} differs in {mismatches}", flush=True)
                     break
             if app_key not in drift:
                 for mid in definitions.keys() - subscribed:
@@ -288,11 +379,7 @@ def sync_one(qix: Qix, doc: int, appkey: str, item: dict, changes: list) -> None
         changes.append((qix, doc, mid, None))
         print(f"[{appkey}] CREATED {mid}", flush=True)
     else:
-        if (previous.get("qMeasure", {}).get("qDef") == item["expression"]
-                and previous.get("qMeasure", {}).get("qLabel") == item["title"]
-                and previous.get("qMetaDef", {}).get("description") == item["description"]
-                and previous.get("qMeasure", {}).get("qNumFormat", {}).get("qFmt")
-                    == item["format"]["qFmt"]):
+        if not format_differences(previous, item):
             print(f"[{appkey}] unchanged {mid}", flush=True)
         else:
             changes.append((qix, doc, mid, deepcopy(previous)))
@@ -306,10 +393,16 @@ def sync_one(qix: Qix, doc: int, appkey: str, item: dict, changes: list) -> None
     check_handle, check_props = actual_measure(qix, doc, mid)
     if check_handle is None:
         raise RuntimeError(f"[{appkey}] {mid} missing after sync")
-    actual = check_props.get("qMeasure", {})
-    if actual.get("qDef") != item["expression"] or actual.get("qLabel") != item["title"]:
-        raise RuntimeError(f"[{appkey}] {mid} failed exact-definition read-back")
-    print(f"[{appkey}] VERIFIED {mid} => {actual['qDef']}", flush=True)
+    differences = format_differences(check_props, item)
+    if differences:
+        raise RuntimeError(f"[{appkey}] {mid} failed QIX properties read-back: {differences}")
+    style = metric_style(item)
+    print(
+        f"[{appkey}] VERIFIED {mid}: expression={item['expression']}, "
+        f"format={style['format']['qFmt']}, decimal={style['format']['qDec']}, "
+        f"thousands={style['format']['qThou']}, color={style['color']}",
+        flush=True
+    )
 
 
 def rollback(changes: list) -> None:
@@ -425,8 +518,11 @@ def orchestrate_semantic_catalog(state: dict, *, run: Callable,
                 doc = audit.call(-1, "OpenDoc", {"qDocName": state[key]})["qReturn"]["qHandle"]
                 for mid in manifests[key]["catalogMeasures"]:
                     _, props = actual_measure(audit, doc, mid)
-                    if not props or props["qMeasure"]["qDef"] != definitions[mid]["expression"]:
-                        raise RuntimeError(f"{key}: persisted measure {mid} differs from Git")
+                    if not props:
+                        raise RuntimeError(f"{key}: missing persisted measure {mid}")
+                    differences = format_differences(props, definitions[mid])
+                    if differences:
+                        raise RuntimeError(f"{key}: persisted measure {mid} differs from catalog: {differences}")
                     # Engine evaluation confirms the formula is calculable in each app.
                     run("app", "eval", definitions[mid]["expression"], "--app", state[key])
                 prune_unsubscribed_measures(

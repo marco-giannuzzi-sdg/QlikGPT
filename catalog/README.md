@@ -37,3 +37,14 @@ L'orchestratore rileva i manifest `presentationN.json`, crea e inizializza le nu
 - Su errori nel mezzo di un deployment, rollback compensativo *best effort*, con log espliciti.
 
 Il codice Qlik è aggiornato tramite GitHub Actions, senza dipendenza dal PC dell'autore.
+
+## Standard di formattazione (Italia)
+
+Il catalogo governa **tutte le master measures**, anche quelle non ancora assegnate a un'app. Ogni misura dichiara `formatPreset`, `colorRole` e, facoltativamente, `compactFormatPreset`, senza copiare impostazioni numeriche.
+
+- [formatting.json](formatting.json) contiene i preset QIX con `qType`, `qnDec`, `qUseThou`, `qFmt`, `qDec`, `qThou` e la palette centralizzata.
+- `currency_eur_2`: `€ 1.245.678,90`; `integer_0`: `5.000`; `percent_1`: `27,7%`; disponibili anche `percent_2` e `decimal_2`.
+- Il `colorRole` viene inserito nel `coloring.baseColor` del master item nativo Qlik. Ogni grafico può deliberatamente sovrascrivere il colore in caso di visualizzazione specifica.
+- `compactFormatPreset` è **un contratto di presentazione**, non altera l'aggregazione o il `qNumFormat` canonico della master measure: il KPI può visualizzare milioni mentre una tabella mostra l'importo completo.
+- La CI confronta **tutti e sei i campi di `qNumFormat`**, colore, etichetta, descrizione, espressione e tag; anche unicamente modificando un preset si ridistribuiscono tutte le app sottoscritte.
+- Resta necessario verificare il rendering nel browser quando si cambia il tema o la visualizzazione nativa Qlik.

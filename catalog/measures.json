@@ -11,12 +11,6 @@
       "title": "Fatturato",
       "expression": "Sum(Revenue)",
       "description": "Fatturato totale con filtri associativi; definizione canonica del catalogo.",
-      "format": {
-        "qType": "M",
-        "qFmt": "€ #,##0.00",
-        "qDec": ",",
-        "qThou": "."
-      },
       "requiredFields": [
         "Revenue"
       ],
@@ -25,19 +19,16 @@
         "Sales",
         "Governed"
       ],
-      "version": "1.0.2"
+      "version": "1.0.2",
+      "formatPreset": "currency_eur_2",
+      "compactFormatPreset": "currency_millions",
+      "colorRole": "revenue"
     },
     {
       "id": "qlikgpt_shared_orders",
       "title": "Numero ordini",
       "expression": "Count(DISTINCT OrderID)",
       "description": "Numero ordini distinti.",
-      "format": {
-        "qType": "F",
-        "qFmt": "#,##0",
-        "qDec": ",",
-        "qThou": "."
-      },
       "requiredFields": [
         "OrderID"
       ],
@@ -46,19 +37,15 @@
         "Sales",
         "Governed"
       ],
-      "version": "1.0.0"
+      "version": "1.0.0",
+      "formatPreset": "integer_0",
+      "colorRole": "orders"
     },
     {
       "id": "qlikgpt_shared_margin",
       "title": "Margine lordo",
       "expression": "Sum(Margin)",
       "description": "Somma dei margini commerciali.",
-      "format": {
-        "qType": "M",
-        "qFmt": "€ #,##0.00",
-        "qDec": ",",
-        "qThou": "."
-      },
       "requiredFields": [
         "Margin"
       ],
@@ -67,19 +54,16 @@
         "Sales",
         "Governed"
       ],
-      "version": "1.0.0"
+      "version": "1.0.0",
+      "formatPreset": "currency_eur_2",
+      "compactFormatPreset": "currency_millions",
+      "colorRole": "margin"
     },
     {
       "id": "qlikgpt_shared_margin_pct",
       "title": "Margine %",
       "expression": "If(Sum(Revenue)>0,Sum(Margin)/Sum(Revenue),0)",
       "description": "Marginalità commerciale percentuale.",
-      "format": {
-        "qType": "F",
-        "qFmt": "0.0%",
-        "qDec": ",",
-        "qThou": "."
-      },
       "requiredFields": [
         "Revenue",
         "Margin"
@@ -89,19 +73,15 @@
         "Sales",
         "Governed"
       ],
-      "version": "1.0.1"
+      "version": "1.0.1",
+      "formatPreset": "percent_1",
+      "colorRole": "positive"
     },
     {
       "id": "qlikgpt_shared_average_order",
       "title": "Valore medio ordine",
       "expression": "If(Count(DISTINCT OrderID)>0,Sum(Revenue)/Count(DISTINCT OrderID),0)",
       "description": "Disponibile per future sottoscrizioni; nessuna app la utilizza oggi.",
-      "format": {
-        "qType": "M",
-        "qFmt": "€ #,##0.00",
-        "qDec": ",",
-        "qThou": "."
-      },
       "requiredFields": [
         "Revenue",
         "OrderID"
@@ -111,7 +91,9 @@
         "Sales",
         "Available"
       ],
-      "version": "1.0.0"
+      "version": "1.0.0",
+      "formatPreset": "currency_eur_2",
+      "colorRole": "revenue"
     }
   ]
 }

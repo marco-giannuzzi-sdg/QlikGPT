@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "locale": "it-IT",
+  "presets": {
+    "currency_eur_2": {
+      "qType": "M",
+      "qnDec": 2,
+      "qUseThou": 1,
+      "qFmt": "€ #.##0,00",
+      "qDec": ",",
+      "qThou": "."
+    },
+    "integer_0": {
+      "qType": "I",
+      "qnDec": 0,
+      "qUseThou": 1,
+      "qFmt": "#.##0",
+      "qDec": ",",
+      "qThou": "."
+    },
+    "percent_1": {
+      "qType": "F",
+      "qnDec": 1,
+      "qUseThou": 0,
+      "qFmt": "0,0%",
+      "qDec": ",",
+      "qThou": "."
+    },
+    "percent_2": {
+      "qType": "F",
+      "qnDec": 2,
+      "qUseThou": 0,
+      "qFmt": "0,00%",
+      "qDec": ",",
+      "qThou": "."
+    },
+    "decimal_2": {
+      "qType": "F",
+      "qnDec": 2,
+      "qUseThou": 1,
+      "qFmt": "#.##0,00",
+      "qDec": ",",
+      "qThou": "."
+    }
+  },
+  "compactPresets": {
+    "currency_millions": {
+      "scale": 1000000,
+      "decimals": 2,
+      "prefix": "€ ",
+      "suffix": " M",
+      "description": "Display-only: a KPI/chart may use a concise millions label, while the master measure keeps full precision."
+    },
+    "currency_thousands": {
+      "scale": 1000,
+      "decimals": 1,
+      "prefix": "€ ",
+      "suffix": " mila",
+      "description": "Display-only: a chart may use a thousands label."
+    },
+    "number_thousands": {
+      "scale": 1000,
+      "decimals": 1,
+      "prefix": "",
+      "suffix": " mila",
+      "description": "Display-only: optional compact count."
+    }
+  },
+  "palette": {
+    "revenue": "#142B49",
+    "orders": "#64748B",
+    "margin": "#0E7490",
+    "positive": "#15803D",
+    "accent": "#2563EB"
+  }
+}
