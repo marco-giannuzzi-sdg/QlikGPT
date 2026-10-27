@@ -1,5 +1,16 @@
 # QlikGPT — Qlik Sense SaaS as Code
 
+**Semantic Catalog 2.0** centralizza master measures, master dimensions e variabili Qlik, con una matrice GitHub consultabile delle applicazioni e dei grafici che le utilizzano.
+
+### Consulta uso e impatti
+
+- **[Usage & Impact Report](catalog/USAGE.md)**: matrice misure, dimensioni e variabili per Presentation, e oggetti visuali collegati tramite `qLibraryId`.
+- **[Report machine-readable](catalog/usage.json)**: dipendenze disponibili per automazioni e controlli.
+- **[Master dimensions](catalog/dimensions.json)** e **[variabili Qlik](catalog/variables.json)**: definizioni versionate con ID stabili, anche quando non ancora assegnate a un'app.
+- **[Semantic Catalog 2.0](catalog/README.md)**: istruzioni di governance e promozione.
+
+Il report fotografa le **dipendenze dichiarate nei JSON GitHub**, non gli oggetti aggiunti a mano nel tenant né gli accessi degli utenti. I grafici con dimensioni inline sono segnalati separatamente.
+
 **Unico Semantic Catalog per tutte le master measures**: GitHub è la fonte di verità, ogni Presentation sceglie le misure tramite il proprio manifest. Nessuna master measure è definita in file app-specifici.
 
 ## Architettura

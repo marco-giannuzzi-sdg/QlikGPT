@@ -7,5 +7,12 @@
     "qlikgpt_shared_margin_pct"
   ],
   "dashboardSource": "apps/presentation2-objects.json",
-  "description": "Catalog-governed native KPIs linked with qLibraryId."
+  "description": "Catalog-governed native KPIs linked with qLibraryId.",
+  "catalogDimensions": [
+    "qlikgpt_d_market",
+    "qlikgpt_d_yearmonth"
+  ],
+  "catalogVariables": [
+    "qlikgpt_v_target_margin"
+  ]
 }

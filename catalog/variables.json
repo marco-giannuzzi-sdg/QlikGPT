@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "governance": {
+    "owner": "BI Architecture",
+    "contract": "Only app variables, not variables defined by load scripts. Variable name is stable across apps."
+  },
+  "variables": [
+    {
+      "id": "qlikgpt_v_target_margin",
+      "name": "vQlikGPTTargetMargin",
+      "definition": "0.40",
+      "description": "Soglia di riferimento di marginalità utilizzabile dalle app sottoscritte.",
+      "version": "1.0.0"
+    },
+    {
+      "id": "qlikgpt_v_currency_label",
+      "name": "vQlikGPTCurrencyLabel",
+      "definition": "EUR",
+      "description": "Etichetta valuta disponibile per utilizzo futuro.",
+      "version": "1.0.0"
+    }
+  ]
+}

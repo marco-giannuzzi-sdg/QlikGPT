@@ -48,3 +48,14 @@ Il catalogo governa **tutte le master measures**, anche quelle non ancora assegn
 - `compactFormatPreset` è **un contratto di presentazione**, non altera l'aggregazione o il `qNumFormat` canonico della master measure: il KPI può visualizzare milioni mentre una tabella mostra l'importo completo.
 - La CI confronta **tutti e sei i campi di `qNumFormat`**, colore, etichetta, descrizione, espressione e tag; anche unicamente modificando un preset si ridistribuiscono tutte le app sottoscritte.
 - Resta necessario verificare il rendering nel browser quando si cambia il tema o la visualizzazione nativa Qlik.
+
+## Semantic Catalog 2.0: dimensioni, variabili e impact analysis
+
+- [dimensions.json](dimensions.json) governa tutte le master dimensions. La vecchia copia `apps/presentation1-dimensions.json` è stata rimossa; gli ID Qlik delle cinque dimensioni esistenti restano invariati.
+- [variables.json](variables.json) governa solo variabili applicative create con QIX `CreateVariableEx`; **non sovrascrive** le variabili definite dagli script QVS.
+- Ogni `apps/presentationN.json` dichiara `catalogMeasures`, `catalogDimensions`, `catalogVariables`. Oggetti non assegnati restano nel catalogo e vengono creati sull'app solo quando ne dichiari l'ID nel manifest.
+- **[Matrice di utilizzo e impatto](USAGE.md)**: distingue master item distribuito a un'app da uso diretto in un oggetto visuale (`qLibraryId`). [usage.json](usage.json) offre gli stessi dati in forma strutturata.
+- Modifiche alle definizioni o alle sottoscrizioni eseguono un **frontend-only deployment** (nessun reload dei dati); la pipeline legge poi gli oggetti QIX e verifica il salvataggio. Gli oggetti estranei al catalogo non vengono eliminati.
+- Per un'analisi puntuale puoi usare `python3 ci/catalog_report.py --impact measure:qlikgpt_shared_revenue` oppure sostituire `measure` con `dimension` o `variable`.
+- `ci/catalog_report.py` rigenera `catalog/USAGE.md` e `catalog/usage.json` nel workflow; il bot li committa con `[skip ci]`.
+- Il report non significa che una dimensione referenziata tramite campo inline sia collegata come master dimension: evidenzia la migrazione eventuale.

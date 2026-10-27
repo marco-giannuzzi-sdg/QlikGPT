@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "governance": {
+    "owner": "BI Architecture",
+    "contract": "Master dimensions are centrally defined and selectively provisioned in subscribed Presentation apps."
+  },
+  "dimensions": [
+    {
+      "id": "qlikgpt_d_market",
+      "title": "Mercato",
+      "fields": [
+        "Market"
+      ],
+      "labels": [
+        "Mercato"
+      ],
+      "description": "Dimensione Market",
+      "tags": [
+        "Semantic Catalog",
+        "Sales",
+        "Governed"
+      ],
+      "version": "1.0.0"
+    },
+    {
+      "id": "qlikgpt_d_yearmonth",
+      "title": "Anno / Mese",
+      "fields": [
+        "YearMonth"
+      ],
+      "labels": [
+        "Anno / Mese"
+      ],
+      "description": "Dimensione YearMonth",
+      "tags": [
+        "Semantic Catalog",
+        "Sales",
+        "Governed"
+      ],
+      "version": "1.0.0"
+    },
+    {
+      "id": "qlikgpt_d_category",
+      "title": "Categoria",
+      "fields": [
+        "ProductCategory"
+      ],
+      "labels": [
+        "Categoria"
+      ],
+      "description": "Dimensione ProductCategory",
+      "tags": [
+        "Semantic Catalog",
+        "Sales",
+        "Governed"
+      ],
+      "version": "1.0.0"
+    },
+    {
+      "id": "qlikgpt_d_year",
+      "title": "Anno",
+      "fields": [
+        "SalesYear"
+      ],
+      "labels": [
+        "Anno"
+      ],
+      "description": "Dimensione SalesYear",
+      "tags": [
+        "Semantic Catalog",
+        "Sales",
+        "Governed"
+      ],
+      "version": "1.0.0"
+    },
+    {
+      "id": "qlikgpt_d_channel",
+      "title": "Canale",
+      "fields": [
+        "Channel"
+      ],
+      "labels": [
+        "Canale"
+      ],
+      "description": "Dimensione Channel",
+      "tags": [
+        "Semantic Catalog",
+        "Sales",
+        "Governed"
+      ],
+      "version": "1.0.0"
+    },
+    {
+      "id": "qlikgpt_d_quarter",
+      "title": "Trimestre",
+      "fields": [
+        "YearQuarter"
+      ],
+      "labels": [
+        "Trimestre"
+      ],
+      "description": "Riservata per nuove dashboard e sottoscrizioni future.",
+      "tags": [
+        "Semantic Catalog",
+        "Available"
+      ],
+      "version": "1.0.0"
+    }
+  ]
+}

@@ -61,11 +61,15 @@ jobs:
         run: |
           python3 -m pip install --disable-pip-version-check --no-cache-dir websocket-client==1.8.0
 
+      - name: Generate Semantic Catalog 2.0 usage and impact matrix
+        shell: bash
+        run: python3 ci/catalog_report.py
+
       - name: Unit-test and compile the Semantic Catalog
         shell: bash
         run: |
           python3 -m unittest discover -s tests -v
-          python3 -m py_compile ci/semantic_catalog.py ci/deploy.py ci/deploy_visuals.py
+          python3 -m py_compile ci/semantic_catalog.py ci/semantic_assets.py ci/catalog_report.py ci/deploy.py ci/deploy_visuals.py
 
       - name: Authenticate to Qlik Cloud
         shell: bash
@@ -84,7 +88,7 @@ jobs:
           scope=full
           if [ "${{ github.event_name }}" = "push" ]; then
             changed="$(git diff --name-only HEAD^ HEAD 2>/dev/null || true)"
-            if [ -n "$changed" ] && ! printf '%s\n' "$changed" | grep -Eq '^(scripts/|ci/|\.github/)'; then
+            if [ -n "$changed" ] && ! printf '%s\n' "$changed" | grep -Eq '^scripts/'; then
               scope=frontend
             fi
           fi
@@ -97,18 +101,18 @@ jobs:
           set -euo pipefail
           python3 ci/deploy.py
 
-      - name: Persist generated app IDs to GitHub
+      - name: Persist app IDs and Semantic Catalog report to GitHub
         # Persist even if ETL2 / Presentation reload fails, avoiding duplicates on retry.
         if: ${{ always() && vars.QLIK_CICD_ENABLED == 'true' }}
         shell: bash
         run: |
           set -euo pipefail
-          if git diff --quiet -- deployment/app-ids.json; then
-            echo "App IDs unchanged."
+          git add -- deployment/app-ids.json catalog/USAGE.md catalog/usage.json
+          if git diff --cached --quiet; then
+            echo "App IDs and Semantic Catalog report unchanged."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add deployment/app-ids.json
-          git commit -m "chore(qlik): persist generated app IDs [skip ci]"
+          git commit -m "chore(qlik): refresh semantic usage report and app IDs [skip ci]"
           git push origin HEAD:main

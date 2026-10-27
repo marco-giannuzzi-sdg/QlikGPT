@@ -183,16 +183,6 @@ def nonempty_json_array(relative: str) -> bool:
     return bool(parsed)
 
 
-def deploy_dimensions(app_id: str) -> None:
-    # Master measures are never imported from local JSON: the Semantic Catalog
-    # and QIX synchronize them for each app independently.
-    path = "apps/presentation1-dimensions.json"
-    if nonempty_json_array(path):
-        run("app", "build", "--app", app_id, "--no-reload",
-            "--dimensions", path)
-        print("Presentation 1 dimensions synchronized.", flush=True)
-
-
 def validate_frontend(app_id: str) -> None:
     """Round-trip the Presentation app through Qlik CLI to confirm persisted objects."""
     # Dynamic: expected catalog measures + all native objects and dimensions
@@ -200,9 +190,8 @@ def validate_frontend(app_id: str) -> None:
     manifest = json.loads((ROOT / "apps/presentation1.json").read_text())
     sheets = json.loads((ROOT / manifest["dashboardSource"]).read_text())
     filters = json.loads((ROOT / manifest["filterSource"]).read_text())
-    dimensions = json.loads((ROOT / manifest["dimensionSource"]).read_text())
     expected_ids = set(manifest["catalogMeasures"])
-    expected_ids.update(d["qInfo"]["qId"] for d in dimensions)
+    expected_ids.update(manifest["catalogDimensions"])
     for sheet in sheets:
         expected_ids.add(sheet["qInfo"]["qId"])
         expected_ids.update(child["qInfo"]["qId"]
@@ -290,7 +279,7 @@ def main() -> None:
             for path in files_changed)
     )
     if refresh_p1_frontend:
-        deploy_dimensions(state["presentation"])
+        # Central master dimensions and variables are provisioned by QIX.
         # Qlik CLI does not fully materialize nested sheet children.
         subprocess.run(
             [sys.executable, "ci/deploy_visuals.py", state["presentation"]],

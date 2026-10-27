@@ -10,6 +10,15 @@
   ],
   "dashboardSource": "apps/presentation1-objects.json",
   "description": "All master measures catalog governed; every KPI/chart uses subscribed qLibraryId.",
-  "dimensionSource": "apps/presentation1-dimensions.json",
-  "filterSource": "apps/presentation1-filters.json"
+  "filterSource": "apps/presentation1-filters.json",
+  "catalogDimensions": [
+    "qlikgpt_d_market",
+    "qlikgpt_d_yearmonth",
+    "qlikgpt_d_category",
+    "qlikgpt_d_year",
+    "qlikgpt_d_channel"
+  ],
+  "catalogVariables": [
+    "qlikgpt_v_target_margin"
+  ]
 }

@@ -468,6 +468,9 @@ def orchestrate_semantic_catalog(state: dict, *, run: Callable,
     catalog = read_json(CATALOG)
     manifests = {key: read_json(path) for key, path in MANIFESTS.items()}
     definitions = validate_catalog(catalog, manifests)  # no side effects
+    import semantic_assets as assets
+    dimensions, variables = assets.catalogs()
+    assets.validate_subscriptions(manifests, dimensions, variables)
     changed = changed_paths()
 
     new_apps = set()
@@ -489,10 +492,26 @@ def orchestrate_semantic_catalog(state: dict, *, run: Callable,
         definitions, manifests, changed, full=(scope == "full"),
         new_app=bool(new_apps)
     )
+    impacted |= assets.impacted(manifests, changed, dimensions, variables)
     # Recover pending changes even when the last commit only changes tests
     # or documentation following a failed deployment.
     if scope != "full":
         impacted |= detect_catalog_drift(state, manifests, definitions)
+        # Reconcile dimensions and variables even if the previous deployment
+        # failed or a Qlik user modified managed object definitions manually.
+        for key, manifest in manifests.items():
+            audit_connection = Qix(state[key])
+            try:
+                audit_doc = audit_connection.call(
+                    -1, "OpenDoc", {"qDocName":state[key]}
+                )["qReturn"]["qHandle"]
+                missing = assets.drift(audit_connection, audit_doc, manifest,
+                                       dimensions, variables)
+                if missing:
+                    print(f"ASSET DRIFT [{key}] {missing}", flush=True)
+                    impacted.add(key)
+            finally:
+                audit_connection.close()
     print(f"SEMANTIC-CATALOG impacted={sorted(impacted)} "
           f"changed={sorted(changed)}", flush=True)
     if not impacted:
@@ -500,6 +519,7 @@ def orchestrate_semantic_catalog(state: dict, *, run: Callable,
 
     connections: list[tuple[Qix, int]] = []
     changes: list = []
+    asset_changes: list = []
     try:
         for key in sorted(impacted):
             qix = Qix(state[key])
@@ -507,6 +527,10 @@ def orchestrate_semantic_catalog(state: dict, *, run: Callable,
             connections.append((qix, doc))
             for mid in manifests[key]["catalogMeasures"]:
                 sync_one(qix, doc, key, definitions[mid], changes)
+            assets.apply(qix, doc, key, "dimensions", dimensions,
+                         manifests[key]["catalogDimensions"], asset_changes)
+            assets.apply(qix, doc, key, "variables", variables,
+                         manifests[key]["catalogVariables"], asset_changes)
             if key != "presentation":
                 deploy_governed_sheets(qix, doc, manifests[key])
         for qix, doc in connections:
@@ -516,6 +540,12 @@ def orchestrate_semantic_catalog(state: dict, *, run: Callable,
             audit = Qix(state[key])
             try:
                 doc = audit.call(-1, "OpenDoc", {"qDocName": state[key]})["qReturn"]["qHandle"]
+                remaining = assets.drift(audit, doc, manifests[key],
+                                         dimensions, variables)
+                if remaining:
+                    raise RuntimeError(
+                        f"{key}: persisted dimensions/variables differ: {remaining}"
+                    )
                 for mid in manifests[key]["catalogMeasures"]:
                     _, props = actual_measure(audit, doc, mid)
                     if not props:
@@ -533,6 +563,7 @@ def orchestrate_semantic_catalog(state: dict, *, run: Callable,
                 audit.close()
         print("SEMANTIC-CATALOG SUCCESS: impacted apps synchronized and audited", flush=True)
     except Exception:
+        assets.rollback(asset_changes)
         rollback(changes)
         raise
     finally:
