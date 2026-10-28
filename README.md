@@ -63,7 +63,7 @@ GitHub resta la fonte autorevole delle misure, dimensioni, variabili e dashboard
 
 ## QlikGPT Executive Premium 1.1 — Frontend Template
 
-Il **[Design System globale](ui/README.md)** (Executive Premium 1.1, ID di compatibilità `qlikgpt-executive-v1`) governa palette, sfondi, tipografia, griglia, header, navigazione e KPI delle nuove Presentation. Il [tema custom Qlik](ui/themes/qlikgpt-executive-v1/theme.json) è versionato ma **non viene importato automaticamente** nel tenant: il frontend nativo va distribuito tramite CI, mentre il tema va caricato come ZIP e selezionato dalle impostazioni di ciascuna app.
+Il **[Design System globale](ui/README.md)** (Executive Premium 1.1, ID di compatibilità `qlikgpt-executive-v1`) governa palette, sfondi, tipografia, griglia, header, navigazione e KPI delle nuove Presentation. Il [tema custom Qlik](ui/themes/qlikgpt-executive-v1/theme.json) è versionato e viene ora pubblicato tramite [Qlik CLI + QIX](ci/deploy_theme.py) nell’ultimo step del workflow, assegnandolo alla prima Presentation **solo se** la CI Qlik è abilitata e la API key ha il permesso di gestione temi. Il merge da solo non certifica che il tema sia attivo: verificare il job GitHub Actions e la resa in Qlik.
 
 Le due app Sales condividono la palette Executive Premium; la prima ha una griglia Overview 24 × 18 con hero, filtri, KPI e insight, mentre la seconda mantiene il layout KPI dedicato. Entrambe sono state allineate al template mantenendo gli ID delle visualizzazioni e le formule governate. Per generare una nuova Presentation in anteprima:
 
