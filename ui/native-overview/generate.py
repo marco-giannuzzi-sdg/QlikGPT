@@ -7,8 +7,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 SHEET = "qlikgpt_sales_native"
 PREFIX = "qlikgpt_native_"
-COLS, ROWS = 24, 20
-C = {"canvas": "#F3F6FA", "navy": "#142840", "blue": "#3365D5",
+COLS, ROWS = 24, 40
+C = {"canvas": "#F2F2F2", "navy": "#142840", "blue": "#3365D5",
      "teal": "#16A39A", "muted": "#718096", "border": "#E5EBF3"}
 MEASURES = ["qlikgpt_shared_revenue", "qlikgpt_shared_orders",
             "qlikgpt_shared_margin", "qlikgpt_shared_margin_pct"]
@@ -85,8 +85,8 @@ def make():
     head_style["borderRadius"] = "16px"
     head_style["title"]["main"] = font(26, "#FFFFFF", True)
     head_style["title"]["subTitle"] = font(11, "#BDCCE0")
-    add(header, 0, 0, 24, 1)
-    add(text("intro", "Executive Overview", "Una visione chiara delle performance di vendita.", size=25), 0, 1, 11, 2)
+    add(header, 0, 0, 24, 3)
+    add(text("intro", "Executive Overview", "Una visione chiara delle performance di vendita.", size=25), 0, 3, 11, 3)
     for i, (key, label, dimension) in enumerate(FILTERS):
         props = common("filter_" + key, "filterpane", label, general(decorated=True, title_size=12))
         props["showTitles"] = False
@@ -99,8 +99,8 @@ def make():
             "layoutOptions": {"dataLayout": "singleColumn", "dense": False},
             "components": [{"key": "theme", "header": {"fontFamily": "Arial", "fontSize": "12px",
                 "fontColor": color(C["navy"])}, "content": {"fontFamily": "Arial", "fontSize": "12px"}}]}
-        add(entry(props, [entry(listing)]), 12 + i*4, 2, 4, 1)
-    add(text("pulse", "BUSINESS PULSE", size=11), 0, 3, 24, 1)
+        add(entry(props, [entry(listing)]), 12 + i*4, 4, 4, 2)
+    add(text("pulse", "BUSINESS PULSE", size=11), 0, 6, 24, 1)
     labels = ["Fatturato", "Ordini", "Margine lordo", "Margine %"]
     notes = ["Valore commerciale", "Volume delle vendite", "Redditività delle vendite", "Margine sul fatturato"]
     for i, (mid, label, note) in enumerate(zip(MEASURES, labels, notes)):
@@ -108,16 +108,14 @@ def make():
         style["bgImage"] = icon_image(i)
         props = common("kpi_" + str(i), "kpi", label, style)
         props.update({"qHyperCubeDef": cube([mid]), "textAlign": "left", "layoutBehavior": "fixed",
-            "fontSize": "M", "showMeasureTitle": False, "showSecondMeasureTitle": False,
+            "fontSize": "S", "showMeasureTitle": False, "showSecondMeasureTitle": False,
             "footnote": note, "version": "2.5.0", "useLink": False})
         props["qHyperCubeDef"]["qMeasures"][0]["coloring"] = {"baseColor": color(C["navy"])}
         props["qHyperCubeDef"]["qMeasures"][0]["conditionalColoring"] = {
             "useConditionalColoring": False, "useBaseColors": False, "paletteSingleColor": color(C["navy"]),
             "segments": {"limits": [], "paletteColors": [color(C["navy"])]}}
-        props["components"].append({"key": "theme", "label": {
-            "value": {"fontFamily": "Arial", "fontSize": "36px", "fontStyle": ["bold"]}}})
-        add(entry(props), i*6, 4, 6, 3)
-    add(text("explorer", "PERFORMANCE EXPLORER", size=11), 0, 7, 24, 1)
+        add(entry(props), i*6, 7, 6, 5)
+    add(text("explorer", "PERFORMANCE EXPLORER", size=11), 0, 12, 24, 1)
     for ident, typ, title, subtitle, dimension, ink, col, width in [
         ("trend", "linechart", "Andamento del fatturato", "Evoluzione mensile dei ricavi", "qlikgpt_d_yearmonth", C["blue"], 0, 15),
         ("markets", "barchart", "Performance per mercato", "Confronto dei ricavi per area", "qlikgpt_d_market", C["teal"], 15, 9)]:
@@ -143,8 +141,8 @@ def make():
                           "scrollbar": "none"})
             props["qHyperCubeDef"]["qInterColumnSortOrder"] = [1, 0]
             props["qHyperCubeDef"]["qMeasures"][0]["qSortBy"] = {"qSortByNumeric": -1}
-        add(entry(props), col, 8, width, 7)
-    add(text("footer", "Sales Intelligence · Executive Overview", "Grafici nativi Qlik · Metriche dal catalogo", size=10), 0, 15, 24, 1)
+        add(entry(props), col, 13, width, 13)
+    add(text("footer", "Sales Intelligence · Executive Overview", "Grafici nativi Qlik · Metriche dal catalogo", size=10), 0, 26, 24, 2)
     sheet = {"qInfo": {"qId": SHEET, "qType": "sheet"}, "qExtendsId": "",
         "qMetaDef": {"title": "Sales Intelligence | Native", "description": "Native Qlik CLI premium composition"},
         "title": "Sales Intelligence | Native", "description": "qlikgpt-native-cli-v1",
