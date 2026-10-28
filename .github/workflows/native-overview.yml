@@ -1,0 +1,52 @@
+name: QlikGPT — Native premium sheet via Qlik CLI
+on:
+  pull_request:
+    paths: ['ui/native-overview/**', 'ci/deploy_native_cli.py', 'tests/test_native_cli.py', '.github/workflows/native-overview.yml']
+  push:
+    branches: [main]
+    paths: ['ui/native-overview/**', 'ci/deploy_native_cli.py', 'tests/test_native_cli.py', '.github/workflows/native-overview.yml']
+permissions:
+  contents: read
+concurrency:
+  group: qlikgpt-native-cli
+  cancel-in-progress: false
+jobs:
+  native:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Generate native full property tree and test contracts
+        run: |
+          python ui/native-overview/generate.py
+          python -m unittest discover -s tests -p test_native_cli.py -v
+          python -m py_compile ci/deploy_native_cli.py
+      - name: Install official Qlik CLI 3.4.0
+        run: |
+          curl --fail --location --silent --show-error https://github.com/qlik-oss/qlik-cli/releases/download/v3.4.0/qlik-Linux-x86_64.tar.gz --output /tmp/qlik-cli.tar.gz
+          mkdir -p "$HOME/.local/bin"
+          tar -xzf /tmp/qlik-cli.tar.gz -C "$HOME/.local/bin" qlik
+          chmod +x "$HOME/.local/bin/qlik"
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          "$HOME/.local/bin/qlik" version
+      - name: Verify native import command
+        run: qlik app object set --help
+      - uses: actions/upload-artifact@v4
+        with:
+          name: native-sheet-full-tree
+          path: ui/native-overview/sheet.json
+      - name: Install readback client
+        if: github.event_name == 'push' && vars.QLIK_CICD_ENABLED == 'true'
+        run: python -m pip install websocket-client==1.8.0
+      - name: Deploy and audit native sheet through CLI — no reload
+        if: github.event_name == 'push' && vars.QLIK_CICD_ENABLED == 'true'
+        env:
+          QLIK_TENANT: https://sdggroup-it.eu.qlikcloud.com
+          QLIK_API_KEY: ${{ secrets.QLIK_API_KEY }}
+        run: |
+          qlik context create native-cli --server "$QLIK_TENANT" --api-key "$QLIK_API_KEY"
+          qlik context use native-cli
+          python ci/deploy_native_cli.py
