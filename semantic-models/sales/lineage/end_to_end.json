@@ -1,0 +1,3652 @@
+{
+  "schemaVersion": 1,
+  "modelId": "sales",
+  "scope": "static versioned QVS/catalog/JSON; no runtime scan",
+  "apps": {
+    "etl1": {
+      "name": "QlikGPT - 01 ETL RAW",
+      "appId": "932480d2-415d-4535-9267-c699f44c55c6",
+      "script": "semantic-models/sales/scripts/etl1.qvs"
+    },
+    "etl2": {
+      "name": "QlikGPT - 02 ETL TRANSFORM",
+      "appId": "70ba9d05-24b7-46ec-8b8c-560e8169c3d1",
+      "script": "semantic-models/sales/scripts/etl2.qvs"
+    },
+    "presentation": {
+      "name": "QlikGPT - 03 PRESENTATION",
+      "appId": "07dfa926-4895-4fb2-af4c-eac90e9eb2cb",
+      "script": "semantic-models/sales/scripts/presentation.qvs"
+    },
+    "presentation2": {
+      "name": "QlikGPT - 04 PRESENTATION SHARED",
+      "appId": "04280b14-6ba5-4fe9-90d6-2ff8fa1c994f",
+      "script": "semantic-models/sales/scripts/presentation.qvs"
+    }
+  },
+  "nodes": [
+    {
+      "id": "app:presentation",
+      "type": "application",
+      "label": "QlikGPT - 03 PRESENTATION",
+      "app": "presentation",
+      "appId": "07dfa926-4895-4fb2-af4c-eac90e9eb2cb",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1.json",
+        "line": 1
+      }
+    },
+    {
+      "id": "app:presentation2",
+      "type": "application",
+      "label": "QlikGPT - 04 PRESENTATION SHARED",
+      "app": "presentation2",
+      "appId": "04280b14-6ba5-4fe9-90d6-2ff8fa1c994f",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation2.json",
+        "line": 1
+      }
+    },
+    {
+      "id": "dimension:qlikgpt_d_category",
+      "type": "dimension",
+      "label": "Categoria",
+      "catalogId": "qlikgpt_d_category",
+      "expression": null,
+      "source": {
+        "path": "semantic-models/sales/catalog/dimensions.json",
+        "line": 43
+      }
+    },
+    {
+      "id": "dimension:qlikgpt_d_channel",
+      "type": "dimension",
+      "label": "Canale",
+      "catalogId": "qlikgpt_d_channel",
+      "expression": null,
+      "source": {
+        "path": "semantic-models/sales/catalog/dimensions.json",
+        "line": 77
+      }
+    },
+    {
+      "id": "dimension:qlikgpt_d_market",
+      "type": "dimension",
+      "label": "Mercato",
+      "catalogId": "qlikgpt_d_market",
+      "expression": null,
+      "source": {
+        "path": "semantic-models/sales/catalog/dimensions.json",
+        "line": 9
+      }
+    },
+    {
+      "id": "dimension:qlikgpt_d_quarter",
+      "type": "dimension",
+      "label": "Trimestre",
+      "catalogId": "qlikgpt_d_quarter",
+      "expression": null,
+      "source": {
+        "path": "semantic-models/sales/catalog/dimensions.json",
+        "line": 94
+      }
+    },
+    {
+      "id": "dimension:qlikgpt_d_year",
+      "type": "dimension",
+      "label": "Anno",
+      "catalogId": "qlikgpt_d_year",
+      "expression": null,
+      "source": {
+        "path": "semantic-models/sales/catalog/dimensions.json",
+        "line": 60
+      }
+    },
+    {
+      "id": "dimension:qlikgpt_d_yearmonth",
+      "type": "dimension",
+      "label": "Anno / Mese",
+      "catalogId": "qlikgpt_d_yearmonth",
+      "expression": null,
+      "source": {
+        "path": "semantic-models/sales/catalog/dimensions.json",
+        "line": 26
+      }
+    },
+    {
+      "id": "logical:presentation2:Channel",
+      "type": "logical_field",
+      "label": "presentation2.Channel",
+      "app": "presentation2",
+      "field": "Channel"
+    },
+    {
+      "id": "logical:presentation2:Cost",
+      "type": "logical_field",
+      "label": "presentation2.Cost",
+      "app": "presentation2",
+      "field": "Cost"
+    },
+    {
+      "id": "logical:presentation2:CustomerID",
+      "type": "logical_field",
+      "label": "presentation2.CustomerID",
+      "app": "presentation2",
+      "field": "CustomerID"
+    },
+    {
+      "id": "logical:presentation2:Margin",
+      "type": "logical_field",
+      "label": "presentation2.Margin",
+      "app": "presentation2",
+      "field": "Margin"
+    },
+    {
+      "id": "logical:presentation2:MarginPct",
+      "type": "logical_field",
+      "label": "presentation2.MarginPct",
+      "app": "presentation2",
+      "field": "MarginPct"
+    },
+    {
+      "id": "logical:presentation2:Market",
+      "type": "logical_field",
+      "label": "presentation2.Market",
+      "app": "presentation2",
+      "field": "Market"
+    },
+    {
+      "id": "logical:presentation2:OrderDate",
+      "type": "logical_field",
+      "label": "presentation2.OrderDate",
+      "app": "presentation2",
+      "field": "OrderDate"
+    },
+    {
+      "id": "logical:presentation2:OrderID",
+      "type": "logical_field",
+      "label": "presentation2.OrderID",
+      "app": "presentation2",
+      "field": "OrderID"
+    },
+    {
+      "id": "logical:presentation2:ProductCategory",
+      "type": "logical_field",
+      "label": "presentation2.ProductCategory",
+      "app": "presentation2",
+      "field": "ProductCategory"
+    },
+    {
+      "id": "logical:presentation2:Quantity",
+      "type": "logical_field",
+      "label": "presentation2.Quantity",
+      "app": "presentation2",
+      "field": "Quantity"
+    },
+    {
+      "id": "logical:presentation2:Revenue",
+      "type": "logical_field",
+      "label": "presentation2.Revenue",
+      "app": "presentation2",
+      "field": "Revenue"
+    },
+    {
+      "id": "logical:presentation2:SalesMonth",
+      "type": "logical_field",
+      "label": "presentation2.SalesMonth",
+      "app": "presentation2",
+      "field": "SalesMonth"
+    },
+    {
+      "id": "logical:presentation2:SalesYear",
+      "type": "logical_field",
+      "label": "presentation2.SalesYear",
+      "app": "presentation2",
+      "field": "SalesYear"
+    },
+    {
+      "id": "logical:presentation2:UnitPrice",
+      "type": "logical_field",
+      "label": "presentation2.UnitPrice",
+      "app": "presentation2",
+      "field": "UnitPrice"
+    },
+    {
+      "id": "logical:presentation2:YearMonth",
+      "type": "logical_field",
+      "label": "presentation2.YearMonth",
+      "app": "presentation2",
+      "field": "YearMonth"
+    },
+    {
+      "id": "logical:presentation2:YearQuarter",
+      "type": "logical_field",
+      "label": "presentation2.YearQuarter",
+      "app": "presentation2",
+      "field": "YearQuarter"
+    },
+    {
+      "id": "logical:presentation:Channel",
+      "type": "logical_field",
+      "label": "presentation.Channel",
+      "app": "presentation",
+      "field": "Channel"
+    },
+    {
+      "id": "logical:presentation:Cost",
+      "type": "logical_field",
+      "label": "presentation.Cost",
+      "app": "presentation",
+      "field": "Cost"
+    },
+    {
+      "id": "logical:presentation:CustomerID",
+      "type": "logical_field",
+      "label": "presentation.CustomerID",
+      "app": "presentation",
+      "field": "CustomerID"
+    },
+    {
+      "id": "logical:presentation:Margin",
+      "type": "logical_field",
+      "label": "presentation.Margin",
+      "app": "presentation",
+      "field": "Margin"
+    },
+    {
+      "id": "logical:presentation:MarginPct",
+      "type": "logical_field",
+      "label": "presentation.MarginPct",
+      "app": "presentation",
+      "field": "MarginPct"
+    },
+    {
+      "id": "logical:presentation:Market",
+      "type": "logical_field",
+      "label": "presentation.Market",
+      "app": "presentation",
+      "field": "Market"
+    },
+    {
+      "id": "logical:presentation:OrderDate",
+      "type": "logical_field",
+      "label": "presentation.OrderDate",
+      "app": "presentation",
+      "field": "OrderDate"
+    },
+    {
+      "id": "logical:presentation:OrderID",
+      "type": "logical_field",
+      "label": "presentation.OrderID",
+      "app": "presentation",
+      "field": "OrderID"
+    },
+    {
+      "id": "logical:presentation:ProductCategory",
+      "type": "logical_field",
+      "label": "presentation.ProductCategory",
+      "app": "presentation",
+      "field": "ProductCategory"
+    },
+    {
+      "id": "logical:presentation:Quantity",
+      "type": "logical_field",
+      "label": "presentation.Quantity",
+      "app": "presentation",
+      "field": "Quantity"
+    },
+    {
+      "id": "logical:presentation:Revenue",
+      "type": "logical_field",
+      "label": "presentation.Revenue",
+      "app": "presentation",
+      "field": "Revenue"
+    },
+    {
+      "id": "logical:presentation:SalesMonth",
+      "type": "logical_field",
+      "label": "presentation.SalesMonth",
+      "app": "presentation",
+      "field": "SalesMonth"
+    },
+    {
+      "id": "logical:presentation:SalesYear",
+      "type": "logical_field",
+      "label": "presentation.SalesYear",
+      "app": "presentation",
+      "field": "SalesYear"
+    },
+    {
+      "id": "logical:presentation:UnitPrice",
+      "type": "logical_field",
+      "label": "presentation.UnitPrice",
+      "app": "presentation",
+      "field": "UnitPrice"
+    },
+    {
+      "id": "logical:presentation:YearMonth",
+      "type": "logical_field",
+      "label": "presentation.YearMonth",
+      "app": "presentation",
+      "field": "YearMonth"
+    },
+    {
+      "id": "logical:presentation:YearQuarter",
+      "type": "logical_field",
+      "label": "presentation.YearQuarter",
+      "app": "presentation",
+      "field": "YearQuarter"
+    },
+    {
+      "id": "measure:qlikgpt_shared_average_order",
+      "type": "measure",
+      "label": "Valore medio ordine",
+      "catalogId": "qlikgpt_shared_average_order",
+      "expression": "If(Count(DISTINCT OrderID)>0,Sum(Revenue)/Count(DISTINCT OrderID),0)",
+      "source": {
+        "path": "semantic-models/sales/catalog/measures.json",
+        "line": 81
+      }
+    },
+    {
+      "id": "measure:qlikgpt_shared_margin",
+      "type": "measure",
+      "label": "Margine lordo",
+      "catalogId": "qlikgpt_shared_margin",
+      "expression": "Sum(Margin)",
+      "source": {
+        "path": "semantic-models/sales/catalog/measures.json",
+        "line": 45
+      }
+    },
+    {
+      "id": "measure:qlikgpt_shared_margin_pct",
+      "type": "measure",
+      "label": "Margine %",
+      "catalogId": "qlikgpt_shared_margin_pct",
+      "expression": "If(Sum(Revenue)>0,Sum(Margin)/Sum(Revenue),0)",
+      "source": {
+        "path": "semantic-models/sales/catalog/measures.json",
+        "line": 63
+      }
+    },
+    {
+      "id": "measure:qlikgpt_shared_orders",
+      "type": "measure",
+      "label": "Numero ordini",
+      "catalogId": "qlikgpt_shared_orders",
+      "expression": "Count(DISTINCT OrderID)",
+      "source": {
+        "path": "semantic-models/sales/catalog/measures.json",
+        "line": 28
+      }
+    },
+    {
+      "id": "measure:qlikgpt_shared_revenue",
+      "type": "measure",
+      "label": "Fatturato",
+      "catalogId": "qlikgpt_shared_revenue",
+      "expression": "Sum(Revenue)",
+      "source": {
+        "path": "semantic-models/sales/catalog/measures.json",
+        "line": 10
+      }
+    },
+    {
+      "id": "object:presentation2:qlikgpt_p2_kpi_marginpct",
+      "type": "visual",
+      "label": "MARGINE % GOVERNATO",
+      "app": "presentation2",
+      "objectId": "qlikgpt_p2_kpi_marginpct",
+      "sheetId": "qlikgpt_p2_sheet",
+      "chartType": "kpi",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation2-objects.json",
+        "line": 89
+      }
+    },
+    {
+      "id": "object:presentation2:qlikgpt_p2_kpi_revenue",
+      "type": "visual",
+      "label": "RICAVI GOVERNATI",
+      "app": "presentation2",
+      "objectId": "qlikgpt_p2_kpi_revenue",
+      "sheetId": "qlikgpt_p2_sheet",
+      "chartType": "kpi",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation2-objects.json",
+        "line": 59
+      }
+    },
+    {
+      "id": "object:presentation2:qlikgpt_p2_sheet",
+      "type": "sheet",
+      "label": "Shared Semantic Measures",
+      "app": "presentation2",
+      "objectId": "qlikgpt_p2_sheet",
+      "sheetId": "qlikgpt_p2_sheet",
+      "chartType": "sheet",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation2-objects.json",
+        "line": 4
+      }
+    },
+    {
+      "id": "object:presentation:qlikgpt_brand_header",
+      "type": "visual",
+      "label": "QlikGPT  |  Sales Intelligence",
+      "app": "presentation",
+      "objectId": "qlikgpt_brand_header",
+      "sheetId": "qlikgpt_sales_overview",
+      "chartType": "text-image",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1-objects.json",
+        "line": 143
+      }
+    },
+    {
+      "id": "object:presentation:qlikgpt_chart_market",
+      "type": "visual",
+      "label": "RICAVI PER MERCATO",
+      "app": "presentation",
+      "objectId": "qlikgpt_chart_market",
+      "sheetId": "qlikgpt_sales_overview",
+      "chartType": "barchart",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1-objects.json",
+        "line": 484
+      }
+    },
+    {
+      "id": "object:presentation:qlikgpt_chart_month",
+      "type": "visual",
+      "label": "TREND DEL FATTURATO",
+      "app": "presentation",
+      "objectId": "qlikgpt_chart_month",
+      "sheetId": "qlikgpt_sales_overview",
+      "chartType": "linechart",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1-objects.json",
+        "line": 373
+      }
+    },
+    {
+      "id": "object:presentation:qlikgpt_filter_panel",
+      "type": "visual",
+      "label": "Filtri · seleziona per restringere",
+      "app": "presentation",
+      "objectId": "qlikgpt_filter_panel",
+      "sheetId": "qlikgpt_sales_overview",
+      "chartType": "filterpane",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1-objects.json",
+        "line": 159
+      }
+    },
+    {
+      "id": "object:presentation:qlikgpt_kpi_margin",
+      "type": "visual",
+      "label": "Margine lordo",
+      "app": "presentation",
+      "objectId": "qlikgpt_kpi_margin",
+      "sheetId": "qlikgpt_sales_overview",
+      "chartType": "kpi",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1-objects.json",
+        "line": 279
+      }
+    },
+    {
+      "id": "object:presentation:qlikgpt_kpi_margin_pct",
+      "type": "visual",
+      "label": "Margine %",
+      "app": "presentation",
+      "objectId": "qlikgpt_kpi_margin_pct",
+      "sheetId": "qlikgpt_sales_overview",
+      "chartType": "kpi",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1-objects.json",
+        "line": 326
+      }
+    },
+    {
+      "id": "object:presentation:qlikgpt_kpi_orders",
+      "type": "visual",
+      "label": "Ordini",
+      "app": "presentation",
+      "objectId": "qlikgpt_kpi_orders",
+      "sheetId": "qlikgpt_sales_overview",
+      "chartType": "kpi",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1-objects.json",
+        "line": 232
+      }
+    },
+    {
+      "id": "object:presentation:qlikgpt_kpi_revenue",
+      "type": "visual",
+      "label": "Fatturato",
+      "app": "presentation",
+      "objectId": "qlikgpt_kpi_revenue",
+      "sheetId": "qlikgpt_sales_overview",
+      "chartType": "kpi",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1-objects.json",
+        "line": 185
+      }
+    },
+    {
+      "id": "object:presentation:qlikgpt_list_channel",
+      "type": "filter",
+      "label": "Canale",
+      "app": "presentation",
+      "objectId": "qlikgpt_list_channel",
+      "chartType": "filter",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1-filters.json",
+        "line": 13
+      }
+    },
+    {
+      "id": "object:presentation:qlikgpt_list_market",
+      "type": "filter",
+      "label": "Mercato",
+      "app": "presentation",
+      "objectId": "qlikgpt_list_market",
+      "chartType": "filter",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1-filters.json",
+        "line": 8
+      }
+    },
+    {
+      "id": "object:presentation:qlikgpt_list_year",
+      "type": "filter",
+      "label": "Anno",
+      "app": "presentation",
+      "objectId": "qlikgpt_list_year",
+      "chartType": "filter",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1-filters.json",
+        "line": 3
+      }
+    },
+    {
+      "id": "object:presentation:qlikgpt_sales_overview",
+      "type": "sheet",
+      "label": "Sales Intelligence | QlikGPT",
+      "app": "presentation",
+      "objectId": "qlikgpt_sales_overview",
+      "sheetId": "qlikgpt_sales_overview",
+      "chartType": "sheet",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1-objects.json",
+        "line": 4
+      }
+    },
+    {
+      "id": "qvd:lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd#Channel",
+      "type": "qvd_field",
+      "label": "RawOrders.qvd.Channel",
+      "uri": "lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd",
+      "field": "Channel",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl1.qvs",
+        "line": 31
+      }
+    },
+    {
+      "id": "qvd:lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd#CostRatio",
+      "type": "qvd_field",
+      "label": "RawOrders.qvd.CostRatio",
+      "uri": "lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd",
+      "field": "CostRatio",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl1.qvs",
+        "line": 31
+      }
+    },
+    {
+      "id": "qvd:lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd#CustomerID",
+      "type": "qvd_field",
+      "label": "RawOrders.qvd.CustomerID",
+      "uri": "lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd",
+      "field": "CustomerID",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl1.qvs",
+        "line": 31
+      }
+    },
+    {
+      "id": "qvd:lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd#Market",
+      "type": "qvd_field",
+      "label": "RawOrders.qvd.Market",
+      "uri": "lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd",
+      "field": "Market",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl1.qvs",
+        "line": 31
+      }
+    },
+    {
+      "id": "qvd:lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd#OrderDate",
+      "type": "qvd_field",
+      "label": "RawOrders.qvd.OrderDate",
+      "uri": "lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd",
+      "field": "OrderDate",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl1.qvs",
+        "line": 31
+      }
+    },
+    {
+      "id": "qvd:lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd#OrderID",
+      "type": "qvd_field",
+      "label": "RawOrders.qvd.OrderID",
+      "uri": "lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd",
+      "field": "OrderID",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl1.qvs",
+        "line": 31
+      }
+    },
+    {
+      "id": "qvd:lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd#ProductCategory",
+      "type": "qvd_field",
+      "label": "RawOrders.qvd.ProductCategory",
+      "uri": "lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd",
+      "field": "ProductCategory",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl1.qvs",
+        "line": 31
+      }
+    },
+    {
+      "id": "qvd:lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd#Quantity",
+      "type": "qvd_field",
+      "label": "RawOrders.qvd.Quantity",
+      "uri": "lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd",
+      "field": "Quantity",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl1.qvs",
+        "line": 31
+      }
+    },
+    {
+      "id": "qvd:lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd#UnitPrice",
+      "type": "qvd_field",
+      "label": "RawOrders.qvd.UnitPrice",
+      "uri": "lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd",
+      "field": "UnitPrice",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl1.qvs",
+        "line": 31
+      }
+    },
+    {
+      "id": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#Channel",
+      "type": "qvd_field",
+      "label": "Sales_Clean.qvd.Channel",
+      "uri": "lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd",
+      "field": "Channel",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 38
+      }
+    },
+    {
+      "id": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#Cost",
+      "type": "qvd_field",
+      "label": "Sales_Clean.qvd.Cost",
+      "uri": "lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd",
+      "field": "Cost",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 38
+      }
+    },
+    {
+      "id": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#CustomerID",
+      "type": "qvd_field",
+      "label": "Sales_Clean.qvd.CustomerID",
+      "uri": "lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd",
+      "field": "CustomerID",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 38
+      }
+    },
+    {
+      "id": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#Market",
+      "type": "qvd_field",
+      "label": "Sales_Clean.qvd.Market",
+      "uri": "lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd",
+      "field": "Market",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 38
+      }
+    },
+    {
+      "id": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#OrderDate",
+      "type": "qvd_field",
+      "label": "Sales_Clean.qvd.OrderDate",
+      "uri": "lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd",
+      "field": "OrderDate",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 38
+      }
+    },
+    {
+      "id": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#OrderID",
+      "type": "qvd_field",
+      "label": "Sales_Clean.qvd.OrderID",
+      "uri": "lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd",
+      "field": "OrderID",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 38
+      }
+    },
+    {
+      "id": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#ProductCategory",
+      "type": "qvd_field",
+      "label": "Sales_Clean.qvd.ProductCategory",
+      "uri": "lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd",
+      "field": "ProductCategory",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 38
+      }
+    },
+    {
+      "id": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#Quantity",
+      "type": "qvd_field",
+      "label": "Sales_Clean.qvd.Quantity",
+      "uri": "lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd",
+      "field": "Quantity",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 38
+      }
+    },
+    {
+      "id": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#Revenue",
+      "type": "qvd_field",
+      "label": "Sales_Clean.qvd.Revenue",
+      "uri": "lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd",
+      "field": "Revenue",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 38
+      }
+    },
+    {
+      "id": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#UnitPrice",
+      "type": "qvd_field",
+      "label": "Sales_Clean.qvd.UnitPrice",
+      "uri": "lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd",
+      "field": "UnitPrice",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 38
+      }
+    },
+    {
+      "id": "subscription:presentation2:dimension:qlikgpt_d_market",
+      "type": "subscription",
+      "label": "presentation2 / qlikgpt_d_market",
+      "app": "presentation2",
+      "catalogType": "dimension",
+      "catalogId": "qlikgpt_d_market",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation2.json",
+        "line": 12
+      }
+    },
+    {
+      "id": "subscription:presentation2:dimension:qlikgpt_d_yearmonth",
+      "type": "subscription",
+      "label": "presentation2 / qlikgpt_d_yearmonth",
+      "app": "presentation2",
+      "catalogType": "dimension",
+      "catalogId": "qlikgpt_d_yearmonth",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation2.json",
+        "line": 13
+      }
+    },
+    {
+      "id": "subscription:presentation2:measure:qlikgpt_shared_margin_pct",
+      "type": "subscription",
+      "label": "presentation2 / qlikgpt_shared_margin_pct",
+      "app": "presentation2",
+      "catalogType": "measure",
+      "catalogId": "qlikgpt_shared_margin_pct",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation2.json",
+        "line": 7
+      }
+    },
+    {
+      "id": "subscription:presentation2:measure:qlikgpt_shared_revenue",
+      "type": "subscription",
+      "label": "presentation2 / qlikgpt_shared_revenue",
+      "app": "presentation2",
+      "catalogType": "measure",
+      "catalogId": "qlikgpt_shared_revenue",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation2.json",
+        "line": 6
+      }
+    },
+    {
+      "id": "subscription:presentation2:variable:qlikgpt_v_target_margin",
+      "type": "subscription",
+      "label": "presentation2 / qlikgpt_v_target_margin",
+      "app": "presentation2",
+      "catalogType": "variable",
+      "catalogId": "qlikgpt_v_target_margin",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation2.json",
+        "line": 16
+      }
+    },
+    {
+      "id": "subscription:presentation:dimension:qlikgpt_d_category",
+      "type": "subscription",
+      "label": "presentation / qlikgpt_d_category",
+      "app": "presentation",
+      "catalogType": "dimension",
+      "catalogId": "qlikgpt_d_category",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1.json",
+        "line": 17
+      }
+    },
+    {
+      "id": "subscription:presentation:dimension:qlikgpt_d_channel",
+      "type": "subscription",
+      "label": "presentation / qlikgpt_d_channel",
+      "app": "presentation",
+      "catalogType": "dimension",
+      "catalogId": "qlikgpt_d_channel",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1.json",
+        "line": 19
+      }
+    },
+    {
+      "id": "subscription:presentation:dimension:qlikgpt_d_market",
+      "type": "subscription",
+      "label": "presentation / qlikgpt_d_market",
+      "app": "presentation",
+      "catalogType": "dimension",
+      "catalogId": "qlikgpt_d_market",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1.json",
+        "line": 15
+      }
+    },
+    {
+      "id": "subscription:presentation:dimension:qlikgpt_d_year",
+      "type": "subscription",
+      "label": "presentation / qlikgpt_d_year",
+      "app": "presentation",
+      "catalogType": "dimension",
+      "catalogId": "qlikgpt_d_year",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1.json",
+        "line": 18
+      }
+    },
+    {
+      "id": "subscription:presentation:dimension:qlikgpt_d_yearmonth",
+      "type": "subscription",
+      "label": "presentation / qlikgpt_d_yearmonth",
+      "app": "presentation",
+      "catalogType": "dimension",
+      "catalogId": "qlikgpt_d_yearmonth",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1.json",
+        "line": 16
+      }
+    },
+    {
+      "id": "subscription:presentation:measure:qlikgpt_shared_margin",
+      "type": "subscription",
+      "label": "presentation / qlikgpt_shared_margin",
+      "app": "presentation",
+      "catalogType": "measure",
+      "catalogId": "qlikgpt_shared_margin",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1.json",
+        "line": 8
+      }
+    },
+    {
+      "id": "subscription:presentation:measure:qlikgpt_shared_margin_pct",
+      "type": "subscription",
+      "label": "presentation / qlikgpt_shared_margin_pct",
+      "app": "presentation",
+      "catalogType": "measure",
+      "catalogId": "qlikgpt_shared_margin_pct",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1.json",
+        "line": 9
+      }
+    },
+    {
+      "id": "subscription:presentation:measure:qlikgpt_shared_orders",
+      "type": "subscription",
+      "label": "presentation / qlikgpt_shared_orders",
+      "app": "presentation",
+      "catalogType": "measure",
+      "catalogId": "qlikgpt_shared_orders",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1.json",
+        "line": 7
+      }
+    },
+    {
+      "id": "subscription:presentation:measure:qlikgpt_shared_revenue",
+      "type": "subscription",
+      "label": "presentation / qlikgpt_shared_revenue",
+      "app": "presentation",
+      "catalogType": "measure",
+      "catalogId": "qlikgpt_shared_revenue",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1.json",
+        "line": 6
+      }
+    },
+    {
+      "id": "subscription:presentation:variable:qlikgpt_v_target_margin",
+      "type": "subscription",
+      "label": "presentation / qlikgpt_v_target_margin",
+      "app": "presentation",
+      "catalogType": "variable",
+      "catalogId": "qlikgpt_v_target_margin",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1.json",
+        "line": 22
+      }
+    },
+    {
+      "id": "table:etl1:RawOrders.Channel",
+      "type": "table_field",
+      "label": "etl1.RawOrders.Channel",
+      "app": "etl1",
+      "table": "RawOrders",
+      "field": "Channel",
+      "expression": "Pick(1 + Floor(Rand() * 3),\n        'Online', 'Retail', 'Partner')",
+      "origin": "synthetic",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl1.qvs",
+        "line": 21
+      }
+    },
+    {
+      "id": "table:etl1:RawOrders.CostRatio",
+      "type": "table_field",
+      "label": "etl1.RawOrders.CostRatio",
+      "app": "etl1",
+      "table": "RawOrders",
+      "field": "CostRatio",
+      "expression": "Round(0.45 + Rand() * 0.30, 0.0001)",
+      "origin": "synthetic",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl1.qvs",
+        "line": 26
+      }
+    },
+    {
+      "id": "table:etl1:RawOrders.CustomerID",
+      "type": "table_field",
+      "label": "etl1.RawOrders.CustomerID",
+      "app": "etl1",
+      "table": "RawOrders",
+      "field": "CustomerID",
+      "expression": "'CUST-' & Num(1 + Floor(Rand() * 120), '000')",
+      "origin": "synthetic",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl1.qvs",
+        "line": 23
+      }
+    },
+    {
+      "id": "table:etl1:RawOrders.Market",
+      "type": "table_field",
+      "label": "etl1.RawOrders.Market",
+      "app": "etl1",
+      "table": "RawOrders",
+      "field": "Market",
+      "expression": "Pick(1 + Floor(Rand() * 4),\n        'Italy', 'France', 'Germany', 'Spain')",
+      "origin": "synthetic",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl1.qvs",
+        "line": 17
+      }
+    },
+    {
+      "id": "table:etl1:RawOrders.OrderDate",
+      "type": "table_field",
+      "label": "etl1.RawOrders.OrderDate",
+      "app": "etl1",
+      "table": "RawOrders",
+      "field": "OrderDate",
+      "expression": "Date(MakeDate(2025, 10, 1) + Floor(Rand() * 365))",
+      "origin": "synthetic",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl1.qvs",
+        "line": 16
+      }
+    },
+    {
+      "id": "table:etl1:RawOrders.OrderID",
+      "type": "table_field",
+      "label": "etl1.RawOrders.OrderID",
+      "app": "etl1",
+      "table": "RawOrders",
+      "field": "OrderID",
+      "expression": "'ORD-' & Num(RecNo(), '000000')",
+      "origin": "synthetic",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl1.qvs",
+        "line": 15
+      }
+    },
+    {
+      "id": "table:etl1:RawOrders.ProductCategory",
+      "type": "table_field",
+      "label": "etl1.RawOrders.ProductCategory",
+      "app": "etl1",
+      "table": "RawOrders",
+      "field": "ProductCategory",
+      "expression": "Pick(1 + Floor(Rand() * 4),\n        'Hardware', 'Software', 'Services', 'Accessories')",
+      "origin": "synthetic",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl1.qvs",
+        "line": 19
+      }
+    },
+    {
+      "id": "table:etl1:RawOrders.Quantity",
+      "type": "table_field",
+      "label": "etl1.RawOrders.Quantity",
+      "app": "etl1",
+      "table": "RawOrders",
+      "field": "Quantity",
+      "expression": "1 + Floor(Rand() * 8)",
+      "origin": "synthetic",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl1.qvs",
+        "line": 24
+      }
+    },
+    {
+      "id": "table:etl1:RawOrders.UnitPrice",
+      "type": "table_field",
+      "label": "etl1.RawOrders.UnitPrice",
+      "app": "etl1",
+      "table": "RawOrders",
+      "field": "UnitPrice",
+      "expression": "Round(40 + Rand() * 500, 0.01)",
+      "origin": "synthetic",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl1.qvs",
+        "line": 25
+      }
+    },
+    {
+      "id": "table:etl2:RawOrders.Channel",
+      "type": "table_field",
+      "label": "etl2.RawOrders.Channel",
+      "app": "etl2",
+      "table": "RawOrders",
+      "field": "Channel",
+      "expression": "Channel",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 15
+      }
+    },
+    {
+      "id": "table:etl2:RawOrders.CostRatio",
+      "type": "table_field",
+      "label": "etl2.RawOrders.CostRatio",
+      "app": "etl2",
+      "table": "RawOrders",
+      "field": "CostRatio",
+      "expression": "CostRatio",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 15
+      }
+    },
+    {
+      "id": "table:etl2:RawOrders.CustomerID",
+      "type": "table_field",
+      "label": "etl2.RawOrders.CustomerID",
+      "app": "etl2",
+      "table": "RawOrders",
+      "field": "CustomerID",
+      "expression": "CustomerID",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 15
+      }
+    },
+    {
+      "id": "table:etl2:RawOrders.Market",
+      "type": "table_field",
+      "label": "etl2.RawOrders.Market",
+      "app": "etl2",
+      "table": "RawOrders",
+      "field": "Market",
+      "expression": "Market",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 15
+      }
+    },
+    {
+      "id": "table:etl2:RawOrders.OrderDate",
+      "type": "table_field",
+      "label": "etl2.RawOrders.OrderDate",
+      "app": "etl2",
+      "table": "RawOrders",
+      "field": "OrderDate",
+      "expression": "OrderDate",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 15
+      }
+    },
+    {
+      "id": "table:etl2:RawOrders.OrderID",
+      "type": "table_field",
+      "label": "etl2.RawOrders.OrderID",
+      "app": "etl2",
+      "table": "RawOrders",
+      "field": "OrderID",
+      "expression": "OrderID",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 15
+      }
+    },
+    {
+      "id": "table:etl2:RawOrders.ProductCategory",
+      "type": "table_field",
+      "label": "etl2.RawOrders.ProductCategory",
+      "app": "etl2",
+      "table": "RawOrders",
+      "field": "ProductCategory",
+      "expression": "ProductCategory",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 15
+      }
+    },
+    {
+      "id": "table:etl2:RawOrders.Quantity",
+      "type": "table_field",
+      "label": "etl2.RawOrders.Quantity",
+      "app": "etl2",
+      "table": "RawOrders",
+      "field": "Quantity",
+      "expression": "Quantity",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 15
+      }
+    },
+    {
+      "id": "table:etl2:RawOrders.UnitPrice",
+      "type": "table_field",
+      "label": "etl2.RawOrders.UnitPrice",
+      "app": "etl2",
+      "table": "RawOrders",
+      "field": "UnitPrice",
+      "expression": "UnitPrice",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 15
+      }
+    },
+    {
+      "id": "table:etl2:SalesClean.Channel",
+      "type": "table_field",
+      "label": "etl2.SalesClean.Channel",
+      "app": "etl2",
+      "table": "SalesClean",
+      "field": "Channel",
+      "expression": "Channel",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 25
+      }
+    },
+    {
+      "id": "table:etl2:SalesClean.Cost",
+      "type": "table_field",
+      "label": "etl2.SalesClean.Cost",
+      "app": "etl2",
+      "table": "SalesClean",
+      "field": "Cost",
+      "expression": "Round(Quantity * UnitPrice * CostRatio, 0.01)",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 30
+      }
+    },
+    {
+      "id": "table:etl2:SalesClean.CustomerID",
+      "type": "table_field",
+      "label": "etl2.SalesClean.CustomerID",
+      "app": "etl2",
+      "table": "SalesClean",
+      "field": "CustomerID",
+      "expression": "CustomerID",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 26
+      }
+    },
+    {
+      "id": "table:etl2:SalesClean.Market",
+      "type": "table_field",
+      "label": "etl2.SalesClean.Market",
+      "app": "etl2",
+      "table": "SalesClean",
+      "field": "Market",
+      "expression": "Market",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 23
+      }
+    },
+    {
+      "id": "table:etl2:SalesClean.OrderDate",
+      "type": "table_field",
+      "label": "etl2.SalesClean.OrderDate",
+      "app": "etl2",
+      "table": "SalesClean",
+      "field": "OrderDate",
+      "expression": "Date(Floor(OrderDate))",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 22
+      }
+    },
+    {
+      "id": "table:etl2:SalesClean.OrderID",
+      "type": "table_field",
+      "label": "etl2.SalesClean.OrderID",
+      "app": "etl2",
+      "table": "SalesClean",
+      "field": "OrderID",
+      "expression": "OrderID",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 21
+      }
+    },
+    {
+      "id": "table:etl2:SalesClean.ProductCategory",
+      "type": "table_field",
+      "label": "etl2.SalesClean.ProductCategory",
+      "app": "etl2",
+      "table": "SalesClean",
+      "field": "ProductCategory",
+      "expression": "ProductCategory",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 24
+      }
+    },
+    {
+      "id": "table:etl2:SalesClean.Quantity",
+      "type": "table_field",
+      "label": "etl2.SalesClean.Quantity",
+      "app": "etl2",
+      "table": "SalesClean",
+      "field": "Quantity",
+      "expression": "Quantity",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 27
+      }
+    },
+    {
+      "id": "table:etl2:SalesClean.Revenue",
+      "type": "table_field",
+      "label": "etl2.SalesClean.Revenue",
+      "app": "etl2",
+      "table": "SalesClean",
+      "field": "Revenue",
+      "expression": "Round(Quantity * UnitPrice, 0.01)",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 29
+      }
+    },
+    {
+      "id": "table:etl2:SalesClean.UnitPrice",
+      "type": "table_field",
+      "label": "etl2.SalesClean.UnitPrice",
+      "app": "etl2",
+      "table": "SalesClean",
+      "field": "UnitPrice",
+      "expression": "UnitPrice",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 28
+      }
+    },
+    {
+      "id": "table:presentation2:Calendar.OrderDate",
+      "type": "table_field",
+      "label": "presentation2.Calendar.OrderDate",
+      "app": "presentation2",
+      "table": "Calendar",
+      "field": "OrderDate",
+      "expression": "OrderDate",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 33
+      }
+    },
+    {
+      "id": "table:presentation2:Calendar.SalesMonth",
+      "type": "table_field",
+      "label": "presentation2.Calendar.SalesMonth",
+      "app": "presentation2",
+      "table": "Calendar",
+      "field": "SalesMonth",
+      "expression": "Month(OrderDate)",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 35
+      }
+    },
+    {
+      "id": "table:presentation2:Calendar.SalesYear",
+      "type": "table_field",
+      "label": "presentation2.Calendar.SalesYear",
+      "app": "presentation2",
+      "table": "Calendar",
+      "field": "SalesYear",
+      "expression": "Year(OrderDate)",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 34
+      }
+    },
+    {
+      "id": "table:presentation2:Calendar.YearMonth",
+      "type": "table_field",
+      "label": "presentation2.Calendar.YearMonth",
+      "app": "presentation2",
+      "table": "Calendar",
+      "field": "YearMonth",
+      "expression": "MonthName(OrderDate)",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 36
+      }
+    },
+    {
+      "id": "table:presentation2:Calendar.YearQuarter",
+      "type": "table_field",
+      "label": "presentation2.Calendar.YearQuarter",
+      "app": "presentation2",
+      "table": "Calendar",
+      "field": "YearQuarter",
+      "expression": "QuarterName(OrderDate)",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 37
+      }
+    },
+    {
+      "id": "table:presentation2:FactSales.Channel",
+      "type": "table_field",
+      "label": "presentation2.FactSales.Channel",
+      "app": "presentation2",
+      "table": "FactSales",
+      "field": "Channel",
+      "expression": "Channel",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 19
+      }
+    },
+    {
+      "id": "table:presentation2:FactSales.Cost",
+      "type": "table_field",
+      "label": "presentation2.FactSales.Cost",
+      "app": "presentation2",
+      "table": "FactSales",
+      "field": "Cost",
+      "expression": "Cost",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 24
+      }
+    },
+    {
+      "id": "table:presentation2:FactSales.CustomerID",
+      "type": "table_field",
+      "label": "presentation2.FactSales.CustomerID",
+      "app": "presentation2",
+      "table": "FactSales",
+      "field": "CustomerID",
+      "expression": "CustomerID",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 20
+      }
+    },
+    {
+      "id": "table:presentation2:FactSales.Margin",
+      "type": "table_field",
+      "label": "presentation2.FactSales.Margin",
+      "app": "presentation2",
+      "table": "FactSales",
+      "field": "Margin",
+      "expression": "Round(Revenue - Cost, 0.01)",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 25
+      }
+    },
+    {
+      "id": "table:presentation2:FactSales.MarginPct",
+      "type": "table_field",
+      "label": "presentation2.FactSales.MarginPct",
+      "app": "presentation2",
+      "table": "FactSales",
+      "field": "MarginPct",
+      "expression": "If(Revenue > 0, (Revenue - Cost) / Revenue, 0)",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 26
+      }
+    },
+    {
+      "id": "table:presentation2:FactSales.Market",
+      "type": "table_field",
+      "label": "presentation2.FactSales.Market",
+      "app": "presentation2",
+      "table": "FactSales",
+      "field": "Market",
+      "expression": "Market",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 17
+      }
+    },
+    {
+      "id": "table:presentation2:FactSales.OrderDate",
+      "type": "table_field",
+      "label": "presentation2.FactSales.OrderDate",
+      "app": "presentation2",
+      "table": "FactSales",
+      "field": "OrderDate",
+      "expression": "Date(Floor(OrderDate))",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 16
+      }
+    },
+    {
+      "id": "table:presentation2:FactSales.OrderID",
+      "type": "table_field",
+      "label": "presentation2.FactSales.OrderID",
+      "app": "presentation2",
+      "table": "FactSales",
+      "field": "OrderID",
+      "expression": "OrderID",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 15
+      }
+    },
+    {
+      "id": "table:presentation2:FactSales.ProductCategory",
+      "type": "table_field",
+      "label": "presentation2.FactSales.ProductCategory",
+      "app": "presentation2",
+      "table": "FactSales",
+      "field": "ProductCategory",
+      "expression": "ProductCategory",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 18
+      }
+    },
+    {
+      "id": "table:presentation2:FactSales.Quantity",
+      "type": "table_field",
+      "label": "presentation2.FactSales.Quantity",
+      "app": "presentation2",
+      "table": "FactSales",
+      "field": "Quantity",
+      "expression": "Quantity",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 21
+      }
+    },
+    {
+      "id": "table:presentation2:FactSales.Revenue",
+      "type": "table_field",
+      "label": "presentation2.FactSales.Revenue",
+      "app": "presentation2",
+      "table": "FactSales",
+      "field": "Revenue",
+      "expression": "Revenue",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 23
+      }
+    },
+    {
+      "id": "table:presentation2:FactSales.UnitPrice",
+      "type": "table_field",
+      "label": "presentation2.FactSales.UnitPrice",
+      "app": "presentation2",
+      "table": "FactSales",
+      "field": "UnitPrice",
+      "expression": "UnitPrice",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 22
+      }
+    },
+    {
+      "id": "table:presentation:Calendar.OrderDate",
+      "type": "table_field",
+      "label": "presentation.Calendar.OrderDate",
+      "app": "presentation",
+      "table": "Calendar",
+      "field": "OrderDate",
+      "expression": "OrderDate",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 33
+      }
+    },
+    {
+      "id": "table:presentation:Calendar.SalesMonth",
+      "type": "table_field",
+      "label": "presentation.Calendar.SalesMonth",
+      "app": "presentation",
+      "table": "Calendar",
+      "field": "SalesMonth",
+      "expression": "Month(OrderDate)",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 35
+      }
+    },
+    {
+      "id": "table:presentation:Calendar.SalesYear",
+      "type": "table_field",
+      "label": "presentation.Calendar.SalesYear",
+      "app": "presentation",
+      "table": "Calendar",
+      "field": "SalesYear",
+      "expression": "Year(OrderDate)",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 34
+      }
+    },
+    {
+      "id": "table:presentation:Calendar.YearMonth",
+      "type": "table_field",
+      "label": "presentation.Calendar.YearMonth",
+      "app": "presentation",
+      "table": "Calendar",
+      "field": "YearMonth",
+      "expression": "MonthName(OrderDate)",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 36
+      }
+    },
+    {
+      "id": "table:presentation:Calendar.YearQuarter",
+      "type": "table_field",
+      "label": "presentation.Calendar.YearQuarter",
+      "app": "presentation",
+      "table": "Calendar",
+      "field": "YearQuarter",
+      "expression": "QuarterName(OrderDate)",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 37
+      }
+    },
+    {
+      "id": "table:presentation:FactSales.Channel",
+      "type": "table_field",
+      "label": "presentation.FactSales.Channel",
+      "app": "presentation",
+      "table": "FactSales",
+      "field": "Channel",
+      "expression": "Channel",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 19
+      }
+    },
+    {
+      "id": "table:presentation:FactSales.Cost",
+      "type": "table_field",
+      "label": "presentation.FactSales.Cost",
+      "app": "presentation",
+      "table": "FactSales",
+      "field": "Cost",
+      "expression": "Cost",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 24
+      }
+    },
+    {
+      "id": "table:presentation:FactSales.CustomerID",
+      "type": "table_field",
+      "label": "presentation.FactSales.CustomerID",
+      "app": "presentation",
+      "table": "FactSales",
+      "field": "CustomerID",
+      "expression": "CustomerID",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 20
+      }
+    },
+    {
+      "id": "table:presentation:FactSales.Margin",
+      "type": "table_field",
+      "label": "presentation.FactSales.Margin",
+      "app": "presentation",
+      "table": "FactSales",
+      "field": "Margin",
+      "expression": "Round(Revenue - Cost, 0.01)",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 25
+      }
+    },
+    {
+      "id": "table:presentation:FactSales.MarginPct",
+      "type": "table_field",
+      "label": "presentation.FactSales.MarginPct",
+      "app": "presentation",
+      "table": "FactSales",
+      "field": "MarginPct",
+      "expression": "If(Revenue > 0, (Revenue - Cost) / Revenue, 0)",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 26
+      }
+    },
+    {
+      "id": "table:presentation:FactSales.Market",
+      "type": "table_field",
+      "label": "presentation.FactSales.Market",
+      "app": "presentation",
+      "table": "FactSales",
+      "field": "Market",
+      "expression": "Market",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 17
+      }
+    },
+    {
+      "id": "table:presentation:FactSales.OrderDate",
+      "type": "table_field",
+      "label": "presentation.FactSales.OrderDate",
+      "app": "presentation",
+      "table": "FactSales",
+      "field": "OrderDate",
+      "expression": "Date(Floor(OrderDate))",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 16
+      }
+    },
+    {
+      "id": "table:presentation:FactSales.OrderID",
+      "type": "table_field",
+      "label": "presentation.FactSales.OrderID",
+      "app": "presentation",
+      "table": "FactSales",
+      "field": "OrderID",
+      "expression": "OrderID",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 15
+      }
+    },
+    {
+      "id": "table:presentation:FactSales.ProductCategory",
+      "type": "table_field",
+      "label": "presentation.FactSales.ProductCategory",
+      "app": "presentation",
+      "table": "FactSales",
+      "field": "ProductCategory",
+      "expression": "ProductCategory",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 18
+      }
+    },
+    {
+      "id": "table:presentation:FactSales.Quantity",
+      "type": "table_field",
+      "label": "presentation.FactSales.Quantity",
+      "app": "presentation",
+      "table": "FactSales",
+      "field": "Quantity",
+      "expression": "Quantity",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 21
+      }
+    },
+    {
+      "id": "table:presentation:FactSales.Revenue",
+      "type": "table_field",
+      "label": "presentation.FactSales.Revenue",
+      "app": "presentation",
+      "table": "FactSales",
+      "field": "Revenue",
+      "expression": "Revenue",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 23
+      }
+    },
+    {
+      "id": "table:presentation:FactSales.UnitPrice",
+      "type": "table_field",
+      "label": "presentation.FactSales.UnitPrice",
+      "app": "presentation",
+      "table": "FactSales",
+      "field": "UnitPrice",
+      "expression": "UnitPrice",
+      "origin": "derived",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 22
+      }
+    },
+    {
+      "id": "variable:qlikgpt_v_currency_label",
+      "type": "variable",
+      "label": "vQlikGPTCurrencyLabel",
+      "catalogId": "qlikgpt_v_currency_label",
+      "expression": "EUR",
+      "source": {
+        "path": "semantic-models/sales/catalog/variables.json",
+        "line": 16
+      }
+    },
+    {
+      "id": "variable:qlikgpt_v_target_margin",
+      "type": "variable",
+      "label": "vQlikGPTTargetMargin",
+      "catalogId": "qlikgpt_v_target_margin",
+      "expression": "0.40",
+      "source": {
+        "path": "semantic-models/sales/catalog/variables.json",
+        "line": 9
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "dimension:qlikgpt_d_category",
+      "to": "subscription:presentation:dimension:qlikgpt_d_category",
+      "kind": "subscribed_by",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1.json",
+        "line": 17
+      }
+    },
+    {
+      "from": "dimension:qlikgpt_d_channel",
+      "to": "subscription:presentation:dimension:qlikgpt_d_channel",
+      "kind": "subscribed_by",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1.json",
+        "line": 19
+      }
+    },
+    {
+      "from": "dimension:qlikgpt_d_market",
+      "to": "subscription:presentation2:dimension:qlikgpt_d_market",
+      "kind": "subscribed_by",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation2.json",
+        "line": 12
+      }
+    },
+    {
+      "from": "dimension:qlikgpt_d_market",
+      "to": "subscription:presentation:dimension:qlikgpt_d_market",
+      "kind": "subscribed_by",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1.json",
+        "line": 15
+      }
+    },
+    {
+      "from": "dimension:qlikgpt_d_year",
+      "to": "subscription:presentation:dimension:qlikgpt_d_year",
+      "kind": "subscribed_by",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1.json",
+        "line": 18
+      }
+    },
+    {
+      "from": "dimension:qlikgpt_d_yearmonth",
+      "to": "subscription:presentation2:dimension:qlikgpt_d_yearmonth",
+      "kind": "subscribed_by",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation2.json",
+        "line": 13
+      }
+    },
+    {
+      "from": "dimension:qlikgpt_d_yearmonth",
+      "to": "subscription:presentation:dimension:qlikgpt_d_yearmonth",
+      "kind": "subscribed_by",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1.json",
+        "line": 16
+      }
+    },
+    {
+      "from": "logical:presentation2:Channel",
+      "to": "dimension:qlikgpt_d_channel",
+      "kind": "semantic_dependency",
+      "source": {
+        "path": "semantic-models/sales/catalog/dimensions.json",
+        "line": 77
+      }
+    },
+    {
+      "from": "logical:presentation2:Margin",
+      "to": "measure:qlikgpt_shared_margin",
+      "kind": "semantic_dependency",
+      "source": {
+        "path": "semantic-models/sales/catalog/measures.json",
+        "line": 45
+      }
+    },
+    {
+      "from": "logical:presentation2:Margin",
+      "to": "measure:qlikgpt_shared_margin_pct",
+      "kind": "semantic_dependency",
+      "source": {
+        "path": "semantic-models/sales/catalog/measures.json",
+        "line": 63
+      }
+    },
+    {
+      "from": "logical:presentation2:Market",
+      "to": "dimension:qlikgpt_d_market",
+      "kind": "semantic_dependency",
+      "source": {
+        "path": "semantic-models/sales/catalog/dimensions.json",
+        "line": 9
+      }
+    },
+    {
+      "from": "logical:presentation2:OrderID",
+      "to": "measure:qlikgpt_shared_average_order",
+      "kind": "semantic_dependency",
+      "source": {
+        "path": "semantic-models/sales/catalog/measures.json",
+        "line": 81
+      }
+    },
+    {
+      "from": "logical:presentation2:OrderID",
+      "to": "measure:qlikgpt_shared_orders",
+      "kind": "semantic_dependency",
+      "source": {
+        "path": "semantic-models/sales/catalog/measures.json",
+        "line": 28
+      }
+    },
+    {
+      "from": "logical:presentation2:ProductCategory",
+      "to": "dimension:qlikgpt_d_category",
+      "kind": "semantic_dependency",
+      "source": {
+        "path": "semantic-models/sales/catalog/dimensions.json",
+        "line": 43
+      }
+    },
+    {
+      "from": "logical:presentation2:Revenue",
+      "to": "measure:qlikgpt_shared_average_order",
+      "kind": "semantic_dependency",
+      "source": {
+        "path": "semantic-models/sales/catalog/measures.json",
+        "line": 81
+      }
+    },
+    {
+      "from": "logical:presentation2:Revenue",
+      "to": "measure:qlikgpt_shared_margin_pct",
+      "kind": "semantic_dependency",
+      "source": {
+        "path": "semantic-models/sales/catalog/measures.json",
+        "line": 63
+      }
+    },
+    {
+      "from": "logical:presentation2:Revenue",
+      "to": "measure:qlikgpt_shared_revenue",
+      "kind": "semantic_dependency",
+      "source": {
+        "path": "semantic-models/sales/catalog/measures.json",
+        "line": 10
+      }
+    },
+    {
+      "from": "logical:presentation2:SalesYear",
+      "to": "dimension:qlikgpt_d_year",
+      "kind": "semantic_dependency",
+      "source": {
+        "path": "semantic-models/sales/catalog/dimensions.json",
+        "line": 60
+      }
+    },
+    {
+      "from": "logical:presentation2:YearMonth",
+      "to": "dimension:qlikgpt_d_yearmonth",
+      "kind": "semantic_dependency",
+      "source": {
+        "path": "semantic-models/sales/catalog/dimensions.json",
+        "line": 26
+      }
+    },
+    {
+      "from": "logical:presentation2:YearQuarter",
+      "to": "dimension:qlikgpt_d_quarter",
+      "kind": "semantic_dependency",
+      "source": {
+        "path": "semantic-models/sales/catalog/dimensions.json",
+        "line": 94
+      }
+    },
+    {
+      "from": "logical:presentation:Channel",
+      "to": "dimension:qlikgpt_d_channel",
+      "kind": "semantic_dependency",
+      "source": {
+        "path": "semantic-models/sales/catalog/dimensions.json",
+        "line": 77
+      }
+    },
+    {
+      "from": "logical:presentation:Margin",
+      "to": "measure:qlikgpt_shared_margin",
+      "kind": "semantic_dependency",
+      "source": {
+        "path": "semantic-models/sales/catalog/measures.json",
+        "line": 45
+      }
+    },
+    {
+      "from": "logical:presentation:Margin",
+      "to": "measure:qlikgpt_shared_margin_pct",
+      "kind": "semantic_dependency",
+      "source": {
+        "path": "semantic-models/sales/catalog/measures.json",
+        "line": 63
+      }
+    },
+    {
+      "from": "logical:presentation:Market",
+      "to": "dimension:qlikgpt_d_market",
+      "kind": "semantic_dependency",
+      "source": {
+        "path": "semantic-models/sales/catalog/dimensions.json",
+        "line": 9
+      }
+    },
+    {
+      "from": "logical:presentation:OrderID",
+      "to": "measure:qlikgpt_shared_average_order",
+      "kind": "semantic_dependency",
+      "source": {
+        "path": "semantic-models/sales/catalog/measures.json",
+        "line": 81
+      }
+    },
+    {
+      "from": "logical:presentation:OrderID",
+      "to": "measure:qlikgpt_shared_orders",
+      "kind": "semantic_dependency",
+      "source": {
+        "path": "semantic-models/sales/catalog/measures.json",
+        "line": 28
+      }
+    },
+    {
+      "from": "logical:presentation:ProductCategory",
+      "to": "dimension:qlikgpt_d_category",
+      "kind": "semantic_dependency",
+      "source": {
+        "path": "semantic-models/sales/catalog/dimensions.json",
+        "line": 43
+      }
+    },
+    {
+      "from": "logical:presentation:Revenue",
+      "to": "measure:qlikgpt_shared_average_order",
+      "kind": "semantic_dependency",
+      "source": {
+        "path": "semantic-models/sales/catalog/measures.json",
+        "line": 81
+      }
+    },
+    {
+      "from": "logical:presentation:Revenue",
+      "to": "measure:qlikgpt_shared_margin_pct",
+      "kind": "semantic_dependency",
+      "source": {
+        "path": "semantic-models/sales/catalog/measures.json",
+        "line": 63
+      }
+    },
+    {
+      "from": "logical:presentation:Revenue",
+      "to": "measure:qlikgpt_shared_revenue",
+      "kind": "semantic_dependency",
+      "source": {
+        "path": "semantic-models/sales/catalog/measures.json",
+        "line": 10
+      }
+    },
+    {
+      "from": "logical:presentation:Revenue",
+      "to": "object:presentation:qlikgpt_chart_market",
+      "kind": "inline_sort",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1-objects.json",
+        "line": 507
+      }
+    },
+    {
+      "from": "logical:presentation:SalesYear",
+      "to": "dimension:qlikgpt_d_year",
+      "kind": "semantic_dependency",
+      "source": {
+        "path": "semantic-models/sales/catalog/dimensions.json",
+        "line": 60
+      }
+    },
+    {
+      "from": "logical:presentation:YearMonth",
+      "to": "dimension:qlikgpt_d_yearmonth",
+      "kind": "semantic_dependency",
+      "source": {
+        "path": "semantic-models/sales/catalog/dimensions.json",
+        "line": 26
+      }
+    },
+    {
+      "from": "logical:presentation:YearQuarter",
+      "to": "dimension:qlikgpt_d_quarter",
+      "kind": "semantic_dependency",
+      "source": {
+        "path": "semantic-models/sales/catalog/dimensions.json",
+        "line": 94
+      }
+    },
+    {
+      "from": "measure:qlikgpt_shared_margin",
+      "to": "subscription:presentation:measure:qlikgpt_shared_margin",
+      "kind": "subscribed_by",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1.json",
+        "line": 8
+      }
+    },
+    {
+      "from": "measure:qlikgpt_shared_margin_pct",
+      "to": "subscription:presentation2:measure:qlikgpt_shared_margin_pct",
+      "kind": "subscribed_by",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation2.json",
+        "line": 7
+      }
+    },
+    {
+      "from": "measure:qlikgpt_shared_margin_pct",
+      "to": "subscription:presentation:measure:qlikgpt_shared_margin_pct",
+      "kind": "subscribed_by",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1.json",
+        "line": 9
+      }
+    },
+    {
+      "from": "measure:qlikgpt_shared_orders",
+      "to": "subscription:presentation:measure:qlikgpt_shared_orders",
+      "kind": "subscribed_by",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1.json",
+        "line": 7
+      }
+    },
+    {
+      "from": "measure:qlikgpt_shared_revenue",
+      "to": "subscription:presentation2:measure:qlikgpt_shared_revenue",
+      "kind": "subscribed_by",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation2.json",
+        "line": 6
+      }
+    },
+    {
+      "from": "measure:qlikgpt_shared_revenue",
+      "to": "subscription:presentation:measure:qlikgpt_shared_revenue",
+      "kind": "subscribed_by",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1.json",
+        "line": 6
+      }
+    },
+    {
+      "from": "qvd:lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd#Channel",
+      "to": "table:etl2:RawOrders.Channel",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 15
+      }
+    },
+    {
+      "from": "qvd:lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd#CostRatio",
+      "to": "table:etl2:RawOrders.CostRatio",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 15
+      }
+    },
+    {
+      "from": "qvd:lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd#CustomerID",
+      "to": "table:etl2:RawOrders.CustomerID",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 15
+      }
+    },
+    {
+      "from": "qvd:lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd#Market",
+      "to": "table:etl2:RawOrders.Market",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 15
+      }
+    },
+    {
+      "from": "qvd:lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd#OrderDate",
+      "to": "table:etl2:RawOrders.OrderDate",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 15
+      }
+    },
+    {
+      "from": "qvd:lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd#OrderID",
+      "to": "table:etl2:RawOrders.OrderID",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 15
+      }
+    },
+    {
+      "from": "qvd:lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd#ProductCategory",
+      "to": "table:etl2:RawOrders.ProductCategory",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 15
+      }
+    },
+    {
+      "from": "qvd:lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd#Quantity",
+      "to": "table:etl2:RawOrders.Quantity",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 15
+      }
+    },
+    {
+      "from": "qvd:lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd#UnitPrice",
+      "to": "table:etl2:RawOrders.UnitPrice",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 15
+      }
+    },
+    {
+      "from": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#Channel",
+      "to": "table:presentation2:FactSales.Channel",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 19
+      }
+    },
+    {
+      "from": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#Channel",
+      "to": "table:presentation:FactSales.Channel",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 19
+      }
+    },
+    {
+      "from": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#Cost",
+      "to": "table:presentation2:FactSales.Cost",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 24
+      }
+    },
+    {
+      "from": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#Cost",
+      "to": "table:presentation2:FactSales.Margin",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 25
+      }
+    },
+    {
+      "from": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#Cost",
+      "to": "table:presentation2:FactSales.MarginPct",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 26
+      }
+    },
+    {
+      "from": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#Cost",
+      "to": "table:presentation:FactSales.Cost",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 24
+      }
+    },
+    {
+      "from": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#Cost",
+      "to": "table:presentation:FactSales.Margin",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 25
+      }
+    },
+    {
+      "from": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#Cost",
+      "to": "table:presentation:FactSales.MarginPct",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 26
+      }
+    },
+    {
+      "from": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#CustomerID",
+      "to": "table:presentation2:FactSales.CustomerID",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 20
+      }
+    },
+    {
+      "from": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#CustomerID",
+      "to": "table:presentation:FactSales.CustomerID",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 20
+      }
+    },
+    {
+      "from": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#Market",
+      "to": "table:presentation2:FactSales.Market",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 17
+      }
+    },
+    {
+      "from": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#Market",
+      "to": "table:presentation:FactSales.Market",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 17
+      }
+    },
+    {
+      "from": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#OrderDate",
+      "to": "table:presentation2:FactSales.OrderDate",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 16
+      }
+    },
+    {
+      "from": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#OrderDate",
+      "to": "table:presentation:FactSales.OrderDate",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 16
+      }
+    },
+    {
+      "from": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#OrderID",
+      "to": "table:presentation2:FactSales.OrderID",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 15
+      }
+    },
+    {
+      "from": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#OrderID",
+      "to": "table:presentation:FactSales.OrderID",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 15
+      }
+    },
+    {
+      "from": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#ProductCategory",
+      "to": "table:presentation2:FactSales.ProductCategory",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 18
+      }
+    },
+    {
+      "from": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#ProductCategory",
+      "to": "table:presentation:FactSales.ProductCategory",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 18
+      }
+    },
+    {
+      "from": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#Quantity",
+      "to": "table:presentation2:FactSales.Quantity",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 21
+      }
+    },
+    {
+      "from": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#Quantity",
+      "to": "table:presentation:FactSales.Quantity",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 21
+      }
+    },
+    {
+      "from": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#Revenue",
+      "to": "table:presentation2:FactSales.Margin",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 25
+      }
+    },
+    {
+      "from": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#Revenue",
+      "to": "table:presentation2:FactSales.MarginPct",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 26
+      }
+    },
+    {
+      "from": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#Revenue",
+      "to": "table:presentation2:FactSales.Revenue",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 23
+      }
+    },
+    {
+      "from": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#Revenue",
+      "to": "table:presentation:FactSales.Margin",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 25
+      }
+    },
+    {
+      "from": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#Revenue",
+      "to": "table:presentation:FactSales.MarginPct",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 26
+      }
+    },
+    {
+      "from": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#Revenue",
+      "to": "table:presentation:FactSales.Revenue",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 23
+      }
+    },
+    {
+      "from": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#UnitPrice",
+      "to": "table:presentation2:FactSales.UnitPrice",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 22
+      }
+    },
+    {
+      "from": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#UnitPrice",
+      "to": "table:presentation:FactSales.UnitPrice",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 22
+      }
+    },
+    {
+      "from": "subscription:presentation2:measure:qlikgpt_shared_margin_pct",
+      "to": "object:presentation2:qlikgpt_p2_kpi_marginpct",
+      "kind": "visual_use",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation2-objects.json",
+        "line": 103
+      }
+    },
+    {
+      "from": "subscription:presentation2:measure:qlikgpt_shared_revenue",
+      "to": "object:presentation2:qlikgpt_p2_kpi_revenue",
+      "kind": "visual_use",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation2-objects.json",
+        "line": 73
+      }
+    },
+    {
+      "from": "subscription:presentation:dimension:qlikgpt_d_channel",
+      "to": "object:presentation:qlikgpt_list_channel",
+      "kind": "filter_use",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1-filters.json",
+        "line": 15
+      }
+    },
+    {
+      "from": "subscription:presentation:dimension:qlikgpt_d_market",
+      "to": "object:presentation:qlikgpt_chart_market",
+      "kind": "visual_use",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1-objects.json",
+        "line": 512
+      }
+    },
+    {
+      "from": "subscription:presentation:dimension:qlikgpt_d_market",
+      "to": "object:presentation:qlikgpt_list_market",
+      "kind": "filter_use",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1-filters.json",
+        "line": 10
+      }
+    },
+    {
+      "from": "subscription:presentation:dimension:qlikgpt_d_year",
+      "to": "object:presentation:qlikgpt_list_year",
+      "kind": "filter_use",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1-filters.json",
+        "line": 5
+      }
+    },
+    {
+      "from": "subscription:presentation:dimension:qlikgpt_d_yearmonth",
+      "to": "object:presentation:qlikgpt_chart_month",
+      "kind": "visual_use",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1-objects.json",
+        "line": 398
+      }
+    },
+    {
+      "from": "subscription:presentation:measure:qlikgpt_shared_margin",
+      "to": "object:presentation:qlikgpt_kpi_margin",
+      "kind": "visual_use",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1-objects.json",
+        "line": 290
+      }
+    },
+    {
+      "from": "subscription:presentation:measure:qlikgpt_shared_margin_pct",
+      "to": "object:presentation:qlikgpt_kpi_margin_pct",
+      "kind": "visual_use",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1-objects.json",
+        "line": 337
+      }
+    },
+    {
+      "from": "subscription:presentation:measure:qlikgpt_shared_orders",
+      "to": "object:presentation:qlikgpt_kpi_orders",
+      "kind": "visual_use",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1-objects.json",
+        "line": 243
+      }
+    },
+    {
+      "from": "subscription:presentation:measure:qlikgpt_shared_revenue",
+      "to": "object:presentation:qlikgpt_chart_market",
+      "kind": "visual_use",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1-objects.json",
+        "line": 196
+      }
+    },
+    {
+      "from": "subscription:presentation:measure:qlikgpt_shared_revenue",
+      "to": "object:presentation:qlikgpt_chart_month",
+      "kind": "visual_use",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1-objects.json",
+        "line": 196
+      }
+    },
+    {
+      "from": "subscription:presentation:measure:qlikgpt_shared_revenue",
+      "to": "object:presentation:qlikgpt_kpi_revenue",
+      "kind": "visual_use",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1-objects.json",
+        "line": 196
+      }
+    },
+    {
+      "from": "table:etl1:RawOrders.Channel",
+      "to": "qvd:lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd#Channel",
+      "kind": "store_qvd",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl1.qvs",
+        "line": 31
+      }
+    },
+    {
+      "from": "table:etl1:RawOrders.CostRatio",
+      "to": "qvd:lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd#CostRatio",
+      "kind": "store_qvd",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl1.qvs",
+        "line": 31
+      }
+    },
+    {
+      "from": "table:etl1:RawOrders.CustomerID",
+      "to": "qvd:lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd#CustomerID",
+      "kind": "store_qvd",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl1.qvs",
+        "line": 31
+      }
+    },
+    {
+      "from": "table:etl1:RawOrders.Market",
+      "to": "qvd:lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd#Market",
+      "kind": "store_qvd",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl1.qvs",
+        "line": 31
+      }
+    },
+    {
+      "from": "table:etl1:RawOrders.OrderDate",
+      "to": "qvd:lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd#OrderDate",
+      "kind": "store_qvd",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl1.qvs",
+        "line": 31
+      }
+    },
+    {
+      "from": "table:etl1:RawOrders.OrderID",
+      "to": "qvd:lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd#OrderID",
+      "kind": "store_qvd",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl1.qvs",
+        "line": 31
+      }
+    },
+    {
+      "from": "table:etl1:RawOrders.ProductCategory",
+      "to": "qvd:lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd#ProductCategory",
+      "kind": "store_qvd",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl1.qvs",
+        "line": 31
+      }
+    },
+    {
+      "from": "table:etl1:RawOrders.Quantity",
+      "to": "qvd:lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd#Quantity",
+      "kind": "store_qvd",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl1.qvs",
+        "line": 31
+      }
+    },
+    {
+      "from": "table:etl1:RawOrders.UnitPrice",
+      "to": "qvd:lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd#UnitPrice",
+      "kind": "store_qvd",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl1.qvs",
+        "line": 31
+      }
+    },
+    {
+      "from": "table:etl2:RawOrders.Channel",
+      "to": "table:etl2:SalesClean.Channel",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 25
+      }
+    },
+    {
+      "from": "table:etl2:RawOrders.CostRatio",
+      "to": "table:etl2:SalesClean.Cost",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 30
+      }
+    },
+    {
+      "from": "table:etl2:RawOrders.CustomerID",
+      "to": "table:etl2:SalesClean.CustomerID",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 26
+      }
+    },
+    {
+      "from": "table:etl2:RawOrders.Market",
+      "to": "table:etl2:SalesClean.Market",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 23
+      }
+    },
+    {
+      "from": "table:etl2:RawOrders.OrderDate",
+      "to": "table:etl2:SalesClean.OrderDate",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 22
+      }
+    },
+    {
+      "from": "table:etl2:RawOrders.OrderID",
+      "to": "table:etl2:SalesClean.Channel",
+      "kind": "row_filter",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 18
+      }
+    },
+    {
+      "from": "table:etl2:RawOrders.OrderID",
+      "to": "table:etl2:SalesClean.Cost",
+      "kind": "row_filter",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 18
+      }
+    },
+    {
+      "from": "table:etl2:RawOrders.OrderID",
+      "to": "table:etl2:SalesClean.CustomerID",
+      "kind": "row_filter",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 18
+      }
+    },
+    {
+      "from": "table:etl2:RawOrders.OrderID",
+      "to": "table:etl2:SalesClean.Market",
+      "kind": "row_filter",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 18
+      }
+    },
+    {
+      "from": "table:etl2:RawOrders.OrderID",
+      "to": "table:etl2:SalesClean.OrderDate",
+      "kind": "row_filter",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 18
+      }
+    },
+    {
+      "from": "table:etl2:RawOrders.OrderID",
+      "to": "table:etl2:SalesClean.OrderID",
+      "kind": "row_filter",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 18
+      }
+    },
+    {
+      "from": "table:etl2:RawOrders.OrderID",
+      "to": "table:etl2:SalesClean.OrderID",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 21
+      }
+    },
+    {
+      "from": "table:etl2:RawOrders.OrderID",
+      "to": "table:etl2:SalesClean.ProductCategory",
+      "kind": "row_filter",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 18
+      }
+    },
+    {
+      "from": "table:etl2:RawOrders.OrderID",
+      "to": "table:etl2:SalesClean.Quantity",
+      "kind": "row_filter",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 18
+      }
+    },
+    {
+      "from": "table:etl2:RawOrders.OrderID",
+      "to": "table:etl2:SalesClean.Revenue",
+      "kind": "row_filter",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 18
+      }
+    },
+    {
+      "from": "table:etl2:RawOrders.OrderID",
+      "to": "table:etl2:SalesClean.UnitPrice",
+      "kind": "row_filter",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 18
+      }
+    },
+    {
+      "from": "table:etl2:RawOrders.ProductCategory",
+      "to": "table:etl2:SalesClean.ProductCategory",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 24
+      }
+    },
+    {
+      "from": "table:etl2:RawOrders.Quantity",
+      "to": "table:etl2:SalesClean.Channel",
+      "kind": "row_filter",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 18
+      }
+    },
+    {
+      "from": "table:etl2:RawOrders.Quantity",
+      "to": "table:etl2:SalesClean.Cost",
+      "kind": "row_filter",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 18
+      }
+    },
+    {
+      "from": "table:etl2:RawOrders.Quantity",
+      "to": "table:etl2:SalesClean.Cost",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 30
+      }
+    },
+    {
+      "from": "table:etl2:RawOrders.Quantity",
+      "to": "table:etl2:SalesClean.CustomerID",
+      "kind": "row_filter",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 18
+      }
+    },
+    {
+      "from": "table:etl2:RawOrders.Quantity",
+      "to": "table:etl2:SalesClean.Market",
+      "kind": "row_filter",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 18
+      }
+    },
+    {
+      "from": "table:etl2:RawOrders.Quantity",
+      "to": "table:etl2:SalesClean.OrderDate",
+      "kind": "row_filter",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 18
+      }
+    },
+    {
+      "from": "table:etl2:RawOrders.Quantity",
+      "to": "table:etl2:SalesClean.OrderID",
+      "kind": "row_filter",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 18
+      }
+    },
+    {
+      "from": "table:etl2:RawOrders.Quantity",
+      "to": "table:etl2:SalesClean.ProductCategory",
+      "kind": "row_filter",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 18
+      }
+    },
+    {
+      "from": "table:etl2:RawOrders.Quantity",
+      "to": "table:etl2:SalesClean.Quantity",
+      "kind": "row_filter",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 18
+      }
+    },
+    {
+      "from": "table:etl2:RawOrders.Quantity",
+      "to": "table:etl2:SalesClean.Quantity",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 27
+      }
+    },
+    {
+      "from": "table:etl2:RawOrders.Quantity",
+      "to": "table:etl2:SalesClean.Revenue",
+      "kind": "row_filter",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 18
+      }
+    },
+    {
+      "from": "table:etl2:RawOrders.Quantity",
+      "to": "table:etl2:SalesClean.Revenue",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 29
+      }
+    },
+    {
+      "from": "table:etl2:RawOrders.Quantity",
+      "to": "table:etl2:SalesClean.UnitPrice",
+      "kind": "row_filter",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 18
+      }
+    },
+    {
+      "from": "table:etl2:RawOrders.UnitPrice",
+      "to": "table:etl2:SalesClean.Channel",
+      "kind": "row_filter",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 18
+      }
+    },
+    {
+      "from": "table:etl2:RawOrders.UnitPrice",
+      "to": "table:etl2:SalesClean.Cost",
+      "kind": "row_filter",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 18
+      }
+    },
+    {
+      "from": "table:etl2:RawOrders.UnitPrice",
+      "to": "table:etl2:SalesClean.Cost",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 30
+      }
+    },
+    {
+      "from": "table:etl2:RawOrders.UnitPrice",
+      "to": "table:etl2:SalesClean.CustomerID",
+      "kind": "row_filter",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 18
+      }
+    },
+    {
+      "from": "table:etl2:RawOrders.UnitPrice",
+      "to": "table:etl2:SalesClean.Market",
+      "kind": "row_filter",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 18
+      }
+    },
+    {
+      "from": "table:etl2:RawOrders.UnitPrice",
+      "to": "table:etl2:SalesClean.OrderDate",
+      "kind": "row_filter",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 18
+      }
+    },
+    {
+      "from": "table:etl2:RawOrders.UnitPrice",
+      "to": "table:etl2:SalesClean.OrderID",
+      "kind": "row_filter",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 18
+      }
+    },
+    {
+      "from": "table:etl2:RawOrders.UnitPrice",
+      "to": "table:etl2:SalesClean.ProductCategory",
+      "kind": "row_filter",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 18
+      }
+    },
+    {
+      "from": "table:etl2:RawOrders.UnitPrice",
+      "to": "table:etl2:SalesClean.Quantity",
+      "kind": "row_filter",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 18
+      }
+    },
+    {
+      "from": "table:etl2:RawOrders.UnitPrice",
+      "to": "table:etl2:SalesClean.Revenue",
+      "kind": "row_filter",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 18
+      }
+    },
+    {
+      "from": "table:etl2:RawOrders.UnitPrice",
+      "to": "table:etl2:SalesClean.Revenue",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 29
+      }
+    },
+    {
+      "from": "table:etl2:RawOrders.UnitPrice",
+      "to": "table:etl2:SalesClean.UnitPrice",
+      "kind": "row_filter",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 18
+      }
+    },
+    {
+      "from": "table:etl2:RawOrders.UnitPrice",
+      "to": "table:etl2:SalesClean.UnitPrice",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 28
+      }
+    },
+    {
+      "from": "table:etl2:SalesClean.Channel",
+      "to": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#Channel",
+      "kind": "store_qvd",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 38
+      }
+    },
+    {
+      "from": "table:etl2:SalesClean.Cost",
+      "to": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#Cost",
+      "kind": "store_qvd",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 38
+      }
+    },
+    {
+      "from": "table:etl2:SalesClean.CustomerID",
+      "to": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#CustomerID",
+      "kind": "store_qvd",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 38
+      }
+    },
+    {
+      "from": "table:etl2:SalesClean.Market",
+      "to": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#Market",
+      "kind": "store_qvd",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 38
+      }
+    },
+    {
+      "from": "table:etl2:SalesClean.OrderDate",
+      "to": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#OrderDate",
+      "kind": "store_qvd",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 38
+      }
+    },
+    {
+      "from": "table:etl2:SalesClean.OrderID",
+      "to": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#OrderID",
+      "kind": "store_qvd",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 38
+      }
+    },
+    {
+      "from": "table:etl2:SalesClean.ProductCategory",
+      "to": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#ProductCategory",
+      "kind": "store_qvd",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 38
+      }
+    },
+    {
+      "from": "table:etl2:SalesClean.Quantity",
+      "to": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#Quantity",
+      "kind": "store_qvd",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 38
+      }
+    },
+    {
+      "from": "table:etl2:SalesClean.Revenue",
+      "to": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#Revenue",
+      "kind": "store_qvd",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 38
+      }
+    },
+    {
+      "from": "table:etl2:SalesClean.UnitPrice",
+      "to": "qvd:lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#UnitPrice",
+      "kind": "store_qvd",
+      "source": {
+        "path": "semantic-models/sales/scripts/etl2.qvs",
+        "line": 38
+      }
+    },
+    {
+      "from": "table:presentation2:Calendar.OrderDate",
+      "to": "logical:presentation2:OrderDate",
+      "kind": "field_binding",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 33
+      }
+    },
+    {
+      "from": "table:presentation2:Calendar.SalesMonth",
+      "to": "logical:presentation2:SalesMonth",
+      "kind": "field_binding",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 35
+      }
+    },
+    {
+      "from": "table:presentation2:Calendar.SalesYear",
+      "to": "logical:presentation2:SalesYear",
+      "kind": "field_binding",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 34
+      }
+    },
+    {
+      "from": "table:presentation2:Calendar.YearMonth",
+      "to": "logical:presentation2:YearMonth",
+      "kind": "field_binding",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 36
+      }
+    },
+    {
+      "from": "table:presentation2:Calendar.YearQuarter",
+      "to": "logical:presentation2:YearQuarter",
+      "kind": "field_binding",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 37
+      }
+    },
+    {
+      "from": "table:presentation2:FactSales.Channel",
+      "to": "logical:presentation2:Channel",
+      "kind": "field_binding",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 19
+      }
+    },
+    {
+      "from": "table:presentation2:FactSales.Cost",
+      "to": "logical:presentation2:Cost",
+      "kind": "field_binding",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 24
+      }
+    },
+    {
+      "from": "table:presentation2:FactSales.CustomerID",
+      "to": "logical:presentation2:CustomerID",
+      "kind": "field_binding",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 20
+      }
+    },
+    {
+      "from": "table:presentation2:FactSales.Margin",
+      "to": "logical:presentation2:Margin",
+      "kind": "field_binding",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 25
+      }
+    },
+    {
+      "from": "table:presentation2:FactSales.MarginPct",
+      "to": "logical:presentation2:MarginPct",
+      "kind": "field_binding",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 26
+      }
+    },
+    {
+      "from": "table:presentation2:FactSales.Market",
+      "to": "logical:presentation2:Market",
+      "kind": "field_binding",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 17
+      }
+    },
+    {
+      "from": "table:presentation2:FactSales.OrderDate",
+      "to": "logical:presentation2:OrderDate",
+      "kind": "field_binding",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 16
+      }
+    },
+    {
+      "from": "table:presentation2:FactSales.OrderDate",
+      "to": "table:presentation2:Calendar.OrderDate",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 33
+      }
+    },
+    {
+      "from": "table:presentation2:FactSales.OrderDate",
+      "to": "table:presentation2:Calendar.SalesMonth",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 35
+      }
+    },
+    {
+      "from": "table:presentation2:FactSales.OrderDate",
+      "to": "table:presentation2:Calendar.SalesYear",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 34
+      }
+    },
+    {
+      "from": "table:presentation2:FactSales.OrderDate",
+      "to": "table:presentation2:Calendar.YearMonth",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 36
+      }
+    },
+    {
+      "from": "table:presentation2:FactSales.OrderDate",
+      "to": "table:presentation2:Calendar.YearQuarter",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 37
+      }
+    },
+    {
+      "from": "table:presentation2:FactSales.OrderID",
+      "to": "logical:presentation2:OrderID",
+      "kind": "field_binding",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 15
+      }
+    },
+    {
+      "from": "table:presentation2:FactSales.ProductCategory",
+      "to": "logical:presentation2:ProductCategory",
+      "kind": "field_binding",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 18
+      }
+    },
+    {
+      "from": "table:presentation2:FactSales.Quantity",
+      "to": "logical:presentation2:Quantity",
+      "kind": "field_binding",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 21
+      }
+    },
+    {
+      "from": "table:presentation2:FactSales.Revenue",
+      "to": "logical:presentation2:Revenue",
+      "kind": "field_binding",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 23
+      }
+    },
+    {
+      "from": "table:presentation2:FactSales.UnitPrice",
+      "to": "logical:presentation2:UnitPrice",
+      "kind": "field_binding",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 22
+      }
+    },
+    {
+      "from": "table:presentation:Calendar.OrderDate",
+      "to": "logical:presentation:OrderDate",
+      "kind": "field_binding",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 33
+      }
+    },
+    {
+      "from": "table:presentation:Calendar.SalesMonth",
+      "to": "logical:presentation:SalesMonth",
+      "kind": "field_binding",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 35
+      }
+    },
+    {
+      "from": "table:presentation:Calendar.SalesYear",
+      "to": "logical:presentation:SalesYear",
+      "kind": "field_binding",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 34
+      }
+    },
+    {
+      "from": "table:presentation:Calendar.YearMonth",
+      "to": "logical:presentation:YearMonth",
+      "kind": "field_binding",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 36
+      }
+    },
+    {
+      "from": "table:presentation:Calendar.YearQuarter",
+      "to": "logical:presentation:YearQuarter",
+      "kind": "field_binding",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 37
+      }
+    },
+    {
+      "from": "table:presentation:FactSales.Channel",
+      "to": "logical:presentation:Channel",
+      "kind": "field_binding",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 19
+      }
+    },
+    {
+      "from": "table:presentation:FactSales.Cost",
+      "to": "logical:presentation:Cost",
+      "kind": "field_binding",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 24
+      }
+    },
+    {
+      "from": "table:presentation:FactSales.CustomerID",
+      "to": "logical:presentation:CustomerID",
+      "kind": "field_binding",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 20
+      }
+    },
+    {
+      "from": "table:presentation:FactSales.Margin",
+      "to": "logical:presentation:Margin",
+      "kind": "field_binding",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 25
+      }
+    },
+    {
+      "from": "table:presentation:FactSales.MarginPct",
+      "to": "logical:presentation:MarginPct",
+      "kind": "field_binding",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 26
+      }
+    },
+    {
+      "from": "table:presentation:FactSales.Market",
+      "to": "logical:presentation:Market",
+      "kind": "field_binding",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 17
+      }
+    },
+    {
+      "from": "table:presentation:FactSales.OrderDate",
+      "to": "logical:presentation:OrderDate",
+      "kind": "field_binding",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 16
+      }
+    },
+    {
+      "from": "table:presentation:FactSales.OrderDate",
+      "to": "table:presentation:Calendar.OrderDate",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 33
+      }
+    },
+    {
+      "from": "table:presentation:FactSales.OrderDate",
+      "to": "table:presentation:Calendar.SalesMonth",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 35
+      }
+    },
+    {
+      "from": "table:presentation:FactSales.OrderDate",
+      "to": "table:presentation:Calendar.SalesYear",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 34
+      }
+    },
+    {
+      "from": "table:presentation:FactSales.OrderDate",
+      "to": "table:presentation:Calendar.YearMonth",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 36
+      }
+    },
+    {
+      "from": "table:presentation:FactSales.OrderDate",
+      "to": "table:presentation:Calendar.YearQuarter",
+      "kind": "value",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 37
+      }
+    },
+    {
+      "from": "table:presentation:FactSales.OrderID",
+      "to": "logical:presentation:OrderID",
+      "kind": "field_binding",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 15
+      }
+    },
+    {
+      "from": "table:presentation:FactSales.ProductCategory",
+      "to": "logical:presentation:ProductCategory",
+      "kind": "field_binding",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 18
+      }
+    },
+    {
+      "from": "table:presentation:FactSales.Quantity",
+      "to": "logical:presentation:Quantity",
+      "kind": "field_binding",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 21
+      }
+    },
+    {
+      "from": "table:presentation:FactSales.Revenue",
+      "to": "logical:presentation:Revenue",
+      "kind": "field_binding",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 23
+      }
+    },
+    {
+      "from": "table:presentation:FactSales.UnitPrice",
+      "to": "logical:presentation:UnitPrice",
+      "kind": "field_binding",
+      "source": {
+        "path": "semantic-models/sales/scripts/presentation.qvs",
+        "line": 22
+      }
+    },
+    {
+      "from": "variable:qlikgpt_v_target_margin",
+      "to": "subscription:presentation2:variable:qlikgpt_v_target_margin",
+      "kind": "subscribed_by",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation2.json",
+        "line": 16
+      }
+    },
+    {
+      "from": "variable:qlikgpt_v_target_margin",
+      "to": "subscription:presentation:variable:qlikgpt_v_target_margin",
+      "kind": "subscribed_by",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1.json",
+        "line": 22
+      }
+    }
+  ],
+  "warnings": []
+}
