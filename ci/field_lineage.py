@@ -396,6 +396,49 @@ def render(report):
                      (", ".join(BT+byid[x]["label"]+BT for x in sorted(origins)) or "Da verificare")+
                      " | "+(", ".join(BT+x+BT for x in targets) or "**Non utilizzata**")+
                      " | "+file_link(node["source"])+" |")
+    lines += ["", "## Passaggi intermedi verificati per ciascuna misura", "",
+              "Ogni arco qui sotto è un collegamento documentato: campo sorgente, "
+              "trasformazione ETL, QVD, campo del modello associativo, "
+              "definizione semantica, sottoscrizione e oggetto Qlik.",
+              "Le relazioni **row_filter** sono escluse da questi percorsi di valore "
+              "e riportate nella sezione successiva.", ""]
+    for measure in (n for n in report["nodes"] if n["type"] == "measure"):
+        mid = measure["id"]
+        upstream = reachable(report, {mid}, backward=True, exclude_row_filters=True)
+        downstream = reachable(report, {mid})
+        chain = upstream | downstream
+        edges = [e for e in report["edges"] if e["kind"] not in ("row_filter", "inline_sort")
+                 and e["from"] in chain and e["to"] in chain]
+        lines += ["### " + measure["label"] + " (" + BT + measure["catalogId"] + BT + ")",
+                  "", "| Da | A | Relazione | Evidenza nel repository |",
+                  "| --- | --- | --- | --- |"]
+        for e in edges:
+            left, right = byid[e["from"]], byid[e["to"]]
+            # For a QVD field, the actual storage location is the lib:// URI
+            # declared in STORE/FROM, not a repository file.
+            def display(node):
+                label = node["label"]
+                if node["type"] == "qvd_field":
+                    label = node["uri"] + "#" + node["field"]
+                elif node["type"] == "subscription":
+                    label = node["app"] + ": " + node["catalogId"]
+                return BT + label.replace("|", "\\|") + BT
+            lines.append("| " + display(left) + " | " + display(right) + " | " +
+                         BT + e["kind"] + BT + " | " + file_link(e["source"]) + " |")
+        lines.append("")
+    lines += ["## Dipendenze che filtrano le righe", "",
+              "Un campo utilizzato da un WHERE può cambiare i risultati dei KPI "
+              "anche senza entrare nell'espressione di calcolo. Gli archi di questo "
+              "tipo vengono mantenuti separati nel JSON e nella impact analysis.",
+              "", "| Input | Output filtrato | Dove |",
+              "| --- | --- | --- |"]
+    for e in report["edges"]:
+        if e["kind"] != "row_filter":
+            continue
+        lines.append("| " + BT + byid[e["from"]]["label"] + BT + " | " +
+                     BT + byid[e["to"]]["label"] + BT + " | " +
+                     file_link(e["source"]) + " |")
+    lines.append("")
     lines+=["","## Dimensioni e filtri","","| Dimensione | Campo | Visualizzazioni/filtri | Definizione |",
             "| --- | --- | --- | --- |"]
     for node in [n for n in report["nodes"] if n["type"]=="dimension"]:
