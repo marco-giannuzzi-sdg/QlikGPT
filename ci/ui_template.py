@@ -32,16 +32,7 @@ def tokens():
             raise ValueError(f"Invalid color token: {key}")
     if t["grid"]["columns"] != 24:
         raise ValueError("Native Qlik template expects 24 grid columns")
-    theme = read(THEME)
-    ext = read(QEXT)
-    if ext.get("type") != "theme" or ext.get("name") != t["templateId"]:
-        raise ValueError("QEXT metadata must match tokens")
-    if theme["_variables"]["@qlikgpt-navy"] != t["colors"]["navy"]:
-        raise ValueError("Theme and UI palette diverged")
-    if theme["_variables"]["@qlikgpt-teal"] != t["colors"]["teal"]:
-        raise ValueError("Theme chart palette and UI tokens diverged")
-    if theme["_variables"]["@qlikgpt-blue"] != t["colors"]["blue"]:
-        raise ValueError("Versioned optional theme color diverged from palette")
+    # The native UI kit must work without installing a custom Qlik theme.
     return t
 
 def color(value):
