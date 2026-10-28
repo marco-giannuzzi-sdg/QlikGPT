@@ -63,3 +63,27 @@ e il vecchio button identificati esplicitamente.
 
 Per modifiche a visualizzazioni basate sui dati già caricati non serve un reload.
 Le modifiche al modello dati seguono il flusso separato del progetto.
+
+## Verifica del 28 ottobre 2026
+
+Il vecchio foglio [Sales Intelligence | Overview](https://sdggroup-it.eu.qlikcloud.com/sense/app/07dfa926-4895-4fb2-af4c-eac90e9eb2cb/sheet/qlikgpt_sales_overview/state/analysis)
+è stato aggiornato e verificato nel browser in modalità analisi: quattro KPI centrati,
+tre filtri compatti, area chart blu, barre teal, tabella con 12 righe per mercato/canale
+e ciambella con palette blu/teal/navy. Il browser è stato usato solo per la verifica visiva.
+
+- [PR di implementazione #8](https://github.com/marco-giannuzzi-sdg/QlikGPT/pull/8), integrata.
+- [CI statica finale](https://github.com/marco-giannuzzi-sdg/QlikGPT/actions/runs/40713627775): verde.
+- [Deploy governato finale e import Qlik CLI](https://github.com/marco-giannuzzi-sdg/QlikGPT/actions/runs/40713627736): verde.
+- 102 test passati; 18 oggetti nativi nel full property tree.
+- Dati e master verificati per tutti i grafici e i filtri.
+- Fatturato di trend, mercato, tabella e ciambella riconciliato con il KPI.
+- Script, quattro master measures, cinque master dimensions e timestamp del reload invariati durante l'import visuale.
+- Proprietà complete degli altri fogli verificate invariate.
+- Nessun reload dati.
+
+Il primo tentativo di deploy si è fermato su un timeout di connessione prima
+dell'import dell'Overview. La revisione finale introduce un retry limitato
+all'apertura della connessione, senza ripetere RPC o scritture Engine.
+
+I fogli Native e Premium restano separati. Questo Overview ora si modifica
+direttamente in presentation1-objects.json, senza dipendere dal generatore Native.
