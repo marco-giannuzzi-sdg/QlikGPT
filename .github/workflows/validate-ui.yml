@@ -1,0 +1,45 @@
+name: QlikGPT — Static UI and Semantic Validation
+
+on:
+  pull_request:
+    paths:
+      - 'semantic-models/**'
+      - 'ui/**'
+      - 'ci/**'
+      - 'tests/**'
+      - '.github/workflows/validate-ui.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'semantic-models/**'
+      - 'ui/**'
+      - 'ci/**'
+      - 'tests/**'
+      - '.github/workflows/validate-ui.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Native Qlik UI contracts and semantic regression tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install test dependencies
+        run: python3 -m pip install websocket-client==1.8.0
+      - name: Compile Python modules
+        run: python3 -m compileall -q ci tests
+      - name: Validate Executive Premium native frontend
+        run: python3 ci/ui_template.py --check
+      - name: Run governed BI regressions
+        run: python3 -m unittest discover -s tests -v
+      - name: Check generated lineage and usage reports
+        run: |
+          python3 ci/catalog_report.py --check
+          python3 ci/app_lineage.py --check
+          python3 ci/field_lineage.py --check
