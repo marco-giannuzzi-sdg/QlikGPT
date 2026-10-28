@@ -102,6 +102,7 @@ jobs:
         run: python3 ci/ui_template.py --check
 
       - name: Authenticate to Qlik Cloud
+        id: qlik_auth
         shell: bash
         run: |
           set -euo pipefail
@@ -125,12 +126,14 @@ jobs:
           fi
 
       - name: Deploy scripts without reload, then run ONLY explicitly requested reloads
+        id: qlik_deploy
         shell: bash
         run: |
           set -euo pipefail
           python3 ci/deploy.py
 
       - name: Publish QlikGPT Executive Premium theme and assign to Sales Overview
+        id: qlik_theme
         shell: bash
         run: |
           set -euo pipefail
@@ -139,6 +142,40 @@ jobs:
           # This does NOT trigger a Qlik data reload.
           python3 ci/deploy_theme.py --apply-app presentation
 
+      - name: Save diagnostic run ID and step outcomes
+        # Makes Actions job logs discoverable through the existing GitHub connector.
+        # This is safe on failures and writes only public workflow metadata.
+        if: ${{ always() && vars.QLIK_CICD_ENABLED == 'true' }}
+        shell: bash
+        env:
+          QLIK_AUTH_OUTCOME: ${{ steps.qlik_auth.outcome }}
+          QLIK_DEPLOY_OUTCOME: ${{ steps.qlik_deploy.outcome }}
+          QLIK_THEME_OUTCOME: ${{ steps.qlik_theme.outcome }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          result = {
+              "run_id": int(os.environ["GITHUB_RUN_ID"]),
+              "run_number": int(os.environ["GITHUB_RUN_NUMBER"]),
+              "commit": os.environ["GITHUB_SHA"],
+              "run_url": (
+                  "https://github.com/" + os.environ["GITHUB_REPOSITORY"]
+                  + "/actions/runs/" + os.environ["GITHUB_RUN_ID"]
+              ),
+              "auth": os.environ["QLIK_AUTH_OUTCOME"],
+              "frontend_deployment": os.environ["QLIK_DEPLOY_OUTCOME"],
+              "theme_install_and_assignment": os.environ["QLIK_THEME_OUTCOME"],
+              "note": "Use workflow run ID to fetch complete job logs; no credentials included."
+          }
+          path = Path(".github/deployment-status/last-run.json")
+          path.parent.mkdir(parents=True, exist_ok=True)
+          path.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
+          print("Workflow diagnostics saved; run ID:", result["run_id"], flush=True)
+          PY
+
       - name: Persist generated lineage, semantic reports and app IDs
         # Persist reports and IDs even when an explicitly requested reload fails.
         if: ${{ always() && vars.QLIK_CICD_ENABLED == 'true' }}
@@ -146,6 +183,7 @@ jobs:
         run: |
           set -euo pipefail
           git add -- semantic-models/sales/deployment/app-ids.json
+          git add -- .github/deployment-status/last-run.json
           if [ -f semantic-models/sales/catalog/USAGE.md ] && [ -f semantic-models/sales/catalog/usage.json ]; then
             git add -- semantic-models/sales/catalog/USAGE.md semantic-models/sales/catalog/usage.json
           fi
