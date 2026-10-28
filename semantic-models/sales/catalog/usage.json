@@ -26,19 +26,19 @@
       "visuals": [
         {
           "app": "presentation",
-          "sheet": "Sales Intelligence | Overview",
+          "sheet": "Sales Intelligence | Executive Overview",
           "visualId": "qlikgpt_kpi_revenue",
           "visualType": "kpi"
         },
         {
           "app": "presentation",
-          "sheet": "Sales Intelligence | Overview",
+          "sheet": "Sales Intelligence | Executive Overview",
           "visualId": "qlikgpt_chart_month",
           "visualType": "linechart"
         },
         {
           "app": "presentation",
-          "sheet": "Sales Intelligence | Overview",
+          "sheet": "Sales Intelligence | Executive Overview",
           "visualId": "qlikgpt_chart_market",
           "visualType": "barchart"
         },
@@ -79,7 +79,7 @@
       "visuals": [
         {
           "app": "presentation",
-          "sheet": "Sales Intelligence | Overview",
+          "sheet": "Sales Intelligence | Executive Overview",
           "visualId": "qlikgpt_kpi_orders",
           "visualType": "kpi"
         }
@@ -113,7 +113,7 @@
       "visuals": [
         {
           "app": "presentation",
-          "sheet": "Sales Intelligence | Overview",
+          "sheet": "Sales Intelligence | Executive Overview",
           "visualId": "qlikgpt_kpi_margin",
           "visualType": "kpi"
         }
@@ -149,7 +149,7 @@
       "visuals": [
         {
           "app": "presentation",
-          "sheet": "Sales Intelligence | Overview",
+          "sheet": "Sales Intelligence | Executive Overview",
           "visualId": "qlikgpt_kpi_margin_pct",
           "visualType": "kpi"
         },
@@ -217,7 +217,7 @@
       "visuals": [
         {
           "app": "presentation",
-          "sheet": "Sales Intelligence | Overview",
+          "sheet": "Sales Intelligence | Executive Overview",
           "visualId": "qlikgpt_chart_market",
           "visualType": "barchart"
         },
@@ -258,7 +258,7 @@
       "visuals": [
         {
           "app": "presentation",
-          "sheet": "Sales Intelligence | Overview",
+          "sheet": "Sales Intelligence | Executive Overview",
           "visualId": "qlikgpt_chart_month",
           "visualType": "linechart"
         }

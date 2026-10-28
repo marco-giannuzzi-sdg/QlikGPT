@@ -2,7 +2,7 @@
 
 **Lineage statico con evidenze file/riga:** QVS → QVD → campi associativi → Semantic Catalog → manifest applicativi → grafici e filtri.
 
-**Copertura:** 4 app, 62 campi tabella, 19 campi QVD, 5 misure, 6 dimensioni, 16 visualizzazioni, 3 filtri.
+**Copertura:** 4 app, 62 campi tabella, 19 campi QVD, 5 misure, 6 dimensioni, 18 visualizzazioni, 3 filtri.
 
 [Grafo JSON dettagliato](end_to_end.json) · [App Lineage](APP_LINEAGE.md) · [Semantic Usage](../catalog/USAGE.md)
 
@@ -63,7 +63,7 @@ Le relazioni **row_filter** sono escluse da questi percorsi di valore e riportat
 | `lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#Cost` | `presentation.FactSales.Margin` | `value` | [semantic-models/sales/scripts/presentation.qvs#L25](../../../semantic-models/sales/scripts/presentation.qvs#L25) |
 | `lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#Revenue` | `presentation2.FactSales.Margin` | `value` | [semantic-models/sales/scripts/presentation.qvs#L25](../../../semantic-models/sales/scripts/presentation.qvs#L25) |
 | `lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#Revenue` | `presentation.FactSales.Margin` | `value` | [semantic-models/sales/scripts/presentation.qvs#L25](../../../semantic-models/sales/scripts/presentation.qvs#L25) |
-| `presentation: qlikgpt_shared_margin` | `Margine lordo` | `visual_use` | [semantic-models/sales/apps/presentation1-objects.json#L318](../../../semantic-models/sales/apps/presentation1-objects.json#L318) |
+| `presentation: qlikgpt_shared_margin` | `Margine lordo` | `visual_use` | [semantic-models/sales/apps/presentation1-objects.json#L448](../../../semantic-models/sales/apps/presentation1-objects.json#L448) |
 | `etl1.RawOrders.CostRatio` | `lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd#CostRatio` | `store_qvd` | [semantic-models/sales/scripts/etl1.qvs#L31](../../../semantic-models/sales/scripts/etl1.qvs#L31) |
 | `etl1.RawOrders.Quantity` | `lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd#Quantity` | `store_qvd` | [semantic-models/sales/scripts/etl1.qvs#L31](../../../semantic-models/sales/scripts/etl1.qvs#L31) |
 | `etl1.RawOrders.UnitPrice` | `lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd#UnitPrice` | `store_qvd` | [semantic-models/sales/scripts/etl1.qvs#L31](../../../semantic-models/sales/scripts/etl1.qvs#L31) |
@@ -96,8 +96,8 @@ Le relazioni **row_filter** sono escluse da questi percorsi di valore e riportat
 | `lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#Revenue` | `presentation2.FactSales.Revenue` | `value` | [semantic-models/sales/scripts/presentation.qvs#L23](../../../semantic-models/sales/scripts/presentation.qvs#L23) |
 | `lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#Revenue` | `presentation.FactSales.Margin` | `value` | [semantic-models/sales/scripts/presentation.qvs#L25](../../../semantic-models/sales/scripts/presentation.qvs#L25) |
 | `lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#Revenue` | `presentation.FactSales.Revenue` | `value` | [semantic-models/sales/scripts/presentation.qvs#L23](../../../semantic-models/sales/scripts/presentation.qvs#L23) |
-| `presentation2: qlikgpt_shared_margin_pct` | `MARGINE % GOVERNATO` | `visual_use` | [semantic-models/sales/apps/presentation2-objects.json#L186](../../../semantic-models/sales/apps/presentation2-objects.json#L186) |
-| `presentation: qlikgpt_shared_margin_pct` | `Margine %` | `visual_use` | [semantic-models/sales/apps/presentation1-objects.json#L365](../../../semantic-models/sales/apps/presentation1-objects.json#L365) |
+| `presentation2: qlikgpt_shared_margin_pct` | `MARGINE % GOVERNATO` | `visual_use` | [semantic-models/sales/apps/presentation2-objects.json#L195](../../../semantic-models/sales/apps/presentation2-objects.json#L195) |
+| `presentation: qlikgpt_shared_margin_pct` | `Margine %` | `visual_use` | [semantic-models/sales/apps/presentation1-objects.json#L495](../../../semantic-models/sales/apps/presentation1-objects.json#L495) |
 | `etl1.RawOrders.CostRatio` | `lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd#CostRatio` | `store_qvd` | [semantic-models/sales/scripts/etl1.qvs#L31](../../../semantic-models/sales/scripts/etl1.qvs#L31) |
 | `etl1.RawOrders.Quantity` | `lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd#Quantity` | `store_qvd` | [semantic-models/sales/scripts/etl1.qvs#L31](../../../semantic-models/sales/scripts/etl1.qvs#L31) |
 | `etl1.RawOrders.UnitPrice` | `lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd#UnitPrice` | `store_qvd` | [semantic-models/sales/scripts/etl1.qvs#L31](../../../semantic-models/sales/scripts/etl1.qvs#L31) |
@@ -123,7 +123,7 @@ Le relazioni **row_filter** sono escluse da questi percorsi di valore e riportat
 | `lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd#OrderID` | `etl2.RawOrders.OrderID` | `value` | [semantic-models/sales/scripts/etl2.qvs#L15](../../../semantic-models/sales/scripts/etl2.qvs#L15) |
 | `lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#OrderID` | `presentation2.FactSales.OrderID` | `value` | [semantic-models/sales/scripts/presentation.qvs#L15](../../../semantic-models/sales/scripts/presentation.qvs#L15) |
 | `lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#OrderID` | `presentation.FactSales.OrderID` | `value` | [semantic-models/sales/scripts/presentation.qvs#L15](../../../semantic-models/sales/scripts/presentation.qvs#L15) |
-| `presentation: qlikgpt_shared_orders` | `Ordini` | `visual_use` | [semantic-models/sales/apps/presentation1-objects.json#L271](../../../semantic-models/sales/apps/presentation1-objects.json#L271) |
+| `presentation: qlikgpt_shared_orders` | `Ordini` | `visual_use` | [semantic-models/sales/apps/presentation1-objects.json#L401](../../../semantic-models/sales/apps/presentation1-objects.json#L401) |
 | `etl1.RawOrders.OrderID` | `lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd#OrderID` | `store_qvd` | [semantic-models/sales/scripts/etl1.qvs#L31](../../../semantic-models/sales/scripts/etl1.qvs#L31) |
 | `etl2.RawOrders.OrderID` | `etl2.SalesClean.OrderID` | `value` | [semantic-models/sales/scripts/etl2.qvs#L21](../../../semantic-models/sales/scripts/etl2.qvs#L21) |
 | `etl2.SalesClean.OrderID` | `lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#OrderID` | `store_qvd` | [semantic-models/sales/scripts/etl2.qvs#L38](../../../semantic-models/sales/scripts/etl2.qvs#L38) |
@@ -142,10 +142,10 @@ Le relazioni **row_filter** sono escluse da questi percorsi di valore e riportat
 | `lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd#UnitPrice` | `etl2.RawOrders.UnitPrice` | `value` | [semantic-models/sales/scripts/etl2.qvs#L15](../../../semantic-models/sales/scripts/etl2.qvs#L15) |
 | `lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#Revenue` | `presentation2.FactSales.Revenue` | `value` | [semantic-models/sales/scripts/presentation.qvs#L23](../../../semantic-models/sales/scripts/presentation.qvs#L23) |
 | `lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd#Revenue` | `presentation.FactSales.Revenue` | `value` | [semantic-models/sales/scripts/presentation.qvs#L23](../../../semantic-models/sales/scripts/presentation.qvs#L23) |
-| `presentation2: qlikgpt_shared_revenue` | `RICAVI GOVERNATI` | `visual_use` | [semantic-models/sales/apps/presentation2-objects.json#L145](../../../semantic-models/sales/apps/presentation2-objects.json#L145) |
-| `presentation: qlikgpt_shared_revenue` | `RICAVI PER MERCATO` | `visual_use` | [semantic-models/sales/apps/presentation1-objects.json#L224](../../../semantic-models/sales/apps/presentation1-objects.json#L224) |
-| `presentation: qlikgpt_shared_revenue` | `TREND DEL FATTURATO` | `visual_use` | [semantic-models/sales/apps/presentation1-objects.json#L224](../../../semantic-models/sales/apps/presentation1-objects.json#L224) |
-| `presentation: qlikgpt_shared_revenue` | `Fatturato` | `visual_use` | [semantic-models/sales/apps/presentation1-objects.json#L224](../../../semantic-models/sales/apps/presentation1-objects.json#L224) |
+| `presentation2: qlikgpt_shared_revenue` | `RICAVI GOVERNATI` | `visual_use` | [semantic-models/sales/apps/presentation2-objects.json#L154](../../../semantic-models/sales/apps/presentation2-objects.json#L154) |
+| `presentation: qlikgpt_shared_revenue` | `Performance per mercato` | `visual_use` | [semantic-models/sales/apps/presentation1-objects.json#L354](../../../semantic-models/sales/apps/presentation1-objects.json#L354) |
+| `presentation: qlikgpt_shared_revenue` | `Andamento del fatturato` | `visual_use` | [semantic-models/sales/apps/presentation1-objects.json#L354](../../../semantic-models/sales/apps/presentation1-objects.json#L354) |
+| `presentation: qlikgpt_shared_revenue` | `Fatturato` | `visual_use` | [semantic-models/sales/apps/presentation1-objects.json#L354](../../../semantic-models/sales/apps/presentation1-objects.json#L354) |
 | `etl1.RawOrders.Quantity` | `lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd#Quantity` | `store_qvd` | [semantic-models/sales/scripts/etl1.qvs#L31](../../../semantic-models/sales/scripts/etl1.qvs#L31) |
 | `etl1.RawOrders.UnitPrice` | `lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd#UnitPrice` | `store_qvd` | [semantic-models/sales/scripts/etl1.qvs#L31](../../../semantic-models/sales/scripts/etl1.qvs#L31) |
 | `etl2.RawOrders.Quantity` | `etl2.SalesClean.Revenue` | `value` | [semantic-models/sales/scripts/etl2.qvs#L29](../../../semantic-models/sales/scripts/etl2.qvs#L29) |
