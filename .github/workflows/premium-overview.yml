@@ -1,0 +1,50 @@
+name: QlikGPT — Premium presentation pilot
+on:
+  push:
+    branches: [main]
+    paths: ['ui/premium/**', 'ci/deploy_premium.py', '.github/workflows/premium-overview.yml']
+  pull_request:
+    paths: ['ui/premium/**', 'ci/deploy_premium.py', '.github/workflows/premium-overview.yml']
+permissions:
+  contents: read
+concurrency:
+  group: qlikgpt-premium-pilot
+  cancel-in-progress: false
+jobs:
+  premium:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Test governed data and renderer
+        working-directory: ui/premium
+        run: npm test
+      - name: Install pinned Qlik build toolchain
+        working-directory: ui/premium
+        run: npm install --ignore-scripts --no-audit --no-fund
+      - name: Build self-contained nebula extension
+        working-directory: ui/premium
+        run: npm run build
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check deploy syntax
+        run: python -m py_compile ci/deploy_premium.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: premium-extension
+          path: |
+            ui/premium/extension/
+            ui/premium/package-lock.json
+      - name: Install Engine client
+        if: github.event_name == 'push' && vars.QLIK_CICD_ENABLED == 'true'
+        run: python -m pip install websocket-client==1.8.0
+      - name: Deploy additive pilot — no scripts, master writes or reload
+        if: github.event_name == 'push' && vars.QLIK_CICD_ENABLED == 'true'
+        env:
+          QLIK_TENANT: https://sdggroup-it.eu.qlikcloud.com
+          QLIK_API_KEY: ${{ secrets.QLIK_API_KEY }}
+        run: python ci/deploy_premium.py
