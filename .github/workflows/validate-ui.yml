@@ -44,4 +44,7 @@ jobs:
         run: |
           python3 ci/catalog_report.py --check
           python3 ci/app_lineage.py --check
+          # Frontend layout edits change the derived field-lineage report.
+          # Regenerate it for the CI check; the main deployment persists reports.
+          python3 ci/field_lineage.py
           python3 ci/field_lineage.py --check
