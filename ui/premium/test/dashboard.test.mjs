@@ -38,3 +38,17 @@ test('render uses Qlik formatted KPI texts and never invents comparisons',()=>{
   assert.ok(!html.includes('vs last'));
   assert.ok(!html.includes('Visualizzazione non valida'));
 });
+
+test('all measure and dimension IDs exist in the versioned semantic catalog',async()=>{
+  const {readFileSync}=await import('node:fs');
+  const base=new URL('../../../semantic-models/sales/catalog/',import.meta.url);
+  const knownMeasures=new Set(JSON.parse(readFileSync(new URL('measures.json',base))).measures.map(d=>d.id));
+  const knownDimensions=new Set(JSON.parse(readFileSync(new URL('dimensions.json',base))).dimensions.map(d=>d.id));
+  for(const id of measureIds)assert.ok(knownMeasures.has(id),id);
+  for(const def of sessionDefinitions()){
+    const cube=def.props.qHyperCubeDef;
+    if(cube)for(const dim of cube.qDimensions)assert.ok(knownDimensions.has(dim.qLibraryId),dim.qLibraryId);
+    const list=def.props.qListObjectDef;
+    if(list)assert.ok(knownDimensions.has(list.qLibraryId),list.qLibraryId);
+  }
+});

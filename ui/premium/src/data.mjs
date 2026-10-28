@@ -14,7 +14,7 @@ export function cube(measures, dimension) {
 export function sessionDefinitions() {
   return [
     { key: 'trend', props: { qInfo: { qType: 'qlikgpt-premium-trend' },
-      qHyperCubeDef: cube([measureIds[0]], 'qlikgpt_d_month') } },
+      qHyperCubeDef: cube([measureIds[0]], 'qlikgpt_d_yearmonth') } },
     { key: 'markets', props: { qInfo: { qType: 'qlikgpt-premium-markets' },
       qHyperCubeDef: cube([measureIds[0]], 'qlikgpt_d_market') } },
     ...filters.map(f => ({ key: f.key, props: {

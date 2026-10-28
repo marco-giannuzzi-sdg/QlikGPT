@@ -16,7 +16,7 @@ CHILD = "qlikgpt_sales_premium_canvas"
 APP = "07dfa926-4895-4fb2-af4c-eac90e9eb2cb"
 MEASURES = ["qlikgpt_shared_revenue", "qlikgpt_shared_orders",
             "qlikgpt_shared_margin", "qlikgpt_shared_margin_pct"]
-DIMENSIONS = ["qlikgpt_d_year", "qlikgpt_d_market", "qlikgpt_d_channel", "qlikgpt_d_month"]
+DIMENSIONS = ["qlikgpt_d_year", "qlikgpt_d_market", "qlikgpt_d_channel", "qlikgpt_d_yearmonth"]
 
 
 def cube(measures, dimension=None):
@@ -81,6 +81,8 @@ def protected_snapshot(qix, doc):
         result[kind] = {}
         for ident in ids:
             handle = qix.call(doc, method, {"qId": ident})["qReturn"]["qHandle"]
+            if not isinstance(handle, int) or handle <= 0:
+                raise RuntimeError("Required master item missing: " + ident)
             result[kind][ident] = qix.call(handle, "GetProperties", [])["qProp"]
     return result
 
@@ -126,7 +128,7 @@ def deploy(qix, doc):
     if not values or len(values[0]) != 4 or any(cell.get("qIsNull") for cell in values[0]):
         raise RuntimeError("Four non-null governed KPI values required")
     # Query the same master-bound chart/filter definitions used by the renderer.
-    for dimension in ("qlikgpt_d_month", "qlikgpt_d_market"):
+    for dimension in ("qlikgpt_d_yearmonth", "qlikgpt_d_market"):
         model = qix.call(doc, "CreateSessionObject", {"qProp": {
             "qInfo": {"qType": "qlikgpt-premium-audit"}, "qHyperCubeDef": cube([MEASURES[0]], dimension)}})["qReturn"]["qHandle"]
         chart = qix.call(model, "GetLayout", [])["qLayout"]["qHyperCube"]
