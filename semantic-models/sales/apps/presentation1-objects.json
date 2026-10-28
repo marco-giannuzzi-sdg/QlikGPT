@@ -203,7 +203,7 @@
         "visualization": "text-image",
         "title": "QlikGPT / Sales Intelligence",
         "showTitles": false,
-        "markdown": "%[Sales Intelligence](6)^[EXECUTIVE OVERVIEW • GOVERNED BI](2)",
+        "markdown": "%[QlikGPT  /  Sales Intelligence](6)^[EXECUTIVE OVERVIEW • GOVERNED BI](2)",
         "images": [],
         "responsive": true,
         "background": {
