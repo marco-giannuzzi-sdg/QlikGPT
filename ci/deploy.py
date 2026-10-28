@@ -336,7 +336,7 @@ def main() -> None:
         from semantic_catalog import prune_unsubscribed_measures, read_json, CATALOG
         from deploy_visuals import Qix
         catalog = read_json(CATALOG)
-        subscriptions = set(read_json(ROOT / "apps/presentation1.json")["catalogMeasures"])
+        subscriptions = set(read_json(MODEL.presentation_manifests()["presentation"])["catalogMeasures"])
         qix = Qix(state["presentation"])
         try:
             doc = qix.call(-1, "OpenDoc",
