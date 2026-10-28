@@ -87,6 +87,15 @@ def protected_snapshot(qix, doc):
     return result
 
 
+def verify_master_bindings(actual, expected):
+    # Engine adds default fields to NxMeasure on readback. Compare semantic IDs,
+    # not byte-for-byte JSON equality with a minimal creation payload.
+    if [m.get("qLibraryId") for m in actual] != [m["qLibraryId"] for m in expected]:
+        raise RuntimeError("KPI master bindings did not persist")
+    if any(m.get("qDef", {}).get("qDef", "").strip() for m in actual):
+        raise RuntimeError("Unexpected inline KPI expression")
+
+
 def deploy(qix, doc):
     from deploy_visuals import find_child
     before = protected_snapshot(qix, doc)
@@ -121,8 +130,7 @@ def deploy(qix, doc):
     else:
         qix.call(handle, "SetProperties", [visual])
     live = qix.call(handle, "GetProperties", [])["qProp"]
-    if live["qHyperCubeDef"]["qMeasures"] != visual["qHyperCubeDef"]["qMeasures"]:
-        raise RuntimeError("KPI master bindings did not persist")
+    verify_master_bindings(live["qHyperCubeDef"]["qMeasures"], visual["qHyperCubeDef"]["qMeasures"])
     layout = qix.call(handle, "GetLayout", [])["qLayout"]
     values = layout.get("qHyperCube", {}).get("qDataPages", [{}])[0].get("qMatrix", [])
     if not values or len(values[0]) != 4 or any(cell.get("qIsNull") for cell in values[0]):
