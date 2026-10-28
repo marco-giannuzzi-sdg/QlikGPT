@@ -133,6 +133,8 @@ jobs:
           python3 ci/deploy.py
 
       - name: Publish QlikGPT Executive Premium theme and assign to Sales Overview
+        # Legacy/optional: disabled by default. Native Qlik object styling is the standard.
+        if: ${{ vars.QLIK_CUSTOM_THEME_ENABLED == 'true' }}
         id: qlik_theme
         shell: bash
         run: |
