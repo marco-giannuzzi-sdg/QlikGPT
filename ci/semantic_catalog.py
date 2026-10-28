@@ -259,7 +259,7 @@ def determine_impacted(catalog: dict, manifests: dict, changed: set[str],
         }
         if any(p in changed for p in candidates if p):
             affected.add(key)
-    if any(path.startswith("ci/") or path.startswith(".github/") for path in changed):
+    if any(path.startswith(("ci/", ".github/", "ui/")) for path in changed):
         affected |= set(manifests)
     return affected
 

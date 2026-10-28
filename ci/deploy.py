@@ -320,7 +320,7 @@ def main() -> None:
     # Rebuild the original Sales Overview only when its own frontend or CI changes.
     refresh_p1_frontend = (
         not files_changed or
-        any(path.startswith((f"{MODEL.prefix}/apps/presentation1", "ci/", ".github/"))
+        any(path.startswith((f"{MODEL.prefix}/apps/presentation1", "ci/", ".github/", "ui/"))
             for path in files_changed)
     )
     if refresh_p1_frontend:

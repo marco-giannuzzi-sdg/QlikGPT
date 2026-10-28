@@ -151,6 +151,13 @@ class CatalogValidationTests(unittest.TestCase):
                 catalog, self.manifests, {"semantic-models/sales/catalog/measures.json"}, False, False)
         self.assertEqual(result, {"presentation"})
 
+    def test_global_ui_template_change_impacts_both_presentations(self):
+        catalog = sc.validate_catalog(self.catalog, self.manifests)
+        impacted = sc.determine_impacted(
+            catalog, self.manifests, {"ui/design-tokens.json"}, False, False
+        )
+        self.assertEqual(impacted, {"presentation", "presentation2"})
+
     def test_unrelated_frontend_has_no_semantic_changes(self):
         catalog = sc.validate_catalog(self.catalog, self.manifests)
         result = sc.determine_impacted(
