@@ -7,13 +7,13 @@
     "qExtendsId": "",
     "qMetaDef": {
       "title": "Sales Intelligence | Overview",
-      "description": "Executive dashboard · 12 mesi completi · dati dimostrativi"
+      "description": "QlikGPT Executive Premium · Model-governed Sales Overview"
     },
-    "title": "Sales Intelligence | Overview",
-    "description": "Executive dashboard · 12 mesi completi · dati dimostrativi",
+    "title": "Sales Intelligence | Executive Overview",
+    "description": "Executive Premium dashboard · KPI e analisi governate",
     "rank": 0,
     "columns": 24,
-    "rows": 13,
+    "rows": 18,
     "gridMode": "edit",
     "cells": [
       {
@@ -21,139 +21,167 @@
         "type": "text-image",
         "col": 0,
         "row": 0,
-        "colspan": 11,
-        "rowspan": 1,
-        "bounds": {
-          "x": 0,
-          "y": 0,
-          "width": 45.833333333333336,
-          "height": 7.6923076923076925
-        }
-      },
-      {
-        "name": "qlikgpt_filter_panel",
-        "type": "filterpane",
-        "col": 11,
-        "row": 0,
-        "colspan": 13,
-        "rowspan": 1,
-        "bounds": {
-          "x": 45.833333333333336,
-          "y": 0,
-          "width": 54.166666666666664,
-          "height": 7.6923076923076925
-        }
-      },
-      {
-        "name": "qlikgpt_kpi_revenue",
-        "type": "kpi",
-        "col": 0,
-        "row": 2,
-        "colspan": 6,
+        "colspan": 18,
         "rowspan": 2,
         "bounds": {
           "x": 0,
-          "y": 15.384615384615385,
-          "width": 25,
-          "height": 15.384615384615385
+          "y": 0,
+          "width": 75,
+          "height": 11.11111111111111
         }
       },
       {
-        "name": "qlikgpt_kpi_orders",
-        "type": "kpi",
-        "col": 6,
-        "row": 2,
-        "colspan": 6,
-        "rowspan": 2,
-        "bounds": {
-          "x": 25,
-          "y": 15.384615384615385,
-          "width": 25,
-          "height": 15.384615384615385
-        }
-      },
-      {
-        "name": "qlikgpt_kpi_margin",
-        "type": "kpi",
-        "col": 12,
-        "row": 2,
-        "colspan": 6,
-        "rowspan": 2,
-        "bounds": {
-          "x": 50,
-          "y": 15.384615384615385,
-          "width": 25,
-          "height": 15.384615384615385
-        }
-      },
-      {
-        "name": "qlikgpt_kpi_margin_pct",
-        "type": "kpi",
+        "name": "qlikgpt_nav_shared_kpis",
+        "type": "button",
         "col": 18,
-        "row": 2,
+        "row": 0,
         "colspan": 6,
         "rowspan": 2,
         "bounds": {
           "x": 75,
-          "y": 15.384615384615385,
+          "y": 0,
           "width": 25,
-          "height": 15.384615384615385
-        }
-      },
-      {
-        "name": "qlikgpt_chart_month",
-        "type": "linechart",
-        "col": 0,
-        "row": 4,
-        "colspan": 15,
-        "rowspan": 9,
-        "bounds": {
-          "x": 0,
-          "y": 30.76923076923077,
-          "width": 62.5,
-          "height": 69.23076923076923
-        }
-      },
-      {
-        "name": "qlikgpt_chart_market",
-        "type": "barchart",
-        "col": 15,
-        "row": 4,
-        "colspan": 9,
-        "rowspan": 9,
-        "bounds": {
-          "x": 62.5,
-          "y": 30.76923076923077,
-          "width": 37.5,
-          "height": 69.23076923076923
+          "height": 11.11111111111111
         }
       },
       {
         "name": "qlikgpt_navigation_hint",
         "type": "text-image",
         "col": 0,
-        "row": 1,
-        "colspan": 17,
+        "row": 2,
+        "colspan": 24,
         "rowspan": 1,
         "bounds": {
           "x": 0,
-          "y": 7.6923076923076925,
-          "width": 70.83333333333333,
-          "height": 7.6923076923076925
+          "y": 11.11111111111111,
+          "width": 100,
+          "height": 5.555555555555555
         }
       },
       {
-        "name": "qlikgpt_nav_shared_kpis",
-        "type": "button",
-        "col": 17,
-        "row": 1,
-        "colspan": 7,
+        "name": "qlikgpt_filter_panel",
+        "type": "filterpane",
+        "col": 0,
+        "row": 3,
+        "colspan": 24,
+        "rowspan": 2,
+        "bounds": {
+          "x": 0,
+          "y": 16.666666666666668,
+          "width": 100,
+          "height": 11.11111111111111
+        }
+      },
+      {
+        "name": "qlikgpt_kpi_section",
+        "type": "text-image",
+        "col": 0,
+        "row": 5,
+        "colspan": 24,
         "rowspan": 1,
         "bounds": {
-          "x": 70.83333333333333,
-          "y": 7.6923076923076925,
-          "width": 29.166666666666668,
-          "height": 7.6923076923076925
+          "x": 0,
+          "y": 27.77777777777778,
+          "width": 100,
+          "height": 5.555555555555555
+        }
+      },
+      {
+        "name": "qlikgpt_kpi_revenue",
+        "type": "kpi",
+        "col": 0,
+        "row": 6,
+        "colspan": 6,
+        "rowspan": 3,
+        "bounds": {
+          "x": 0,
+          "y": 33.333333333333336,
+          "width": 25,
+          "height": 16.666666666666668
+        }
+      },
+      {
+        "name": "qlikgpt_kpi_orders",
+        "type": "kpi",
+        "col": 6,
+        "row": 6,
+        "colspan": 6,
+        "rowspan": 3,
+        "bounds": {
+          "x": 25,
+          "y": 33.333333333333336,
+          "width": 25,
+          "height": 16.666666666666668
+        }
+      },
+      {
+        "name": "qlikgpt_kpi_margin",
+        "type": "kpi",
+        "col": 12,
+        "row": 6,
+        "colspan": 6,
+        "rowspan": 3,
+        "bounds": {
+          "x": 50,
+          "y": 33.333333333333336,
+          "width": 25,
+          "height": 16.666666666666668
+        }
+      },
+      {
+        "name": "qlikgpt_kpi_margin_pct",
+        "type": "kpi",
+        "col": 18,
+        "row": 6,
+        "colspan": 6,
+        "rowspan": 3,
+        "bounds": {
+          "x": 75,
+          "y": 33.333333333333336,
+          "width": 25,
+          "height": 16.666666666666668
+        }
+      },
+      {
+        "name": "qlikgpt_insights_section",
+        "type": "text-image",
+        "col": 0,
+        "row": 9,
+        "colspan": 24,
+        "rowspan": 1,
+        "bounds": {
+          "x": 0,
+          "y": 50,
+          "width": 100,
+          "height": 5.555555555555555
+        }
+      },
+      {
+        "name": "qlikgpt_chart_month",
+        "type": "linechart",
+        "col": 0,
+        "row": 10,
+        "colspan": 15,
+        "rowspan": 8,
+        "bounds": {
+          "x": 0,
+          "y": 55.55555555555556,
+          "width": 62.5,
+          "height": 44.44444444444444
+        }
+      },
+      {
+        "name": "qlikgpt_chart_market",
+        "type": "barchart",
+        "col": 15,
+        "row": 10,
+        "colspan": 9,
+        "rowspan": 8,
+        "bounds": {
+          "x": 62.5,
+          "y": 55.55555555555556,
+          "width": 37.5,
+          "height": 44.44444444444444
         }
       }
     ],
@@ -173,13 +201,89 @@
         },
         "qExtendsId": "",
         "visualization": "text-image",
-        "title": "QlikGPT | Sales Intelligence",
+        "title": "Sales Intelligence · Executive Overview",
         "showTitles": false,
-        "markdown": "## QlikGPT  |  Sales Intelligence\n**SALES OVERVIEW**  ·  Executive Dashboard",
+        "markdown": "%[QlikGPT  /  SALES INTELLIGENCE](4)^[EXECUTIVE OVERVIEW  ·  DECISION INTELLIGENCE](inherit)",
         "images": [],
         "responsive": true,
         "background": {
-          "color": "#142B49"
+          "color": "#EDF3FF"
+        },
+        "style": {
+          "background": {
+            "useColorExpression": false,
+            "color": {
+              "index": -1,
+              "color": "#EDF3FF"
+            }
+          }
+        }
+      },
+      {
+        "qInfo": {
+          "qId": "qlikgpt_nav_shared_kpis",
+          "qType": "button"
+        },
+        "qExtendsId": "",
+        "visualization": "button",
+        "title": "Esplora KPI condivisi",
+        "showTitles": false,
+        "showDetails": false,
+        "actions": [],
+        "navigation": {
+          "action": "openWebsite",
+          "websiteUrl": "https://sdggroup-it.eu.qlikcloud.com/sense/app/04280b14-6ba5-4fe9-90d6-2ff8fa1c994f",
+          "sameWindow": false
+        },
+        "style": {
+          "label": "ESPLORA KPI CONDIVISI  →",
+          "showLabel": true,
+          "font": {
+            "fontFamily": "Arial, Helvetica, sans-serif",
+            "color": {
+              "useColorExpression": false,
+              "color": {
+                "index": -1,
+                "color": "#FFFFFF"
+              }
+            }
+          },
+          "background": {
+            "useColorExpression": false,
+            "color": {
+              "index": -1,
+              "color": "#142840"
+            }
+          },
+          "border": {
+            "radius": 0.16,
+            "width": 0
+          }
+        }
+      },
+      {
+        "qInfo": {
+          "qId": "qlikgpt_navigation_hint",
+          "qType": "text-image"
+        },
+        "qExtendsId": "",
+        "visualization": "text-image",
+        "title": "qlikgpt_navigation_hint",
+        "showTitles": false,
+        "markdown": "OVERVIEW   /   PERFORMANCE   /   GOVERNED METRICS        •        Filtra e scopri gli insight in tempo reale",
+        "images": [],
+        "responsive": true,
+        "background": {
+          "color": "#FFFFFF"
+        },
+        "style": {
+          "background": {
+            "useColorExpression": false,
+            "color": {
+              "index": -1,
+              "color": "#FFFFFF"
+            }
+          }
         }
       },
       {
@@ -189,7 +293,7 @@
         },
         "qExtendsId": "",
         "visualization": "filterpane",
-        "title": "Filtri · seleziona per restringere",
+        "title": "FILTRI · Anno / Mercato / Canale",
         "showTitles": false,
         "qChildListDef": {
           "qData": {
@@ -203,7 +307,33 @@
             "useColorExpression": false,
             "color": {
               "index": -1,
-              "color": "#F5F8FC"
+              "color": "#FFFFFF"
+            }
+          }
+        }
+      },
+      {
+        "qInfo": {
+          "qId": "qlikgpt_kpi_section",
+          "qType": "text-image"
+        },
+        "qExtendsId": "",
+        "visualization": "text-image",
+        "title": "qlikgpt_kpi_section",
+        "showTitles": false,
+        "showDetails": false,
+        "markdown": "01  /  BUSINESS PULSE     •     Indicatori chiave aggiornati dalle selezioni",
+        "images": [],
+        "responsive": true,
+        "background": {
+          "color": "#F5F7FB"
+        },
+        "style": {
+          "background": {
+            "useColorExpression": false,
+            "color": {
+              "index": -1,
+              "color": "#F5F7FB"
             }
           }
         }
@@ -238,19 +368,19 @@
             }
           ]
         },
-        "subtitle": "",
+        "subtitle": "01  /  COMMERCIAL VALUE",
         "version": "1.0.0",
         "showDetails": false,
         "textAlign": "left",
         "layoutBehavior": "Responsive",
-        "fontSize": "S",
+        "fontSize": "M",
         "showMeasureTitle": false,
         "style": {
           "background": {
             "useColorExpression": false,
             "color": {
               "index": -1,
-              "color": "#F5F8FC"
+              "color": "#FFFFFF"
             }
           }
         }
@@ -285,19 +415,19 @@
             }
           ]
         },
-        "subtitle": "",
+        "subtitle": "02  /  SALES VOLUME",
         "version": "1.0.0",
         "showDetails": false,
         "textAlign": "left",
         "layoutBehavior": "Responsive",
-        "fontSize": "S",
+        "fontSize": "M",
         "showMeasureTitle": false,
         "style": {
           "background": {
             "useColorExpression": false,
             "color": {
               "index": -1,
-              "color": "#F5F8FC"
+              "color": "#F0F5FF"
             }
           }
         }
@@ -332,19 +462,19 @@
             }
           ]
         },
-        "subtitle": "",
+        "subtitle": "03  /  PROFITABILITY",
         "version": "1.0.0",
         "showDetails": false,
         "textAlign": "left",
         "layoutBehavior": "Responsive",
-        "fontSize": "S",
+        "fontSize": "M",
         "showMeasureTitle": false,
         "style": {
           "background": {
             "useColorExpression": false,
             "color": {
               "index": -1,
-              "color": "#F5F8FC"
+              "color": "#FFFFFF"
             }
           }
         }
@@ -379,19 +509,45 @@
             }
           ]
         },
-        "subtitle": "",
+        "subtitle": "04  /  MARGIN RATIO",
         "version": "1.0.0",
         "showDetails": false,
         "textAlign": "left",
         "layoutBehavior": "Responsive",
-        "fontSize": "S",
+        "fontSize": "M",
         "showMeasureTitle": false,
         "style": {
           "background": {
             "useColorExpression": false,
             "color": {
               "index": -1,
-              "color": "#F5F8FC"
+              "color": "#EAF8F6"
+            }
+          }
+        }
+      },
+      {
+        "qInfo": {
+          "qId": "qlikgpt_insights_section",
+          "qType": "text-image"
+        },
+        "qExtendsId": "",
+        "visualization": "text-image",
+        "title": "qlikgpt_insights_section",
+        "showTitles": false,
+        "showDetails": false,
+        "markdown": "02  /  PERFORMANCE EXPLORER     •     Andamento, confronto e distribuzione",
+        "images": [],
+        "responsive": true,
+        "background": {
+          "color": "#F5F7FB"
+        },
+        "style": {
+          "background": {
+            "useColorExpression": false,
+            "color": {
+              "index": -1,
+              "color": "#F5F7FB"
             }
           }
         }
@@ -403,7 +559,7 @@
         },
         "qExtendsId": "",
         "visualization": "linechart",
-        "title": "TREND DEL FATTURATO",
+        "title": "Andamento del fatturato",
         "showTitles": true,
         "qHyperCubeDef": {
           "qDimensions": [
@@ -455,7 +611,7 @@
           ]
         },
         "version": "1.0.0",
-        "subtitle": "Ultimi 12 mesi completi · ottobre 2025 – settembre 2026",
+        "subtitle": "Evoluzione mensile · 12 mesi completi",
         "showDetails": false,
         "showDisclaimer": false,
         "legend": {
@@ -469,7 +625,7 @@
           "useBaseColors": "off",
           "paletteColor": {
             "index": -1,
-            "color": "#0E7490"
+            "color": "#3365D5"
           }
         },
         "lineType": "line",
@@ -494,10 +650,10 @@
           {
             "key": "line",
             "style": {
-              "dataPointSize": 6,
+              "dataPointSize": 5,
               "lineThickness": 3,
               "lineType": "solid",
-              "lineCurve": "monotone"
+              "lineCurve": "linear"
             }
           }
         ],
@@ -505,6 +661,15 @@
         "gridLine": {
           "auto": false,
           "spacing": 2
+        },
+        "style": {
+          "background": {
+            "useColorExpression": false,
+            "color": {
+              "index": -1,
+              "color": "#FFFFFF"
+            }
+          }
         }
       },
       {
@@ -514,7 +679,7 @@
         },
         "qExtendsId": "",
         "visualization": "barchart",
-        "title": "RICAVI PER MERCATO",
+        "title": "Performance per mercato",
         "showTitles": true,
         "qHyperCubeDef": {
           "qDimensions": [
@@ -569,7 +734,7 @@
           ]
         },
         "version": "1.0.0",
-        "subtitle": "Classifica · valore in EUR",
+        "subtitle": "Confronto dei ricavi per area",
         "showDetails": false,
         "showDisclaimer": false,
         "legend": {
@@ -583,7 +748,7 @@
           "useBaseColors": "off",
           "paletteColor": {
             "index": -1,
-            "color": "#0E7490"
+            "color": "#16A39A"
           }
         },
         "orientation": "horizontal",
@@ -610,58 +775,13 @@
           "autoMinMax": true,
           "dock": "near"
         },
-        "scrollbar": "none"
-      },
-      {
-        "qInfo": {
-          "qId": "qlikgpt_navigation_hint",
-          "qType": "text-image"
-        },
-        "qExtendsId": "",
-        "visualization": "text-image",
-        "title": "qlikgpt_navigation_hint",
-        "showTitles": false,
-        "markdown": "**SALES ANALYTICS**  ·  Overview  /  KPI condivisi  /  Esplora i dati con i filtri",
-        "images": [],
-        "responsive": true,
-        "background": {
-          "color": "#FFFFFF"
-        }
-      },
-      {
-        "qInfo": {
-          "qId": "qlikgpt_nav_shared_kpis",
-          "qType": "button"
-        },
-        "qExtendsId": "",
-        "visualization": "button",
-        "title": "Apri KPI condivisi ↗",
-        "showTitles": false,
-        "showDetails": false,
-        "actions": [],
-        "navigation": {
-          "action": "openWebsite",
-          "websiteUrl": "https://sdggroup-it.eu.qlikcloud.com/sense/app/04280b14-6ba5-4fe9-90d6-2ff8fa1c994f",
-          "sameWindow": false
-        },
+        "scrollbar": "none",
         "style": {
-          "label": "Apri KPI condivisi ↗",
-          "showLabel": true,
-          "font": {
-            "fontFamily": "Arial, Helvetica, sans-serif",
-            "color": {
-              "useColorExpression": false,
-              "color": {
-                "index": -1,
-                "color": "#142B49"
-              }
-            }
-          },
           "background": {
             "useColorExpression": false,
             "color": {
               "index": -1,
-              "color": "#F5F8FC"
+              "color": "#FFFFFF"
             }
           }
         }
