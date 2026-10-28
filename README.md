@@ -61,6 +61,12 @@ Per avviare reload espliciti: [GitHub Actions — QlikGPT](https://github.com/ma
 
 GitHub resta la fonte autorevole delle misure, dimensioni, variabili e dashboard. Le app sottoscrivono i master item tramite `qLibraryId`. I report di lineage e Usage sono derivati dai file versionati (non da telemetria runtime del tenant).
 
+## Native Executive Overview V2 — il template predefinito
+
+Il frontend delle Presentation è ora **Qlik-native**: [UI Kit V2](ui/README.md) + [esempio Sales](semantic-models/sales/apps/presentation1-objects.json). Colori, sfondi, bordi, ombre, KPI, grafici, geometria del foglio e filtri sono governati tramite proprietà versionate su GitHub e distribuite da QIX; **non è necessario installare né selezionare un tema personalizzato**.
+
+Il deploy ripristina il tema Qlik built-in `horizon` solo se la demo usa ancora il precedente `qlikgpt-executive-v1`, mantenendo una testata brandizzata tramite proprietà applicative native. Il vecchio tema resta archiviato e il suo upload automatico è disabilitato per default.
+
 ## QlikGPT Executive Premium 1.1 — Frontend Template
 
 Il **[Design System globale](ui/README.md)** (Executive Premium 1.1, ID di compatibilità `qlikgpt-executive-v1`) governa palette, sfondi, tipografia, griglia, header, navigazione e KPI delle nuove Presentation. Il [tema custom Qlik](ui/themes/qlikgpt-executive-v1/theme.json) è versionato e viene ora pubblicato tramite [Qlik CLI + QIX](ci/deploy_theme.py) nell’ultimo step del workflow, assegnandolo alla prima Presentation **solo se** la CI Qlik è abilitata e la API key ha il permesso di gestione temi. Il merge da solo non certifica che il tema sia attivo: verificare il job GitHub Actions e la resa in Qlik.
