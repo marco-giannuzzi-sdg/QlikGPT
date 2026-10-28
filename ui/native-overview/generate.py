@@ -137,18 +137,21 @@ def make():
             props["qHyperCubeDef"]["qMeasures"][0]["qSortBy"] = {"qSortByNumeric": -1}
         add(entry(props), col, 10, width, 13)
     add(text("detail", "SALES BREAKDOWN", size=11), 0, 23, 24, 1)
-    table = common("market_detail", "table", "Dettaglio per mercato", general())
+    table = common("market_detail", "table", "Dettaglio vendite", general())
     table.update({"qHyperCubeDef": cube(MEASURES, "qlikgpt_d_market"),
-        "subtitle": "Ricavi, volumi e redditività a confronto",
+        "subtitle": "Ricavi, volumi e redditività per mercato e canale",
         "totals": {"show": True, "position": "top", "label": "Totale"},
         "scrolling": {"horizontal": True, "keepFirstColumnInView": True},
-        "multiline": {"wrapTextInHeaders": False, "wrapTextInCells": False},
-        "columnOrder": [0, 1, 2, 3, 4], "columnWidths": [-1, -1, -1, -1, -1]})
-    table["qHyperCubeDef"]["qInterColumnSortOrder"] = [1, 0, 2, 3, 4]
+        "multiline": {"wrapTextInHeaders": False, "wrapTextInCells": False}})
+    table["qHyperCubeDef"]["qDimensions"].append({"qLibraryId": "qlikgpt_d_channel", "qNullSuppression": True})
+    table["qHyperCubeDef"].update({"qColumnOrder": [0, 1, 2, 3, 4, 5],
+        "columnOrder": [0, 1, 2, 3, 4, 5], "columnWidths": [-1, -1, -1, -1, -1, -1]})
+    table["qHyperCubeDef"]["qInitialDataFetch"][0]["qWidth"] = 6
+    table["qHyperCubeDef"]["qInterColumnSortOrder"] = [2, 0, 1, 3, 4, 5]
     table["qHyperCubeDef"]["qMeasures"][0]["qSortBy"] = {"qSortByNumeric": -1}
     table["components"].append({"key": "theme", "content": {
-        "fontSize": "13px", "fontColor": color(C["navy"])},
-        "header": {"fontSize": "12px", "fontColor": color(C["muted"])}})
+        "fontSize": 13, "fontColor": color(C["navy"])},
+        "header": {"fontSize": 12, "fontColor": color(C["muted"])}})
     add(entry(table), 0, 24, 15, 13)
     donut = common("channels", "piechart", "Mix per canale", general())
     donut.update({"qHyperCubeDef": cube([MEASURES[0]], "qlikgpt_d_channel"),
@@ -156,8 +159,12 @@ def make():
         "donut": {"showAsDonut": True}, "dimensionTitle": False,
         "dataPoint": {"auto": False, "labelMode": "share"},
         "legend": {"show": True, "dock": "right", "showTitle": False},
-        "color": {"auto": False, "mode": "byDimension", "persistent": True,
-                  "useBaseColors": "off", "paletteColor": color(C["blue"])}})
+        "color": {"auto": False, "mode": "byExpression", "expressionIsColor": True,
+                  "colorExpression": "=If(Channel='Online',RGB(51,101,213),If(Channel='Partner',RGB(22,163,154),RGB(20,40,64)))",
+                  "useBaseColors": "off"}})
+    donut["qHyperCubeDef"]["qMeasures"][0]["qAttributeExpressions"] = [{
+        "id": "colorByExpression",
+        "qExpression": "If(Channel='Online',RGB(51,101,213),If(Channel='Partner',RGB(22,163,154),RGB(20,40,64)))"}]
     donut["qHyperCubeDef"]["qInterColumnSortOrder"] = [1, 0]
     donut["qHyperCubeDef"]["qMeasures"][0]["qSortBy"] = {"qSortByNumeric": -1}
     donut["components"].append({"key": "pie", "style": {

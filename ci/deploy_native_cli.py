@@ -134,7 +134,7 @@ def main():
             chart = data[ident]
             rows = [row for page in chart["qDataPages"] for row in page["qMatrix"]]
             if len(rows) != chart["qSize"]["qcy"] or not math.isclose(
-                    sum(row[1]["qNum"] for row in rows), revenue, rel_tol=1e-9, abs_tol=0.01):
+                    sum(row[len(chart["qDimensionInfo"])]["qNum"] for row in rows), revenue, rel_tol=1e-9, abs_tol=0.01):
                 raise RuntimeError("Breakdown revenue does not reconcile with KPI: " + ident)
         print("BREAKDOWN REVENUE RECONCILED: table and donut equal governed revenue KPI", flush=True)
         if protected_snapshot(qix, doc) != before:

@@ -101,3 +101,11 @@ class NativeCliTests(unittest.TestCase):
         self.assertEqual(after["qProperty"], dict(previous["qProperty"], **TITLE_STYLE))
         self.assertEqual(after["qChildren"], previous["qChildren"])
         self.assertEqual(previous["qProperty"]["sheetTitleColor"], "#000000")
+
+    def test_native_table_column_metadata_is_inside_the_hypercube(self):
+        table = next(p for p in self.objects if p["qInfo"]["qType"] == "table")
+        cube = table["qHyperCubeDef"]
+        width = len(cube["qDimensions"]) + len(cube["qMeasures"])
+        self.assertEqual(cube["columnOrder"], list(range(width)))
+        self.assertEqual(len(cube["columnWidths"]), width)
+        self.assertNotIn("columnOrder", table)
