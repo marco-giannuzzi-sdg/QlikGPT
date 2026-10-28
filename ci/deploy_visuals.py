@@ -9,6 +9,7 @@ import json
 import math
 import subprocess
 import tempfile
+import time
 import os
 from pathlib import Path
 import sys
@@ -30,10 +31,18 @@ class Qix:
         if not tenant.startswith("https://") or not token:
             raise RuntimeError("Qlik tenant/API key is not configured")
         url = "wss://" + tenant.removeprefix("https://") + "/app/" + urllib.parse.quote(app_id, safe="")
-        self.ws = websocket.create_connection(
-            url, header={"Authorization": "Bearer " + token},
-            origin=tenant, timeout=45,
-        )
+        for attempt in range(3):
+            try:
+                self.ws = websocket.create_connection(
+                    url, header={"Authorization": "Bearer " + token},
+                    origin=tenant, timeout=45,
+                )
+                break
+            except (TimeoutError, ConnectionError, OSError):
+                if attempt == 2:
+                    raise
+                print("Transient Qlik connection failure; reconnecting before any RPC", flush=True)
+                time.sleep(attempt + 1)
         self.request_id = 0
 
     def call(self, handle: int, method: str, params: dict | list | None = None) -> dict:

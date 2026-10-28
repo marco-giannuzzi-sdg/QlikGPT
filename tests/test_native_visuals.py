@@ -102,6 +102,31 @@ class NativeSheetSyncTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"column metadata"):
             validate_tree(tree,manifest)
 
+    def test_connection_retry_does_not_replay_engine_operations(self):
+        from types import SimpleNamespace
+        from unittest.mock import Mock, patch
+        from deploy_visuals import Qix
+        socket=Mock()
+        connect=Mock(side_effect=[TimeoutError("network"),socket])
+        with patch.dict(sys.modules,{"websocket":SimpleNamespace(create_connection=connect)}), \
+             patch.dict("os.environ",{"QLIK_TENANT":"https://example.qlikcloud.com","QLIK_API_KEY":"test-only"}), \
+             patch("deploy_visuals.time.sleep"):
+            client=Qix("test-app")
+        self.assertEqual(connect.call_count,2)
+        socket.send.assert_not_called()
+        self.assertEqual(client.request_id,0)
+
+    def test_non_network_connection_error_is_not_retried(self):
+        from types import SimpleNamespace
+        from unittest.mock import Mock, patch
+        from deploy_visuals import Qix
+        connect=Mock(side_effect=ValueError("invalid handshake"))
+        with patch.dict(sys.modules,{"websocket":SimpleNamespace(create_connection=connect)}), \
+             patch.dict("os.environ",{"QLIK_TENANT":"https://example.qlikcloud.com","QLIK_API_KEY":"test-only"}):
+            with self.assertRaises(ValueError):
+                Qix("test-app")
+        self.assertEqual(connect.call_count,1)
+
     def test_generator_cannot_depend_on_custom_theme_files(self):
         self.assertEqual(ui_template.tokens()["grid"]["columns"],24)
         sc=ui_template.sheet(
