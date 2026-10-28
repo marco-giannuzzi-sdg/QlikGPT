@@ -17,7 +17,7 @@ The [second native sheet](../apps/presentation2-objects.json) adopts the same pa
 ## How to complete the visual rollout
 
 1. Review and merge the Executive Premium PR to `main`, after the static checks. With `QLIK_CICD_ENABLED=true`, the existing GitHub workflow can synchronize the native QIX frontend **without reloading data**.
-2. In the Qlik tenant, upload the global custom theme ZIP built from `ui/themes/qlikgpt-executive-v1/` and select it from **App settings > Appearance > Application theme**. This action is not automated by the current repository.
+2. The guarded GitHub workflow publishes the versioned theme through `ci/deploy_theme.py` (Qlik CLI create/patch), then saves `appprops.theme` on the first Presentation via QIX. Check the job result and theme management permission. If the workflow is skipped, an administrator can still upload the ZIP manually and choose it under **App settings > Appearance > Application theme**.
 3. Open [Sales Overview](https://sdggroup-it.eu.qlikcloud.com/sense/app/07dfa926-4895-4fb2-af4c-eac90e9eb2cb) and verify header readability, filter alignment, KPI layout, navigation, title styles, line chart and market sorting.
 4. Only after visual approval roll out to client-facing apps. The source Qlik objects and the custom theme are separate layers.
 
