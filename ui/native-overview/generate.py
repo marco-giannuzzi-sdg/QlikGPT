@@ -80,15 +80,9 @@ def make():
                       "col": col, "row": row, "colspan": width, "rowspan": height,
                       "bounds": {"x": col*100/COLS, "y": row*100/ROWS,
                                  "width": width*100/COLS, "height": height*100/ROWS}})
-    header = text("header", "Sales Intelligence", "QLIKGPT / EXECUTIVE ANALYTICS", C["navy"], 26)
-    head_style = header["qProperty"]["components"][0]
-    head_style["borderRadius"] = "16px"
-    head_style["title"]["main"] = font(26, "#FFFFFF", True)
-    head_style["title"]["subTitle"] = font(11, "#BDCCE0")
-    add(header, 0, 0, 24, 3)
-    add(text("intro", "Executive Overview", "Una visione chiara delle performance di vendita.", size=25), 0, 3, 11, 3)
+    add(text("intro", "Executive Overview", "Una visione chiara delle performance di vendita.", size=25), 0, 0, 11, 3)
     for i, (key, label, dimension) in enumerate(FILTERS):
-        props = common("filter_" + key, "filterpane", label, general(decorated=True, title_size=12))
+        props = common("filter_" + key, "filterpane", label, general(C["canvas"], decorated=False, title_size=12))
         props["showTitles"] = False
         props["qChildListDef"] = {"qData": {"title": "/title", "id": "/qInfo/qId", "type": "/qInfo/qType"}}
         listing = {"qInfo": {"qId": PREFIX + "list_" + key, "qType": "listbox"},
@@ -96,26 +90,26 @@ def make():
             "searchEnabled": True, "autoConfirm": True,
             "qListObjectDef": {"qLibraryId": dimension, "qStateName": "$",
                 "qInitialDataFetch": [{"qTop": 0, "qLeft": 0, "qWidth": 1, "qHeight": 1000}]},
-            "layoutOptions": {"dataLayout": "singleColumn", "dense": False},
+            "layoutOptions": {"dataLayout": "singleColumn", "dense": True},
             "components": [{"key": "theme", "header": {"fontFamily": "Arial", "fontSize": "12px",
                 "fontColor": color(C["navy"])}, "content": {"fontFamily": "Arial", "fontSize": "12px"}}]}
-        add(entry(props, [entry(listing)]), 12 + i*4, 4, 4, 2)
-    add(text("pulse", "BUSINESS PULSE", size=11), 0, 6, 24, 1)
+        add(entry(props, [entry(listing)]), 12 + i*4, 1, 4, 1)
+    add(text("pulse", "BUSINESS PULSE", size=11), 0, 3, 24, 1)
     labels = ["Fatturato", "Ordini", "Margine lordo", "Margine %"]
     notes = ["Valore commerciale", "Volume delle vendite", "Redditività delle vendite", "Margine sul fatturato"]
     for i, (mid, label, note) in enumerate(zip(MEASURES, labels, notes)):
         style = general(title_size=13, title_color=C["muted"])
         style["bgImage"] = icon_image(i)
         props = common("kpi_" + str(i), "kpi", label, style)
-        props.update({"qHyperCubeDef": cube([mid]), "textAlign": "left", "layoutBehavior": "fixed",
+        props.update({"qHyperCubeDef": cube([mid]), "textAlign": "center", "layoutBehavior": "fixed",
             "fontSize": "S", "showMeasureTitle": False, "showSecondMeasureTitle": False,
             "footnote": note, "version": "2.5.0", "useLink": False})
         props["qHyperCubeDef"]["qMeasures"][0]["coloring"] = {"baseColor": color(C["navy"])}
         props["qHyperCubeDef"]["qMeasures"][0]["conditionalColoring"] = {
             "useConditionalColoring": False, "useBaseColors": False, "paletteSingleColor": color(C["navy"]),
             "segments": {"limits": [], "paletteColors": [color(C["navy"])]}}
-        add(entry(props), i*6, 7, 6, 5)
-    add(text("explorer", "PERFORMANCE EXPLORER", size=11), 0, 12, 24, 1)
+        add(entry(props), i*6, 4, 6, 5)
+    add(text("explorer", "PERFORMANCE EXPLORER", size=11), 0, 9, 24, 1)
     for ident, typ, title, subtitle, dimension, ink, col, width in [
         ("trend", "linechart", "Andamento del fatturato", "Evoluzione mensile dei ricavi", "qlikgpt_d_yearmonth", C["blue"], 0, 15),
         ("markets", "barchart", "Performance per mercato", "Confronto dei ricavi per area", "qlikgpt_d_market", C["teal"], 15, 9)]:
@@ -141,8 +135,36 @@ def make():
                           "scrollbar": "none"})
             props["qHyperCubeDef"]["qInterColumnSortOrder"] = [1, 0]
             props["qHyperCubeDef"]["qMeasures"][0]["qSortBy"] = {"qSortByNumeric": -1}
-        add(entry(props), col, 13, width, 13)
-    add(text("footer", "Sales Intelligence · Executive Overview", "Grafici nativi Qlik · Metriche dal catalogo", size=10), 0, 26, 24, 2)
+        add(entry(props), col, 10, width, 13)
+    add(text("detail", "SALES BREAKDOWN", size=11), 0, 23, 24, 1)
+    table = common("market_detail", "table", "Dettaglio per mercato", general())
+    table.update({"qHyperCubeDef": cube(MEASURES, "qlikgpt_d_market"),
+        "subtitle": "Ricavi, volumi e redditività a confronto",
+        "totals": {"show": True, "position": "top", "label": "Totale"},
+        "scrolling": {"horizontal": True, "keepFirstColumnInView": True},
+        "multiline": {"wrapTextInHeaders": False, "wrapTextInCells": False},
+        "columnOrder": [0, 1, 2, 3, 4], "columnWidths": [-1, -1, -1, -1, -1]})
+    table["qHyperCubeDef"]["qInterColumnSortOrder"] = [1, 0, 2, 3, 4]
+    table["qHyperCubeDef"]["qMeasures"][0]["qSortBy"] = {"qSortByNumeric": -1}
+    table["components"].append({"key": "theme", "content": {
+        "fontSize": "13px", "fontColor": color(C["navy"])},
+        "header": {"fontSize": "12px", "fontColor": color(C["muted"])}})
+    add(entry(table), 0, 24, 15, 13)
+    donut = common("channels", "piechart", "Mix per canale", general())
+    donut.update({"qHyperCubeDef": cube([MEASURES[0]], "qlikgpt_d_channel"),
+        "subtitle": "Quota di fatturato per canale di vendita",
+        "donut": {"showAsDonut": True}, "dimensionTitle": False,
+        "dataPoint": {"auto": False, "labelMode": "share"},
+        "legend": {"show": True, "dock": "right", "showTitle": False},
+        "color": {"auto": False, "mode": "byDimension", "persistent": True,
+                  "useBaseColors": "off", "paletteColor": color(C["blue"])}})
+    donut["qHyperCubeDef"]["qInterColumnSortOrder"] = [1, 0]
+    donut["qHyperCubeDef"]["qMeasures"][0]["qSortBy"] = {"qSortByNumeric": -1}
+    donut["components"].append({"key": "pie", "style": {
+        "innerRadius": 0.65, "cornerRadius": 4, "strokeWidth": "small",
+        "strokeColor": color("#FFFFFF")}})
+    add(entry(donut), 15, 24, 9, 13)
+    add(text("footer", "Sales Intelligence · Executive Overview", "Grafici nativi Qlik · Metriche dal catalogo", size=10), 0, 37, 24, 2)
     sheet = {"qInfo": {"qId": SHEET, "qType": "sheet"}, "qExtendsId": "",
         "qMetaDef": {"title": "Sales Intelligence | Native", "description": "Native Qlik CLI premium composition"},
         "title": "Sales Intelligence | Native", "description": "qlikgpt-native-cli-v1",
