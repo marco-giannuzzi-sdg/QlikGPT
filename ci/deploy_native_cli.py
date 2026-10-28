@@ -68,7 +68,7 @@ def main():
             props = actual[ident]
             if props["qInfo"]["qType"] != target["qInfo"]["qType"]:
                 raise RuntimeError("Native object type mismatch: " + ident)
-            if target.get("components"):
+            if any(c.get("key") == "general" for c in target.get("components", [])):
                 expected_general = next(c for c in target["components"] if c["key"] == "general")
                 observed_general = next((c for c in props.get("components", []) if c["key"] == "general"), None)
                 if observed_general != expected_general:
