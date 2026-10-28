@@ -40,6 +40,8 @@ def tokens():
         raise ValueError("Theme and UI palette diverged")
     if theme["_variables"]["@qlikgpt-teal"] != t["colors"]["teal"]:
         raise ValueError("Theme chart palette and UI tokens diverged")
+    if theme["_variables"]["@qlikgpt-blue"] != t["colors"]["blue"]:
+        raise ValueError("Theme primary accent and UI tokens diverged")
     return t
 
 def color(value):
@@ -55,7 +57,8 @@ def text_block(ident, markdown, *, dark=False):
         "qExtendsId": "", "visualization": "text-image",
         "title": ident, "showTitles": False,
         "markdown": markdown, "images": [], "responsive": True,
-        "background": {"color": t["colors"]["navy"] if dark else t["colors"]["surface"]}
+        "background": {"color": t["colors"]["paleBlue"] if dark else t["colors"]["canvas"]},
+        "style": background(t["colors"]["paleBlue"] if dark else t["colors"]["canvas"])
     }
 
 def navigation_button(ident, label, destination, *, target_title=None):
@@ -74,9 +77,9 @@ def navigation_button(ident, label, destination, *, target_title=None):
             "label": label, "showLabel": True,
             "font": {"fontFamily": t["fontFamily"],
                      "color": {"useColorExpression": False,
-                               "color": color(t["colors"]["navy"])}},
+                               "color": color(t["colors"]["inverse"])}},
             "background": {"useColorExpression": False,
-                           "color": color(t["colors"]["card"])}
+                           "color": color(t["colors"]["navy"])}
         }
     }
 
@@ -120,28 +123,28 @@ def sheet(key, title, measures, destination):
     t=tokens()
     prefix="qlikgpt_"+key
     sheet_id=prefix+"_overview"
-    rows=9
+    rows=12
     header=text_block(prefix+"_header",
-                      "## QlikGPT  |  "+title+"\n**EXECUTIVE OVERVIEW**  ·  Governed Analytics",
+                      "%[QlikGPT  /  "+title+"](4)^[EXECUTIVE OVERVIEW  ·  GOVERNED ANALYTICS](inherit)",
                       dark=True)
     nav=navigation_button(prefix+"_nav", "Sales Overview ↗", destination)
     section=text_block(prefix+"_section",
-                       "**KEY PERFORMANCE INDICATORS**  ·  Dati governati dal catalogo")
+                       "01  /  BUSINESS PULSE  ·  Indicatori governati dal Semantic Catalog")
     intro=text_block(prefix+"_intro",
-                     "**INSIGHTS**  ·  Sostituisci questa sezione con grafici nativi"
+                     "02  /  INSIGHTS  ·  Sostituisci questa sezione con grafici nativi"
                      " che referenziano le master measures e dimensions via qLibraryId.")
     children=[header,nav,section]
-    cells=[cell(header["qInfo"]["qId"],"text-image",0,0,18,1,rows),
-           cell(nav["qInfo"]["qId"],"button",18,0,6,1,rows),
-           cell(section["qInfo"]["qId"],"text-image",0,1,24,1,rows)]
+    cells=[cell(header["qInfo"]["qId"],"text-image",0,0,18,2,rows),
+           cell(nav["qInfo"]["qId"],"button",18,0,6,2,rows),
+           cell(section["qInfo"]["qId"],"text-image",0,2,24,1,rows)]
     width=24//len(measures)
     for i,(mid,label) in enumerate(measures):
         ident=prefix+"_kpi_"+str(i+1)
         children.append(kpi(ident,label,mid))
         span=24-(i*width) if i==len(measures)-1 else width
-        cells.append(cell(ident,"kpi",i*width,2,span,3,rows))
+        cells.append(cell(ident,"kpi",i*width,3,span,3,rows))
     children.append(intro)
-    cells.append(cell(intro["qInfo"]["qId"],"text-image",0,5,24,4,rows))
+    cells.append(cell(intro["qInfo"]["qId"],"text-image",0,6,24,6,rows))
     return [{
         "qInfo":{"qId":sheet_id,"qType":"sheet"}, "qExtendsId":"",
         "qMetaDef":{"title":title,"description":"QlikGPT Executive V1 template"},
@@ -208,9 +211,9 @@ def validate_dashboard(dashboard,t,filename):
             raise ValueError(f"{filename}: child without layout cell")
         brands=[obj for obj in children.values()
                 if obj["qInfo"]["qType"]=="text-image" and "QlikGPT" in obj.get("markdown","")
-                and obj.get("background",{}).get("color")==t["colors"]["navy"]]
+                and obj.get("background",{}).get("color")==t["colors"]["paleBlue"]]
         if not brands:
-            raise ValueError(f"{filename}: missing branded dark header")
+            raise ValueError(f"{filename}: missing executive branded header")
         nav=[obj for obj in children.values() if obj["qInfo"]["qType"]=="button" and
              obj.get("navigation",{}).get("action")=="openWebsite"]
         if not nav:
@@ -218,7 +221,7 @@ def validate_dashboard(dashboard,t,filename):
         for obj in children.values():
             if obj["qInfo"]["qType"]=="kpi":
                 actual=obj.get("style",{}).get("background",{}).get("color",{}).get("color")
-                if actual != t["colors"]["card"]:
+                if actual not in {t["colors"]["card"], t["colors"]["softBlue"], t["colors"]["softTeal"]}:
                     raise ValueError(f"{filename}: KPI card diverges from design tokens")
     return len(dashboard)
 
