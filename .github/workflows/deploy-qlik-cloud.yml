@@ -86,11 +86,15 @@ jobs:
         shell: bash
         run: python3 ci/app_lineage.py
 
+      - name: Generate evidence-based end-to-end field lineage
+        shell: bash
+        run: python3 ci/field_lineage.py
+
       - name: Unit-test and compile the Semantic Catalog
         shell: bash
         run: |
           python3 -m unittest discover -s tests -v
-          python3 -m py_compile ci/semantic_catalog.py ci/semantic_assets.py ci/catalog_report.py ci/app_lineage.py ci/model_registry.py ci/deployment_plan.py ci/reload_chain.py ci/deploy.py ci/deploy_visuals.py
+          python3 -m py_compile ci/semantic_catalog.py ci/semantic_assets.py ci/catalog_report.py ci/app_lineage.py ci/field_lineage.py ci/model_registry.py ci/deployment_plan.py ci/reload_chain.py ci/deploy.py ci/deploy_visuals.py
 
       - name: Authenticate to Qlik Cloud
         shell: bash
@@ -121,7 +125,7 @@ jobs:
           set -euo pipefail
           python3 ci/deploy.py
 
-      - name: Persist App Lineage, Semantic Catalog report and app IDs to GitHub
+      - name: Persist generated lineage, semantic reports and app IDs
         # Persist reports and IDs even when an explicitly requested reload fails.
         if: ${{ always() && vars.QLIK_CICD_ENABLED == 'true' }}
         shell: bash
@@ -133,6 +137,9 @@ jobs:
           fi
           if [ -f semantic-models/sales/lineage/APP_LINEAGE.md ] && [ -f semantic-models/sales/lineage/graph.json ]; then
             git add -- semantic-models/sales/lineage/APP_LINEAGE.md semantic-models/sales/lineage/graph.json
+          fi
+          if [ -f semantic-models/sales/lineage/END_TO_END.md ] && [ -f semantic-models/sales/lineage/end_to_end.json ]; then
+            git add -- semantic-models/sales/lineage/END_TO_END.md semantic-models/sales/lineage/end_to_end.json
           fi
           if git diff --cached --quiet; then
             echo "App IDs, Semantic Catalog and App Lineage reports unchanged."

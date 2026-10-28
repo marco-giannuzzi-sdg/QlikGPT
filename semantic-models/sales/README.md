@@ -8,6 +8,7 @@ Tutti gli asset del modello Sales sono in questa cartella. [model.json](model.js
 - [Manifest e dashboard](apps/).
 - [Catalogo semantico](catalog/README.md), [Usage & Impact](catalog/USAGE.md).
 - [App Lineage](lineage/APP_LINEAGE.md), [grafo JSON](lineage/graph.json).
+- [End-to-End Field Lineage](lineage/END_TO_END.md): da campi QVS/QVD a misure e KPI, con [grafo dettagliato JSON](lineage/end_to_end.json).
 - [Design System](design/EXECUTIVE_CLEAN.md).
 - [App ID](deployment/app-ids.json): gli ID Qlik esistenti restano invariati.
 

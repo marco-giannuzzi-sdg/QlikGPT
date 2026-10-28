@@ -6,7 +6,7 @@ QlikGPT governa app Qlik Cloud, ETL/QVD, master items, dashboard, script deploym
 
 | Modello | Script, ETL e app | Cataloghi | Lineage e impatti |
 | --- | --- | --- | --- |
-| **[Sales Analytics](semantic-models/sales/README.md)** | [ETL1](semantic-models/sales/scripts/etl1.qvs), [ETL2](semantic-models/sales/scripts/etl2.qvs), [Presentation](semantic-models/sales/scripts/presentation.qvs) e [app JSON](semantic-models/sales/apps/) | [Misure](semantic-models/sales/catalog/measures.json), [Dimensioni](semantic-models/sales/catalog/dimensions.json), [Variabili](semantic-models/sales/catalog/variables.json), [Formati](semantic-models/sales/catalog/formatting.json) | [App Lineage](semantic-models/sales/lineage/APP_LINEAGE.md) e [Semantic Usage](semantic-models/sales/catalog/USAGE.md) |
+| **[Sales Analytics](semantic-models/sales/README.md)** | [ETL1](semantic-models/sales/scripts/etl1.qvs), [ETL2](semantic-models/sales/scripts/etl2.qvs), [Presentation](semantic-models/sales/scripts/presentation.qvs) e [app JSON](semantic-models/sales/apps/) | [Misure](semantic-models/sales/catalog/measures.json), [Dimensioni](semantic-models/sales/catalog/dimensions.json), [Variabili](semantic-models/sales/catalog/variables.json), [Formati](semantic-models/sales/catalog/formatting.json) | [App Lineage](semantic-models/sales/lineage/APP_LINEAGE.md), [End-to-End Field Lineage](semantic-models/sales/lineage/END_TO_END.md) e [Semantic Usage](semantic-models/sales/catalog/USAGE.md) |
 
 Tutti gli asset specifici del modello Sales sono in **[semantic-models/sales/](semantic-models/sales/README.md)**, incluso il registro [model.json](semantic-models/sales/model.json), il [design system](semantic-models/sales/design/EXECUTIVE_CLEAN.md) e gli [App ID](semantic-models/sales/deployment/app-ids.json).
 
@@ -71,6 +71,7 @@ GitHub resta la fonte autorevole delle misure, dimensioni, variabili e dashboard
 python3 -m unittest discover -s tests -v
 python3 ci/catalog_report.py --check
 python3 ci/app_lineage.py --check
+python3 ci/field_lineage.py --check
 ```
 
 Le credenziali Qlik restano nei GitHub Secrets. Nessun Reverse Sync automatico dai master item Qlik a GitHub. Rollback compensativo best effort: il deploy su più app non è una singola transazione atomica.

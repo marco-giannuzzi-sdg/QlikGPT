@@ -31,7 +31,9 @@
     "usage": "catalog/USAGE.md",
     "usageJson": "catalog/usage.json",
     "lineage": "lineage/APP_LINEAGE.md",
-    "lineageJson": "lineage/graph.json"
+    "lineageJson": "lineage/graph.json",
+    "endToEndLineage": "lineage/END_TO_END.md",
+    "endToEndGraph": "lineage/end_to_end.json"
   },
   "design": "design/EXECUTIVE_CLEAN.md"
 }
