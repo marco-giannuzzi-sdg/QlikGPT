@@ -1,0 +1,24 @@
+{
+  "name": "qlikgpt-premium-overview",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Governed Sales Intelligence dashboard for Qlik Cloud",
+  "author": "QlikGPT",
+  "license": "UNLICENSED",
+  "main": "dist/qlikgpt-premium-overview.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "build": "node prepare.mjs && nebula build --systemjs false --sourcemap false && nebula sense --output extension"
+  },
+  "devDependencies": {
+    "@nebula.js/cli": "7.8.0",
+    "@nebula.js/cli-build": "7.8.0",
+    "@nebula.js/cli-sense": "7.8.0"
+  },
+  "peerDependencies": {
+    "@nebula.js/stardust": "7.8.0"
+  }
+}
