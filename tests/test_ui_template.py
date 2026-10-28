@@ -38,7 +38,7 @@ class NativeUITemplateTests(unittest.TestCase):
         self.assertEqual(m["catalogMeasures"],["qlikgpt_shared_revenue","qlikgpt_shared_margin_pct"])
         self.assertEqual(ui.validate_dashboard(sheet,ui.tokens(),"new-app"),1)
         self.assertFalse(any("qDef" in child and child["qDef"] for child in sheet[0]["qChildren"]))
-        self.assertEqual(sheet[0]["rows"],12)
+        self.assertEqual(sheet[0]["rows"],22)
         self.assertEqual(
             [x["qHyperCubeDef"]["qMeasures"][0]["qLibraryId"] for x in sheet[0]["qChildren"] if x["qInfo"]["qType"]=="kpi"],
             m["catalogMeasures"]
@@ -62,10 +62,11 @@ class NativeUITemplateTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"overlapping"):
             ui.validate_dashboard(bad,ui.tokens(),"overlap")
 
-    def test_first_app_is_premium_18_row_grid_with_governed_objects(self):
+    def test_first_app_is_native_22_row_grid_with_governed_objects(self):
         app=ui.read(ui.MODEL.root/"apps"/"presentation1-objects.json")[0]
-        self.assertEqual(app["rows"],18)
+        self.assertEqual(app["rows"],22)
         byid={o["qInfo"]["qId"]:o for o in app["qChildren"]}
+        self.assertEqual(app["background"]["color"],ui.tokens()["colors"]["canvas"])
         self.assertIn("qlikgpt_kpi_section",byid)
         self.assertIn("qlikgpt_insights_section",byid)
         self.assertNotIn("##",byid["qlikgpt_brand_header"]["markdown"])

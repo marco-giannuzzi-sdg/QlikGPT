@@ -72,6 +72,33 @@ def find_child(qix: Qix, parent: int, child_id: str) -> int | None:
         raise
 
 
+def sync_sheet_grid(qix: Qix, sheet: int, target: dict) -> None:
+    """Reconcile the persisted sheet grid before updating child visuals."""
+    existing_sheet = qix.call(sheet, "GetProperties", [])["qProp"]
+    updated_sheet = dict(existing_sheet)
+    updated_sheet.update({k: v for k, v in target.items()
+                          if k not in {"qChildren", "qInfo"}})
+    qix.call(sheet, "SetProperties", [updated_sheet])
+    live_sheet = qix.call(sheet, "GetProperties", [])["qProp"]
+    if live_sheet.get("columns") != target["columns"] or live_sheet.get("rows") != target["rows"]:
+        raise RuntimeError("Native sheet dimensions did not persist")
+    expected_cells = {
+        (cell["name"], cell["col"], cell["row"], cell["colspan"], cell["rowspan"])
+        for cell in target["cells"]
+    }
+    actual_cells = {
+        (cell["name"], cell["col"], cell["row"], cell["colspan"], cell["rowspan"])
+        for cell in live_sheet.get("cells", [])
+    }
+    if actual_cells != expected_cells:
+        raise RuntimeError("Native sheet cell placement differs from versioned layout")
+    print(
+        f"Native sheet geometry VERIFIED: {target['columns']}x{target['rows']} "
+        f"/ {len(expected_cells)} cells", flush=True
+    )
+
+
+
 def main() -> None:
     if len(sys.argv) != 2:
         raise SystemExit("Expected presentation app ID as argument")
@@ -93,6 +120,8 @@ def main() -> None:
         sheet = qix.call(doc, "GetObject", {"qId": "qlikgpt_sales_overview"})["qReturn"]["qHandle"]
         if sheet is None:
             raise RuntimeError("Qlik Sales Overview sheet not found")
+
+        sync_sheet_grid(qix, sheet, target)
 
         # qlik app build may store an embedded qChildren JSON array without
         # creating native QIX children. Ensure actual Engine relationships.
@@ -225,6 +254,32 @@ def main() -> None:
         for item in definitions:
             if find_child(qix, pane, item["id"]) is None:
                 raise RuntimeError(f"Filter child missing: {item['id']}")
+        # Return the pilot app to a built-in Qlik theme; the Executive
+        # native UI must not depend on an uploaded custom theme package.
+        # Preserve any unrelated user-selected theme.
+        app_list = qix.call(doc, "CreateSessionObject", {"qProp": {
+            "qInfo": {"qType": "qlikgpt-theme-list"},
+            "qAppObjectListDef": {"qType": "appprops", "qData": {"theme": "/theme"}}
+        }})["qReturn"]["qHandle"]
+        list_items = qix.call(app_list, "GetLayout", [])["qLayout"].get(
+            "qAppObjectList", {}).get("qItems", [])
+        if len(list_items) == 1:
+            app_props_id = list_items[0].get("qInfo", {}).get("qId")
+            if app_props_id:
+                ap_handle = qix.call(doc, "GetObject", {"qId":app_props_id})["qReturn"]["qHandle"]
+                ap = qix.call(ap_handle,"GetProperties",[])["qProp"]
+                if ap.get("theme") == "qlikgpt-executive-v1":
+                    rebuilt=dict(ap)
+                    rebuilt["theme"]="horizon"
+                    rebuilt["sheetTitleBgColor"]="#142840"
+                    rebuilt["sheetTitleGradientColor"]="#3365D5"
+                    rebuilt["sheetTitleColor"]="#FFFFFF"
+                    qix.call(ap_handle,"SetProperties",[rebuilt])
+                    verify_theme=qix.call(ap_handle,"GetProperties",[])["qProp"]
+                    if verify_theme.get("theme")!="horizon":
+                        raise RuntimeError("Built-in Qlik theme restore failed")
+                    print("Custom theme detached; built-in horizon + native brand header assigned.",flush=True)
+
         qix.call(doc, "DoSave", [])
         print(
             f"QIX hierarchy verified: {len(target['qChildren'])} sheet children, "

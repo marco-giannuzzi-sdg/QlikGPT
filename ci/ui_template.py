@@ -32,16 +32,7 @@ def tokens():
             raise ValueError(f"Invalid color token: {key}")
     if t["grid"]["columns"] != 24:
         raise ValueError("Native Qlik template expects 24 grid columns")
-    theme = read(THEME)
-    ext = read(QEXT)
-    if ext.get("type") != "theme" or ext.get("name") != t["templateId"]:
-        raise ValueError("QEXT metadata must match tokens")
-    if theme["_variables"]["@qlikgpt-navy"] != t["colors"]["navy"]:
-        raise ValueError("Theme and UI palette diverged")
-    if theme["_variables"]["@qlikgpt-teal"] != t["colors"]["teal"]:
-        raise ValueError("Theme chart palette and UI tokens diverged")
-    if theme["_variables"]["@qlikgpt-blue"] != t["colors"]["blue"]:
-        raise ValueError("Theme primary accent and UI tokens diverged")
+    # The native UI kit must work without installing a custom Qlik theme.
     return t
 
 def color(value):
@@ -49,6 +40,23 @@ def color(value):
 
 def background(value):
     return {"background": {"useColorExpression": False, "color": color(value)}}
+
+def native_card_style(background_color: str, *, decorated: bool = True) -> dict:
+    """Versioned Qlik native object styling; no uploaded application theme."""
+    t = tokens()["colors"]
+    return {
+        "background": {"useColorExpression": False, "color": color(background_color)},
+        "border": {
+            "width": 1 if decorated else 0,
+            "radius": 12,
+            "color": color(t["border"]),
+        },
+        "shadow": {
+            "size": "small" if decorated else "none",
+            "color": color("#A7B7D1"),
+        },
+    }
+
 
 def text_block(ident, markdown, *, dark=False):
     t = tokens()
@@ -58,7 +66,7 @@ def text_block(ident, markdown, *, dark=False):
         "title": ident, "showTitles": False,
         "markdown": markdown, "images": [], "responsive": True,
         "background": {"color": t["colors"]["paleBlue"] if dark else t["colors"]["canvas"]},
-        "style": background(t["colors"]["paleBlue"] if dark else t["colors"]["canvas"])
+        "style": native_card_style(t["colors"]["paleBlue"] if dark else t["colors"]["canvas"],decorated=False)
     }
 
 def navigation_button(ident, label, destination, *, target_title=None):
@@ -74,6 +82,7 @@ def navigation_button(ident, label, destination, *, target_title=None):
         "navigation": {"action": "openWebsite", "websiteUrl": destination,
                        "sameWindow": False},
         "style": {
+            **native_card_style(t["colors"]["navy"], decorated=False),
             "label": label, "showLabel": True,
             "font": {"fontFamily": t["fontFamily"],
                      "color": {"useColorExpression": False,
@@ -97,7 +106,7 @@ def kpi(ident, label, measure):
             "qInitialDataFetch": [{"qLeft": 0, "qTop": 0,
                                     "qWidth": 1, "qHeight": 1}]
         },
-        "style": background(t["colors"]["card"])
+        "style": native_card_style(t["colors"]["card"])
     }
 
 def cell(ident, typ, col, row, colspan, rowspan, rows):
@@ -123,33 +132,53 @@ def sheet(key, title, measures, destination):
     t=tokens()
     prefix="qlikgpt_"+key
     sheet_id=prefix+"_overview"
-    rows=12
-    header=text_block(prefix+"_header",
-                      "%[QlikGPT  /  "+title+"](4)^[EXECUTIVE OVERVIEW  ·  GOVERNED ANALYTICS](inherit)",
-                      dark=True)
-    nav=navigation_button(prefix+"_nav", "Sales Overview ↗", destination)
-    section=text_block(prefix+"_section",
-                       "01  /  BUSINESS PULSE  ·  Indicatori governati dal Semantic Catalog")
-    intro=text_block(prefix+"_intro",
-                     "02  /  INSIGHTS  ·  Sostituisci questa sezione con grafici nativi"
-                     " che referenziano le master measures e dimensions via qLibraryId.")
-    children=[header,nav,section]
-    cells=[cell(header["qInfo"]["qId"],"text-image",0,0,18,2,rows),
-           cell(nav["qInfo"]["qId"],"button",18,0,6,2,rows),
-           cell(section["qInfo"]["qId"],"text-image",0,2,24,1,rows)]
+    rows=22
+    header=text_block(
+        prefix+"_header",
+        "%[QlikGPT  /  "+title+"](6)^[EXECUTIVE OVERVIEW  •  GOVERNED ANALYTICS](2)",
+        dark=True,
+    )
+    nav=navigation_button(prefix+"_nav", "APRI OVERVIEW  →", destination)
+    intro=text_block(
+        prefix+"_intro",
+        "%[Executive Overview](5)^[Un unico spazio per esplorare le performance di business.](2)",
+    )
+    section=text_block(
+        prefix+"_section",
+        "%[01 / BUSINESS PULSE](3)^[Indicatori governati dal modello semantico](2)",
+    )
+    insights=text_block(
+        prefix+"_insights",
+        "%[02 / PERFORMANCE EXPLORER](3)^[Aggiungere grafici Qlik nativi dopo aver associato le dimensioni del catalogo](2)",
+    )
+    details=text_block(
+        prefix+"_detail",
+        "Visualizzazioni Qlik native: associa misure e dimensioni con qLibraryId, senza formule inline.",
+    )
+    children=[header,nav,intro,section]
+    cells=[
+        cell(header["qInfo"]["qId"],"text-image",0,0,18,3,rows),
+        cell(nav["qInfo"]["qId"],"button",18,0,6,3,rows),
+        cell(intro["qInfo"]["qId"],"text-image",0,3,24,3,rows),
+        cell(section["qInfo"]["qId"],"text-image",0,6,24,1,rows),
+    ]
     width=24//len(measures)
     for i,(mid,label) in enumerate(measures):
         ident=prefix+"_kpi_"+str(i+1)
         children.append(kpi(ident,label,mid))
         span=24-(i*width) if i==len(measures)-1 else width
-        cells.append(cell(ident,"kpi",i*width,3,span,3,rows))
-    children.append(intro)
-    cells.append(cell(intro["qInfo"]["qId"],"text-image",0,6,24,6,rows))
+        cells.append(cell(ident,"kpi",i*width,7,span,4,rows))
+    children.extend([insights,details])
+    cells.append(cell(insights["qInfo"]["qId"],"text-image",0,11,24,1,rows))
+    cells.append(cell(details["qInfo"]["qId"],"text-image",0,12,24,10,rows))
     return [{
         "qInfo":{"qId":sheet_id,"qType":"sheet"}, "qExtendsId":"",
         "qMetaDef":{"title":title,"description":"QlikGPT Executive V1 template"},
         "title":title,"description":"Governed native Qlik analytics",
         "rank":0,"columns":24,"rows":rows,"gridMode":"edit",
+        "background": {"color":t["colors"]["canvas"]},
+        "backgroundColor":color(t["colors"]["canvas"]),
+        "style":native_card_style(t["colors"]["canvas"],decorated=False),
         "cells":cells,
         "qChildListDef":{"qData":{"title":"/title","description":"/description",
                                    "type":"/qInfo/qType","id":"/qInfo/qId"}},

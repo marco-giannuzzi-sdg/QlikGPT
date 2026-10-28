@@ -1,4 +1,29 @@
-# QlikGPT — Executive Premium (visual system 1.1)
+# QlikGPT — Native Executive Overview V2 (senza custom theme)
+
+Questa è la strada **predefinita** per tutte le nuove app: styling nativo Qlik negli oggetti e nel foglio, non più un pacchetto tema da installare. I design token restano indipendenti dal Semantic Catalog.
+
+## Modifica pilota: Sales Overview
+
+- La [prima Presentation](../semantic-models/sales/apps/presentation1-objects.json) ora specifica una griglia **24 colonne × 22 righe** (header, introduzione + filtri, KPI, sezione analitica), con spazi tra card e tra i due grafici.
+- Ogni KPI e grafico ha una proprietà nativa `style` con sfondo, bordo e ombra. L'app usa `#F5F7FB` come canvas.
+- Il grafico mensile è configurato come *area chart* blu; le barre dei mercati restano teal. Riferimenti `qLibraryId`, formule, ID QIX, filtri e grafici esistenti sono preservati.
+- `ci/deploy_visuals.py` sincronizza finalmente **le proprietà del foglio stesso** via QIX `SetProperties`, non solo i figli. Controlla che `rows`, `columns` e tutte le celle siano effettivamente persistite.
+- Se l'app utilizza il nostro vecchio tema `qlikgpt-executive-v1`, il deployment lo sostituisce con **Qlik Sense Horizon** e imposta i colori dell'intestazione usando le proprietà applicative native (`appprops.sheetTitleBgColor`, `sheetTitleGradientColor`, `sheetTitleColor`). Eventuali temi impostati da altre persone sono rispettati e non vengono sovrascritti.
+- Il caricamento del tema personalizzato è **disabilitato** nel workflow, salvo opt-in esplicito attraverso `vars.QLIK_CUSTOM_THEME_ENABLED=true`. Non è richiesto per questo layout.
+
+## Come avviene il deployment
+
+Un merge su `main`, con `vars.QLIK_CICD_ENABLED=true`, attiva il normale workflow Qlik. L'operazione di default è `deploy-only`: **nessun data reload**. La verifica QIX della geometria del foglio e dei master item fallisce esplicitamente se la modifica non persiste; la diagnostica viene registrata su `.github/deployment-status/last-run.json`.
+
+Per collaudare: aprire [Sales Intelligence](https://sdggroup-it.eu.qlikcloud.com/sense/app/07dfa926-4895-4fb2-af4c-eac90e9eb2cb) a 1920px e 1366px di larghezza; verificare spazi, card, colore dei valori, linea/area, leggibilità filtri e comportamento dei controlli. **QIX garantisce il salvataggio delle proprietà, non che ogni renderer client interpreti tutte le proprietà allo stesso modo**: se una proprietà CSS-like non produce l'effetto previsto, occorre adeguarla dopo la prova visiva e non chiamare completato il mockup.
+
+## Riuso
+
+`python3 ci/ui_template.py --new-key presentation3 --app-name "New Analysis" --measures qlikgpt_shared_revenue` produce un foglio nativo analogo, senza bisogno del file del tema. Il modello semantico resta una dipendenza della singola app (misure/dimensioni governate), non del design system.
+
+---
+
+# Archivio — Custom Theme Executive Premium 1.1 (non più predefinito)
 
 **Global design system, independent of Sales.** The stable template identifier remains `qlikgpt-executive-v1` for backward compatibility. Version **1.1.0** introduces a more pronounced visual hierarchy while preserving all Qlik master-item contracts.
 
