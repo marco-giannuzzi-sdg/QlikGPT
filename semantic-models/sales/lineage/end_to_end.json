@@ -393,6 +393,32 @@
       }
     },
     {
+      "id": "object:presentation2:qlikgpt_p2_footnote",
+      "type": "visual",
+      "label": "qlikgpt_p2_footnote",
+      "app": "presentation2",
+      "objectId": "qlikgpt_p2_footnote",
+      "sheetId": "qlikgpt_p2_sheet",
+      "chartType": "text-image",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation2-objects.json",
+        "line": 267
+      }
+    },
+    {
+      "id": "object:presentation2:qlikgpt_p2_header",
+      "type": "visual",
+      "label": "Sales Intelligence",
+      "app": "presentation2",
+      "objectId": "qlikgpt_p2_header",
+      "sheetId": "qlikgpt_p2_sheet",
+      "chartType": "text-image",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation2-objects.json",
+        "line": 115
+      }
+    },
+    {
       "id": "object:presentation2:qlikgpt_p2_kpi_marginpct",
       "type": "visual",
       "label": "MARGINE % GOVERNATO",
@@ -402,7 +428,7 @@
       "chartType": "kpi",
       "source": {
         "path": "semantic-models/sales/apps/presentation2-objects.json",
-        "line": 89
+        "line": 172
       }
     },
     {
@@ -415,13 +441,39 @@
       "chartType": "kpi",
       "source": {
         "path": "semantic-models/sales/apps/presentation2-objects.json",
-        "line": 59
+        "line": 131
+      }
+    },
+    {
+      "id": "object:presentation2:qlikgpt_p2_nav_overview",
+      "type": "visual",
+      "label": "Apri Sales Overview ↗",
+      "app": "presentation2",
+      "objectId": "qlikgpt_p2_nav_overview",
+      "sheetId": "qlikgpt_p2_sheet",
+      "chartType": "button",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation2-objects.json",
+        "line": 213
+      }
+    },
+    {
+      "id": "object:presentation2:qlikgpt_p2_section",
+      "type": "visual",
+      "label": "qlikgpt_p2_section",
+      "app": "presentation2",
+      "objectId": "qlikgpt_p2_section",
+      "sheetId": "qlikgpt_p2_sheet",
+      "chartType": "text-image",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation2-objects.json",
+        "line": 251
       }
     },
     {
       "id": "object:presentation2:qlikgpt_p2_sheet",
       "type": "sheet",
-      "label": "Shared Semantic Measures",
+      "label": "Sales Intelligence | KPI condivisi",
       "app": "presentation2",
       "objectId": "qlikgpt_p2_sheet",
       "sheetId": "qlikgpt_p2_sheet",
@@ -434,14 +486,14 @@
     {
       "id": "object:presentation:qlikgpt_brand_header",
       "type": "visual",
-      "label": "QlikGPT  |  Sales Intelligence",
+      "label": "QlikGPT | Sales Intelligence",
       "app": "presentation",
       "objectId": "qlikgpt_brand_header",
       "sheetId": "qlikgpt_sales_overview",
       "chartType": "text-image",
       "source": {
         "path": "semantic-models/sales/apps/presentation1-objects.json",
-        "line": 143
+        "line": 171
       }
     },
     {
@@ -454,7 +506,7 @@
       "chartType": "barchart",
       "source": {
         "path": "semantic-models/sales/apps/presentation1-objects.json",
-        "line": 484
+        "line": 512
       }
     },
     {
@@ -467,7 +519,7 @@
       "chartType": "linechart",
       "source": {
         "path": "semantic-models/sales/apps/presentation1-objects.json",
-        "line": 373
+        "line": 401
       }
     },
     {
@@ -480,7 +532,7 @@
       "chartType": "filterpane",
       "source": {
         "path": "semantic-models/sales/apps/presentation1-objects.json",
-        "line": 159
+        "line": 187
       }
     },
     {
@@ -493,7 +545,7 @@
       "chartType": "kpi",
       "source": {
         "path": "semantic-models/sales/apps/presentation1-objects.json",
-        "line": 279
+        "line": 307
       }
     },
     {
@@ -506,7 +558,7 @@
       "chartType": "kpi",
       "source": {
         "path": "semantic-models/sales/apps/presentation1-objects.json",
-        "line": 326
+        "line": 354
       }
     },
     {
@@ -519,7 +571,7 @@
       "chartType": "kpi",
       "source": {
         "path": "semantic-models/sales/apps/presentation1-objects.json",
-        "line": 232
+        "line": 260
       }
     },
     {
@@ -532,7 +584,7 @@
       "chartType": "kpi",
       "source": {
         "path": "semantic-models/sales/apps/presentation1-objects.json",
-        "line": 185
+        "line": 213
       }
     },
     {
@@ -572,9 +624,35 @@
       }
     },
     {
+      "id": "object:presentation:qlikgpt_nav_shared_kpis",
+      "type": "visual",
+      "label": "Apri KPI condivisi ↗",
+      "app": "presentation",
+      "objectId": "qlikgpt_nav_shared_kpis",
+      "sheetId": "qlikgpt_sales_overview",
+      "chartType": "button",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1-objects.json",
+        "line": 633
+      }
+    },
+    {
+      "id": "object:presentation:qlikgpt_navigation_hint",
+      "type": "visual",
+      "label": "qlikgpt_navigation_hint",
+      "app": "presentation",
+      "objectId": "qlikgpt_navigation_hint",
+      "sheetId": "qlikgpt_sales_overview",
+      "chartType": "text-image",
+      "source": {
+        "path": "semantic-models/sales/apps/presentation1-objects.json",
+        "line": 617
+      }
+    },
+    {
       "id": "object:presentation:qlikgpt_sales_overview",
       "type": "sheet",
-      "label": "Sales Intelligence | QlikGPT",
+      "label": "Sales Intelligence | Overview",
       "app": "presentation",
       "objectId": "qlikgpt_sales_overview",
       "sheetId": "qlikgpt_sales_overview",
@@ -2141,7 +2219,7 @@
       "kind": "inline_sort",
       "source": {
         "path": "semantic-models/sales/apps/presentation1-objects.json",
-        "line": 507
+        "line": 535
       }
     },
     {
@@ -2564,7 +2642,7 @@
       "kind": "visual_use",
       "source": {
         "path": "semantic-models/sales/apps/presentation2-objects.json",
-        "line": 103
+        "line": 186
       }
     },
     {
@@ -2573,7 +2651,7 @@
       "kind": "visual_use",
       "source": {
         "path": "semantic-models/sales/apps/presentation2-objects.json",
-        "line": 73
+        "line": 145
       }
     },
     {
@@ -2591,7 +2669,7 @@
       "kind": "visual_use",
       "source": {
         "path": "semantic-models/sales/apps/presentation1-objects.json",
-        "line": 512
+        "line": 540
       }
     },
     {
@@ -2618,7 +2696,7 @@
       "kind": "visual_use",
       "source": {
         "path": "semantic-models/sales/apps/presentation1-objects.json",
-        "line": 398
+        "line": 426
       }
     },
     {
@@ -2627,7 +2705,7 @@
       "kind": "visual_use",
       "source": {
         "path": "semantic-models/sales/apps/presentation1-objects.json",
-        "line": 290
+        "line": 318
       }
     },
     {
@@ -2636,7 +2714,7 @@
       "kind": "visual_use",
       "source": {
         "path": "semantic-models/sales/apps/presentation1-objects.json",
-        "line": 337
+        "line": 365
       }
     },
     {
@@ -2645,7 +2723,7 @@
       "kind": "visual_use",
       "source": {
         "path": "semantic-models/sales/apps/presentation1-objects.json",
-        "line": 243
+        "line": 271
       }
     },
     {
@@ -2654,7 +2732,7 @@
       "kind": "visual_use",
       "source": {
         "path": "semantic-models/sales/apps/presentation1-objects.json",
-        "line": 196
+        "line": 224
       }
     },
     {
@@ -2663,7 +2741,7 @@
       "kind": "visual_use",
       "source": {
         "path": "semantic-models/sales/apps/presentation1-objects.json",
-        "line": 196
+        "line": 224
       }
     },
     {
@@ -2672,7 +2750,7 @@
       "kind": "visual_use",
       "source": {
         "path": "semantic-models/sales/apps/presentation1-objects.json",
-        "line": 196
+        "line": 224
       }
     },
     {
