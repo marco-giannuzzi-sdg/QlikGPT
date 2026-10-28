@@ -1,10 +1,10 @@
 {
-  "run_id": 40684605110,
-  "run_number": 78,
-  "commit": "160df1d2cf3bfe302aff9306fa2a9fca3d1f8a92",
-  "run_url": "https://github.com/marco-giannuzzi-sdg/QlikGPT/actions/runs/40684605110",
+  "run_id": 40690019408,
+  "run_number": 79,
+  "commit": "738c46b8a9a0ef887e88d609eecd7bf2d6195d26",
+  "run_url": "https://github.com/marco-giannuzzi-sdg/QlikGPT/actions/runs/40690019408",
   "auth": "success",
   "frontend_deployment": "success",
-  "theme_install_and_assignment": "failure",
+  "theme_install_and_assignment": "skipped",
   "note": "Use workflow run ID to fetch complete job logs; no credentials included."
 }
