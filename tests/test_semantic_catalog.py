@@ -54,7 +54,7 @@ class CatalogValidationTests(unittest.TestCase):
         definitions = sc.validate_catalog(self.catalog, self.manifests)
         self.assertEqual(
             sc.determine_impacted(
-                definitions, self.manifests, {"catalog/formatting.json"}, False, False
+                definitions, self.manifests, {"semantic-models/sales/catalog/formatting.json"}, False, False
             ),
             {"presentation", "presentation2"},
         )
@@ -90,7 +90,7 @@ class CatalogValidationTests(unittest.TestCase):
             ]
         with patch.object(sc, "changed_metric_ids", return_value={"qlikgpt_shared_average_order"}):
             affected = sc.determine_impacted(
-                catalog, hypothetical, {"catalog/measures.json"}, False, False)
+                catalog, hypothetical, {"semantic-models/sales/catalog/measures.json"}, False, False)
         self.assertEqual(affected, set())
 
     def test_future_subscription_activates_existing_catalog_metric(self):
@@ -98,7 +98,7 @@ class CatalogValidationTests(unittest.TestCase):
         future = deepcopy(self.manifests)
         future["presentation2"]["catalogMeasures"].append("qlikgpt_shared_average_order")
         self.assertEqual(
-            sc.determine_impacted(catalog, future, {"apps/presentation2.json"}, False, False),
+            sc.determine_impacted(catalog, future, {"semantic-models/sales/apps/presentation2.json"}, False, False),
             {"presentation2"},
         )
 
@@ -141,14 +141,14 @@ class CatalogValidationTests(unittest.TestCase):
         catalog = sc.validate_catalog(self.catalog, self.manifests)
         with patch.object(sc, "changed_metric_ids", return_value={"qlikgpt_shared_revenue"}):
             result = sc.determine_impacted(
-                catalog, self.manifests, {"catalog/measures.json"}, False, False)
+                catalog, self.manifests, {"semantic-models/sales/catalog/measures.json"}, False, False)
         self.assertEqual(result, {"presentation", "presentation2"})
 
     def test_impact_analysis_non_shared_targets_one(self):
         catalog = sc.validate_catalog(self.catalog, self.manifests)
         with patch.object(sc, "changed_metric_ids", return_value={"qlikgpt_shared_orders"}):
             result = sc.determine_impacted(
-                catalog, self.manifests, {"catalog/measures.json"}, False, False)
+                catalog, self.manifests, {"semantic-models/sales/catalog/measures.json"}, False, False)
         self.assertEqual(result, {"presentation"})
 
     def test_unrelated_frontend_has_no_semantic_changes(self):
@@ -160,7 +160,7 @@ class CatalogValidationTests(unittest.TestCase):
     def test_app2_manifest_targets_only_app2(self):
         catalog = sc.validate_catalog(self.catalog, self.manifests)
         result = sc.determine_impacted(
-            catalog, self.manifests, {"apps/presentation2.json"}, False, False)
+            catalog, self.manifests, {"semantic-models/sales/apps/presentation2.json"}, False, False)
         self.assertEqual(result, {"presentation2"})
 
 

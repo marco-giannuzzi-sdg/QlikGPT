@@ -20,10 +20,7 @@ on:
   push:
     branches: [main]
     paths:
-      - 'scripts/**'
-      - 'catalog/**'
-      - 'lineage/**'
-      - 'apps/**'
+      - 'semantic-models/**'
       - 'tests/**'
       - 'ci/**'
       - '.github/workflows/deploy-qlik-cloud.yml'
@@ -47,6 +44,7 @@ jobs:
       QLIK_TENANT: https://sdggroup-it.eu.qlikcloud.com
       QLIK_API_KEY: ${{ secrets.QLIK_API_KEY }}
       QLIK_SPACE_ID: ${{ vars.QLIK_SPACE_ID }}
+      QLIK_MODEL_ID: sales
       QLIK_DEPLOY_OPERATION: ${{ github.event_name == 'workflow_dispatch' && inputs.operation || 'deploy-only' }}
       QLIK_DEPLOY_TARGET: ${{ github.event_name == 'workflow_dispatch' && inputs.target_app || '' }}
       GITHUB_EVENT_NAME: ${{ github.event_name }}
@@ -92,7 +90,7 @@ jobs:
         shell: bash
         run: |
           python3 -m unittest discover -s tests -v
-          python3 -m py_compile ci/semantic_catalog.py ci/semantic_assets.py ci/catalog_report.py ci/app_lineage.py ci/deployment_plan.py ci/reload_chain.py ci/deploy.py ci/deploy_visuals.py
+          python3 -m py_compile ci/semantic_catalog.py ci/semantic_assets.py ci/catalog_report.py ci/app_lineage.py ci/model_registry.py ci/deployment_plan.py ci/reload_chain.py ci/deploy.py ci/deploy_visuals.py
 
       - name: Authenticate to Qlik Cloud
         shell: bash
@@ -129,12 +127,12 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          git add -- deployment/app-ids.json
-          if [ -f catalog/USAGE.md ] && [ -f catalog/usage.json ]; then
-            git add -- catalog/USAGE.md catalog/usage.json
+          git add -- semantic-models/sales/deployment/app-ids.json
+          if [ -f semantic-models/sales/catalog/USAGE.md ] && [ -f semantic-models/sales/catalog/usage.json ]; then
+            git add -- semantic-models/sales/catalog/USAGE.md semantic-models/sales/catalog/usage.json
           fi
-          if [ -f lineage/APP_LINEAGE.md ] && [ -f lineage/graph.json ]; then
-            git add -- lineage/APP_LINEAGE.md lineage/graph.json
+          if [ -f semantic-models/sales/lineage/APP_LINEAGE.md ] && [ -f semantic-models/sales/lineage/graph.json ]; then
+            git add -- semantic-models/sales/lineage/APP_LINEAGE.md semantic-models/sales/lineage/graph.json
           fi
           if git diff --cached --quiet; then
             echo "App IDs, Semantic Catalog and App Lineage reports unchanged."

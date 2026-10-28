@@ -18,22 +18,22 @@ class DeploymentPlanTests(unittest.TestCase):
         self.graph = app_lineage.build(app_lineage.registry())
 
     def test_push_etl2_script_only_no_data_reload(self):
-        p = planner.plan(self.graph, {"scripts/etl2.qvs"}, "deploy-only")
+        p = planner.plan(self.graph, {"semantic-models/sales/scripts/etl2.qvs"}, "deploy-only")
         self.assertEqual(p["scripts"], ["etl2"])
         self.assertEqual(p["reloads"], [])
 
     def test_push_etl1_only_does_not_regenerate_downstream(self):
-        p = planner.plan(self.graph, {"scripts/etl1.qvs"}, "deploy-only")
+        p = planner.plan(self.graph, {"semantic-models/sales/scripts/etl1.qvs"}, "deploy-only")
         self.assertEqual(p["scripts"], ["etl1"])
         self.assertEqual(p["reloads"], [])
 
     def test_push_shared_presentation_script_updates_both_no_reload(self):
-        p = planner.plan(self.graph, {"scripts/presentation.qvs"}, "deploy-only")
+        p = planner.plan(self.graph, {"semantic-models/sales/scripts/presentation.qvs"}, "deploy-only")
         self.assertEqual(p["scripts"], ["presentation", "presentation2"])
         self.assertEqual(p["reloads"], [])
 
     def test_catalog_ci_or_docs_commit_does_not_apply_any_script(self):
-        p = planner.plan(self.graph, {"ci/deployment_plan.py", "catalog/measures.json"},
+        p = planner.plan(self.graph, {"ci/deployment_plan.py", "semantic-models/sales/catalog/measures.json"},
                          "deploy-only")
         self.assertEqual(p["scripts"], [])
         self.assertEqual(p["reloads"], [])

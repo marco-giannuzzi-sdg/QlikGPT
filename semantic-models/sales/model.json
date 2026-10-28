@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "modelId": "sales",
+  "name": "Sales Analytics",
+  "description": "Modello Sales (FactSales e Calendar) con 2 ETL e 2 Presentation",
+  "appIds": "deployment/app-ids.json",
+  "etlApplications": [
+    {
+      "appKey": "etl1",
+      "appName": "QlikGPT - 01 ETL RAW",
+      "loadScript": "scripts/etl1.qvs"
+    },
+    {
+      "appKey": "etl2",
+      "appName": "QlikGPT - 02 ETL TRANSFORM",
+      "loadScript": "scripts/etl2.qvs"
+    }
+  ],
+  "presentationScript": "scripts/presentation.qvs",
+  "presentations": [
+    "presentation1",
+    "presentation2"
+  ],
+  "catalog": {
+    "measures": "catalog/measures.json",
+    "dimensions": "catalog/dimensions.json",
+    "variables": "catalog/variables.json",
+    "formatting": "catalog/formatting.json"
+  },
+  "reports": {
+    "usage": "catalog/USAGE.md",
+    "usageJson": "catalog/usage.json",
+    "lineage": "lineage/APP_LINEAGE.md",
+    "lineageJson": "lineage/graph.json"
+  },
+  "design": "design/EXECUTIVE_CLEAN.md"
+}

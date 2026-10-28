@@ -1,12 +1,12 @@
 {
   "appKey": "presentation2",
   "appName": "QlikGPT - 04 PRESENTATION SHARED",
-  "loadScript": "scripts/presentation.qvs",
+  "loadScript": "semantic-models/sales/scripts/presentation.qvs",
   "catalogMeasures": [
     "qlikgpt_shared_revenue",
     "qlikgpt_shared_margin_pct"
   ],
-  "dashboardSource": "apps/presentation2-objects.json",
+  "dashboardSource": "semantic-models/sales/apps/presentation2-objects.json",
   "description": "Catalog-governed native KPIs linked with qLibraryId.",
   "catalogDimensions": [
     "qlikgpt_d_market",

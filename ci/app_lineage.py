@@ -15,9 +15,12 @@ import re
 from urllib.parse import quote
 from uuid import UUID
 
+from model_registry import active_model
+
 ROOT = Path(__file__).resolve().parents[1]
-OUTPUT = ROOT / "lineage" / "APP_LINEAGE.md"
-JSON_OUTPUT = ROOT / "lineage" / "graph.json"
+MODEL = active_model()
+OUTPUT = MODEL.root / "lineage" / "APP_LINEAGE.md"
+JSON_OUTPUT = MODEL.root / "lineage" / "graph.json"
 BT = chr(96)
 
 SOURCE_RE = re.compile(
@@ -92,7 +95,7 @@ def registry() -> dict:
     # of truth for application names, script paths or Qlik IDs.
     from deploy import APPS
     from semantic_catalog import MANIFESTS
-    ids = load(ROOT / "deployment" / "app-ids.json")
+    ids = load(MODEL.state_path)
     out = {}
     for key, name, script in APPS:
         if key.startswith("etl"):
@@ -215,7 +218,7 @@ def build(applications: dict) -> dict:
     return {
         "schemaVersion": 1,
         "source": "QVS scripts and GitHub app registry (static declarations, not live Qlik metadata)",
-        "tenant": load(ROOT / "deployment" / "app-ids.json").get("tenant"),
+        "tenant": load(MODEL.state_path).get("tenant"),
         "apps": apps,
         "resources": resources,
         "connections": connections,
@@ -236,7 +239,7 @@ def app_link(report: dict, key: str) -> str:
 
 def script_link(path: str, line: int | None = None) -> str:
     suffix = f"#L{line}" if line else ""
-    return f"[{path}](../{path}{suffix})"
+    return f"[{path}](../{Path(path).relative_to(MODEL.prefix).as_posix()}{suffix})"
 
 
 def graph_mermaid(report: dict, detailed: bool) -> list[str]:

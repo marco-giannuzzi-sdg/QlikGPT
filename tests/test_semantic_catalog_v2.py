@@ -41,12 +41,12 @@ class CatalogV2Tests(unittest.TestCase):
 
     def test_changed_unused_dimension_has_zero_impacted_apps(self):
         with patch.object(assets,"changed_definitions",return_value={"qlikgpt_d_quarter"}):
-            self.assertEqual(assets.impacted(self.manifests,{"catalog/dimensions.json"},
+            self.assertEqual(assets.impacted(self.manifests,{"semantic-models/sales/catalog/dimensions.json"},
                                             self.dims,self.vars),set())
 
     def test_changed_shared_variable_impacts_both_apps(self):
         with patch.object(assets,"changed_definitions",return_value={"qlikgpt_v_target_margin"}):
-            self.assertEqual(assets.impacted(self.manifests,{"catalog/variables.json"},
+            self.assertEqual(assets.impacted(self.manifests,{"semantic-models/sales/catalog/variables.json"},
                                             self.dims,self.vars),
                              {"presentation","presentation2"})
 

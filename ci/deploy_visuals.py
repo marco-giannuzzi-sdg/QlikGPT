@@ -12,8 +12,11 @@ import urllib.parse
 
 import websocket
 
+from model_registry import active_model
+
 ROOT = Path(__file__).resolve().parents[1]
-CONFIG = ROOT / "apps" / "presentation1-filters.json"
+MODEL = active_model()
+CONFIG = MODEL.root / "apps" / "presentation1-filters.json"
 
 
 class Qix:
@@ -76,7 +79,7 @@ def main() -> None:
     if not isinstance(definitions, list):
         raise TypeError("apps/presentation1-filters.json must be an array")
 
-    source = json.loads((ROOT / "apps" / "presentation1-objects.json").read_text(encoding="utf-8"))
+    source = json.loads((MODEL.root / "apps" / "presentation1-objects.json").read_text(encoding="utf-8"))
     target = next(
         (obj for obj in source if obj.get("qInfo", {}).get("qId") == "qlikgpt_sales_overview"),
         None,

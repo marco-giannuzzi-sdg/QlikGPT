@@ -15,15 +15,17 @@ from urllib import request as urlrequest
 import sys
 import uuid
 
+from model_registry import active_model
+
 ROOT = Path(__file__).resolve().parents[1]
-STATE_PATH = ROOT / "deployment" / "app-ids.json"
+MODEL = active_model()
+STATE_PATH = MODEL.state_path
 TENANT = os.environ.get("QLIK_TENANT", "").rstrip("/")
 SPACE_ID = os.environ.get("QLIK_SPACE_ID", "").strip()
 
-APPS = (
-    ("etl1", "QlikGPT - 01 ETL RAW", "scripts/etl1.qvs"),
-    ("etl2", "QlikGPT - 02 ETL TRANSFORM", "scripts/etl2.qvs"),
-    ("presentation", "QlikGPT - 03 PRESENTATION", "scripts/presentation.qvs"),
+APPS = MODEL.etl_apps() + tuple(
+    (key, json.loads(path.read_text(encoding="utf-8"))["appName"], MODEL.presentation_script)
+    for key, path in MODEL.presentation_manifests().items() if key == "presentation"
 )
 
 
@@ -187,7 +189,7 @@ def validate_frontend(app_id: str) -> None:
     """Round-trip the Presentation app through Qlik CLI to confirm persisted objects."""
     # Dynamic: expected catalog measures + all native objects and dimensions
     # declared in the app manifest. No fixed list of legacy master items.
-    manifest = json.loads((ROOT / "apps/presentation1.json").read_text())
+    manifest = json.loads((MODEL.presentation_manifests()["presentation"]).read_text())
     sheets = json.loads((ROOT / manifest["dashboardSource"]).read_text())
     filters = json.loads((ROOT / manifest["filterSource"]).read_text())
     expected_ids = set(manifest["catalogMeasures"])
@@ -283,12 +285,23 @@ def main() -> None:
         if not app.get("appId"):
             raise RuntimeError(f"{key}: missing registered Qlik App ID")
         path = app["script"]
-        print(f"DEPLOY SCRIPT ONLY [{key}] {path} (NO DATA RELOAD)", flush=True)
-        run("app", "build", "--app", state[key], "--script", path, "--no-reload")
-
-        # Separate QIX readback: commit must really reach the application's
-        # load-script editor, independent of the loaded data model.
+        # Moving a QVS file without changing its contents must not rewrite Qlik.
         from deploy_visuals import Qix
+        expected = (ROOT / path).read_text(encoding="utf-8")
+        normalize = lambda value: value.replace("\r\n", "\n").strip() if isinstance(value, str) else None
+        check_existing = Qix(state[key])
+        try:
+            current_doc = check_existing.call(-1, "OpenDoc", {"qDocName":state[key]})["qReturn"]["qHandle"]
+            current_script = check_existing.call(current_doc, "GetScript", []).get("qScript")
+        finally:
+            check_existing.close()
+        if normalize(current_script) == normalize(expected):
+            print(f"SCRIPT UNCHANGED [{key}]: path relocated, Qlik write skipped", flush=True)
+        else:
+            print(f"DEPLOY SCRIPT ONLY [{key}] {path} (NO DATA RELOAD)", flush=True)
+            run("app", "build", "--app", state[key], "--script", path, "--no-reload")
+
+        # A separate QIX readback validates the currently persisted script.
         check = Qix(state[key])
         try:
             doc = check.call(-1, "OpenDoc", {"qDocName":state[key]})["qReturn"]["qHandle"]
@@ -307,7 +320,7 @@ def main() -> None:
     # Rebuild the original Sales Overview only when its own frontend or CI changes.
     refresh_p1_frontend = (
         not files_changed or
-        any(path.startswith(("apps/presentation1", "ci/", ".github/"))
+        any(path.startswith((f"{MODEL.prefix}/apps/presentation1", "ci/", ".github/"))
             for path in files_changed)
     )
     if refresh_p1_frontend:

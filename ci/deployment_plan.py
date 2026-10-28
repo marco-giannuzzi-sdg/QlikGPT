@@ -49,7 +49,7 @@ def plan(graph: dict, changed: set[str], mode: str, target: str = "") -> dict:
                 raise ValueError(f"Unknown deployment target: {target}")
             selected = {target}
         else:
-            # Shared QVS files, like scripts/presentation.qvs, affect each
+            # Shared QVS files, like shared model Presentation QVS, affect each
             # subscribed app. Other changes produce no script deployment.
             selected = {
                 key for key, app in apps.items() if app["script"] in changed

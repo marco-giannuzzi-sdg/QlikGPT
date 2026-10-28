@@ -17,16 +17,13 @@ from typing import Callable
 
 from deploy_visuals import Qix, find_child
 
+from model_registry import active_model
+
 ROOT = Path(__file__).resolve().parents[1]
-CATALOG = ROOT / "catalog" / "measures.json"
-FORMATTING = ROOT / "catalog" / "formatting.json"
-# Additional apps are onboarded by adding apps/presentation3.json,
-# apps/presentation3-objects.json, etc. No Python routing table to edit.
-MANIFESTS = {
-    ("presentation" if p.stem == "presentation1" else p.stem): p
-    for p in sorted((ROOT / "apps").glob("presentation*.json"))
-    if re.fullmatch(r"presentation[0-9]+\.json", p.name)
-}
+MODEL = active_model()
+CATALOG = MODEL.catalog("measures")
+FORMATTING = MODEL.catalog("formatting")
+MANIFESTS = MODEL.presentation_manifests()
 ALLOWED_FIELDS = {"Revenue", "Margin", "Cost", "OrderID", "Quantity", "Market",
                   "OrderDate", "Channel", "CustomerID", "SalesYear"}
 
@@ -168,10 +165,10 @@ def validate_catalog(catalog: dict, manifests: dict) -> dict:
         missing = set(refs) - set(by_id)
         if missing:
             raise ValueError(f"{app_key}: unknown subscribed measures: {sorted(missing)}")
-        if not manifest.get("loadScript") == "scripts/presentation.qvs":
+        if not manifest.get("loadScript") == MODEL.presentation_script:
             raise ValueError(f"{app_key}: unapproved loadScript")
         suffix = "1" if app_key == "presentation" else app_key.removeprefix("presentation")
-        expected_dashboard = f"apps/presentation{suffix}-objects.json"
+        expected_dashboard = f"{MODEL.prefix}/apps/presentation{suffix}-objects.json"
         if manifest.get("dashboardSource") != expected_dashboard:
             raise ValueError(f"{app_key}: dashboardSource must be {expected_dashboard}")
         if not isinstance(manifest.get("appName"), str) or not manifest["appName"]:
@@ -232,7 +229,7 @@ def changed_metric_ids(current: dict) -> set[str]:
     """Diff the canonical measure definitions using git history."""
     try:
         old_data = subprocess.check_output(
-            ["git", "show", "HEAD^:catalog/measures.json"],
+            ["git", "show", "HEAD^:" + CATALOG.relative_to(ROOT).as_posix()],
             cwd=ROOT, text=True, stderr=subprocess.DEVNULL,
         )
         previous = json.loads(old_data)
@@ -248,16 +245,16 @@ def determine_impacted(catalog: dict, manifests: dict, changed: set[str],
     if full or new_app or not changed:
         return set(manifests)
     affected = set()
-    if "catalog/formatting.json" in changed:
+    if FORMATTING.relative_to(ROOT).as_posix() in changed:
         affected |= set(manifests)
-    if "catalog/measures.json" in changed:
+    if CATALOG.relative_to(ROOT).as_posix() in changed:
         modified = changed_metric_ids(catalog)
         affected |= {key for key, manifest in manifests.items()
                      if modified.intersection(manifest["catalogMeasures"])}
     for key, manifest in manifests.items():
         suffix = "1" if key == "presentation" else key.removeprefix("presentation")
         candidates = {
-            f"apps/presentation{suffix}.json", manifest["dashboardSource"],
+            f"{MODEL.prefix}/apps/presentation{suffix}.json", manifest["dashboardSource"],
             manifest.get("filterSource"), manifest.get("dimensionSource"),
         }
         if any(p in changed for p in candidates if p):

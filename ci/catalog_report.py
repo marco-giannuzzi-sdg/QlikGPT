@@ -10,12 +10,15 @@ import json
 from pathlib import Path
 import re
 
+from model_registry import active_model
+
 ROOT = Path(__file__).resolve().parents[1]
-C = ROOT / "catalog"
-APP = ROOT / "apps"
+MODEL = active_model()
+C = MODEL.root / "catalog"
+APP = MODEL.root / "apps"
 OUTPUT = C / "USAGE.md"
 OUTPUT_JSON = C / "usage.json"
-TENANT = "https://sdggroup-it.eu.qlikcloud.com"
+TENANT = json.loads(MODEL.state_path.read_text(encoding="utf-8"))["tenant"]
 
 
 def load(path):
@@ -34,7 +37,7 @@ def read_catalog(kind):
 
 def read_apps():
     data = {}
-    apps = load(ROOT / "deployment" / "app-ids.json")
+    apps = load(MODEL.state_path)
     for path in sorted(APP.glob("presentation[0-9]*.json")):
         if not re.fullmatch(r"presentation[0-9]+\.json", path.name):
             continue
@@ -150,7 +153,7 @@ def render(report):
     ]
     for key,app in apps.items():
         link=f"[Apri app]({TENANT}/sense/app/{app['appId']})" if app["appId"] else "Non creata"
-        lines.append(f"| {app['name']} | {link} | [Manifest](../{app['manifest']}) |")
+        lines.append(f"| {app['name']} | {link} | [Manifest](../../../{app['manifest']}) |")
     lines.extend(["","## Matrice delle dipendenze","","**✓** = master item sottoscritto, **—** = assente. Il numero di grafici che lo referenziano è mostrato separatamente.",""])
     lines.append("| Tipo | Elemento | "+" | ".join(apps)+" | Grafici collegati |")
     lines.append("| --- | --- | "+" | ".join(":---:" for _ in apps)+" | ---: |")
@@ -175,8 +178,8 @@ def render(report):
         lines.extend(f"- {w}" for w in report["warnings"])
         lines.append("")
     lines.extend(["## Come si usa","",
-        "Modifica **[catalog/measures.json](measures.json)**, **[catalog/dimensions.json](dimensions.json)** "
-        "oppure **[catalog/variables.json](variables.json)**; associa gli ID alle app nei rispettivi manifest. "
+        "Modifica **[measures.json](measures.json)**, **[dimensions.json](dimensions.json)** "
+        "oppure **[variables.json](variables.json)**; associa gli ID alle app nei rispettivi manifest. "
         "Il report è aggiornato dal workflow GitHub Actions senza usare il computer dell'autore.",
         "",
         "Per i dettagli strutturati e per altri strumenti, usa **[usage.json](usage.json)**.",

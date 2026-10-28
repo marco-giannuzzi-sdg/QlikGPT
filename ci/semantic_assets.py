@@ -12,9 +12,12 @@ from pathlib import Path
 import re
 import subprocess
 
+from model_registry import active_model
+
 ROOT = Path(__file__).resolve().parents[1]
-DIMENSIONS = ROOT / "catalog" / "dimensions.json"
-VARIABLES = ROOT / "catalog" / "variables.json"
+MODEL = active_model()
+DIMENSIONS = MODEL.catalog("dimensions")
+VARIABLES = MODEL.catalog("variables")
 
 
 def definitions(path: Path, key: str) -> dict:
@@ -188,8 +191,8 @@ def impacted(manifests: dict, paths: set[str], dims: dict, variables: dict) -> s
     # dimension or variable does not force unrelated apps to deploy.
     affected = set()
     for path,kind,field,values in (
-        ("catalog/dimensions.json", "dimensions", "catalogDimensions", dims),
-        ("catalog/variables.json", "variables", "catalogVariables", variables),
+        (DIMENSIONS.relative_to(ROOT).as_posix(), "dimensions", "catalogDimensions", dims),
+        (VARIABLES.relative_to(ROOT).as_posix(), "variables", "catalogVariables", variables),
     ):
         if path in paths:
             diff = changed_definitions(path, kind, values)

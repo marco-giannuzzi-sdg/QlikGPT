@@ -10,7 +10,7 @@ Questa sezione contiene un lineage **tra applicazioni Qlik e artefatti dati QVD*
 
 ## Come vengono scoperte le dipendenze
 
-Il generatore [ci/app_lineage.py](../ci/app_lineage.py) usa direttamente il registry di `ci/deploy.py`, i manifest `apps/presentationN.json`, gli ID registrati in `deployment/app-ids.json` e le istruzioni QVS. Quando un'app fa `STORE` su un URI e un'altra fa `FROM` sullo stesso URI, viene ricostruito un arco upstream → downstream. Se più app dichiarano di scrivere sullo stesso file, il controllo fallisce per evitare lineage ambiguo.
+Il generatore [ci/app_lineage.py](../../../ci/app_lineage.py) usa direttamente il registry di `ci/deploy.py`, i manifest `semantic-models/sales/apps/presentationN.json`, gli ID registrati in `semantic-models/sales/deployment/app-ids.json` e le istruzioni QVS. Quando un'app fa `STORE` su un URI e un'altra fa `FROM` sullo stesso URI, viene ricostruito un arco upstream → downstream. Se più app dichiarano di scrivere sullo stesso file, il controllo fallisce per evitare lineage ambiguo.
 
 L'elaborazione produce le dipendenze dirette e quelle indirette (transitive), ad esempio ETL1 → ETL2 → entrambe le Presentation. Le nuove Presentation che leggono QVD già presenti verranno aggiunte automaticamente attraverso i manifest.
 

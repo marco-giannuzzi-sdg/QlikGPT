@@ -1,16 +1,16 @@
 {
   "appKey": "presentation",
   "appName": "QlikGPT - 03 PRESENTATION",
-  "loadScript": "scripts/presentation.qvs",
+  "loadScript": "semantic-models/sales/scripts/presentation.qvs",
   "catalogMeasures": [
     "qlikgpt_shared_revenue",
     "qlikgpt_shared_orders",
     "qlikgpt_shared_margin",
     "qlikgpt_shared_margin_pct"
   ],
-  "dashboardSource": "apps/presentation1-objects.json",
+  "dashboardSource": "semantic-models/sales/apps/presentation1-objects.json",
   "description": "All master measures catalog governed; every KPI/chart uses subscribed qLibraryId.",
-  "filterSource": "apps/presentation1-filters.json",
+  "filterSource": "semantic-models/sales/apps/presentation1-filters.json",
   "catalogDimensions": [
     "qlikgpt_d_market",
     "qlikgpt_d_yearmonth",

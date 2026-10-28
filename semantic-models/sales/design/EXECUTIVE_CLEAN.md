@@ -30,7 +30,7 @@ The Qlik Engine hypercubes must return nonzero data rows. QlikGPT CI also verifi
 
 ## Continuous delivery
 
-Any commit modifying only `frontend/**` runs a **frontend-only** deploy, leaving all three apps and their loaded data unchanged. Changes to `scripts/**`, `ci/**` or workflow files deploy all three stages sequentially. Manual workflow runs default to full.
+QVS distribuiti con `--no-reload`; reload dei dati solo attraverso operazione esplicita `reload-app` o `reload-chain`. Vedi [README del modello](../README.md).
 
 ## Next level
 
