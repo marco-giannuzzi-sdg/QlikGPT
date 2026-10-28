@@ -95,7 +95,7 @@ jobs:
         shell: bash
         run: |
           python3 -m unittest discover -s tests -v
-          python3 -m py_compile ci/semantic_catalog.py ci/semantic_assets.py ci/catalog_report.py ci/app_lineage.py ci/field_lineage.py ci/model_registry.py ci/deployment_plan.py ci/reload_chain.py ci/deploy.py ci/deploy_visuals.py ci/ui_template.py
+          python3 -m py_compile ci/semantic_catalog.py ci/semantic_assets.py ci/catalog_report.py ci/app_lineage.py ci/field_lineage.py ci/model_registry.py ci/deployment_plan.py ci/reload_chain.py ci/deploy.py ci/deploy_visuals.py ci/deploy_theme.py ci/ui_template.py
 
       - name: Validate reusable native Qlik frontend template
         shell: bash
@@ -129,6 +129,15 @@ jobs:
         run: |
           set -euo pipefail
           python3 ci/deploy.py
+
+      - name: Publish QlikGPT Executive Premium theme and assign to Sales Overview
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Qlik CLI uses the existing qlikgpt-ci context and QLIK_API_KEY secret.
+          # The script is idempotent, patches only our own QEXT and checks QIX readback.
+          # This does NOT trigger a Qlik data reload.
+          python3 ci/deploy_theme.py --apply-app presentation
 
       - name: Persist generated lineage, semantic reports and app IDs
         # Persist reports and IDs even when an explicitly requested reload fails.
