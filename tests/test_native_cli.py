@@ -23,9 +23,11 @@ class NativeCliTests(unittest.TestCase):
         self.assertEqual(types.count("kpi"), 4)
         self.assertEqual(types.count("linechart"), 1)
         self.assertEqual(types.count("barchart"), 1)
+        self.assertEqual(types.count("table"), 1)
+        self.assertEqual(types.count("piechart"), 1)
         self.assertEqual(types.count("filterpane"), 3)
         self.assertEqual(types.count("listbox"), 3)
-        self.assertEqual(set(types), {"sheet", "kpi", "linechart", "barchart", "filterpane", "listbox", "text-image"})
+        self.assertEqual(set(types), {"sheet", "kpi", "linechart", "barchart", "filterpane", "listbox", "text-image", "table", "piechart"})
         self.assertTrue(all("qChildren" not in p for p in self.objects))
         ids = [p["qInfo"]["qId"] for p in self.objects]
         self.assertEqual(len(ids), len(set(ids)))
@@ -73,3 +75,29 @@ class NativeCliTests(unittest.TestCase):
                 self.assertTrue(p["markdown"])
             if p["qInfo"]["qType"] == "linechart":
                 self.assertEqual(p["qHyperCubeDef"]["qDimensions"][0]["qDef"]["qSortCriterias"][0]["qSortByNumeric"], 1)
+
+    def test_requested_layout_is_compact_centered_and_uses_the_bottom_of_the_sheet(self):
+        cells = {c["name"]: c for c in self.tree["qProperty"]["cells"]}
+        self.assertNotIn("qlikgpt_native_header", cells)
+        self.assertEqual(cells["qlikgpt_native_intro"]["row"], 0)
+        self.assertGreaterEqual(max(c["row"] + c["rowspan"] for c in cells.values()), 38)
+        for p in self.objects:
+            if p["qInfo"]["qType"] == "kpi":
+                self.assertEqual(p["textAlign"], "center")
+            if p["qInfo"]["qType"] == "filterpane":
+                style = p["components"][0]
+                self.assertEqual(style["borderWidth"], "0px")
+                self.assertEqual(style["shadow"]["boxShadow"], "none")
+                self.assertEqual(cells[p["qInfo"]["qId"]]["rowspan"], 1)
+
+    def test_native_title_update_preserves_unrelated_app_properties_and_children(self):
+        import sys
+        sys.path.insert(0, str(ROOT / "ci"))
+        from deploy_native_cli import styled_app_tree, TITLE_STYLE
+        previous = {"qProperty": {"qInfo": {"qId": "app", "qType": "appprops"},
+                    "theme": "horizon", "rtl": False, "sheetTitleColor": "#000000",
+                    "custom": {"keep": True}}, "qChildren": [{"qProperty": {"title": "Keep"}}]}
+        after = styled_app_tree(previous)
+        self.assertEqual(after["qProperty"], dict(previous["qProperty"], **TITLE_STYLE))
+        self.assertEqual(after["qChildren"], previous["qChildren"])
+        self.assertEqual(previous["qProperty"]["sheetTitleColor"], "#000000")

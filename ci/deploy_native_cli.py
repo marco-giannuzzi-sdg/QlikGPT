@@ -1,6 +1,8 @@
 """Write a new native sheet through Qlik CLI; QIX is used only for readback/audit."""
 from __future__ import annotations
+import copy
 import importlib.util
+import math
 import json
 from pathlib import Path
 import subprocess
@@ -23,6 +25,14 @@ def walk(tree):
     for child in tree.get("qChildren", []):
         yield from walk(child)
 
+TITLE_STYLE = {"sheetTitleBgColor": "#142840", "sheetTitleGradientColor": "#142840",
+               "sheetTitleColor": "#FFFFFF"}
+
+def styled_app_tree(previous):
+    tree = copy.deepcopy(previous)
+    tree["qProperty"].update(TITLE_STYLE)
+    return tree
+
 def main():
     from deploy_visuals import Qix
     from deploy_premium import protected_snapshot
@@ -32,7 +42,7 @@ def main():
     generator.write()
     expected_tree = json.loads(SOURCE.read_text(encoding="utf-8"))[0]
     expected = {props["qInfo"]["qId"]: props for props in walk(expected_tree)}
-    allowed = {"sheet", "kpi", "filterpane", "listbox", "text-image", "linechart", "barchart"}
+    allowed = {"sheet", "kpi", "filterpane", "listbox", "text-image", "linechart", "barchart", "table", "piechart"}
     if any(props["qInfo"]["qType"] not in allowed for props in expected.values()):
         raise RuntimeError("Only built-in native objects are permitted")
     registry = json.loads((ROOT / "semantic-models/sales/deployment/app-ids.json").read_text())
@@ -43,6 +53,16 @@ def main():
         doc = qix.call(-1, "OpenDoc", {"qDocName": APP})["qReturn"]["qHandle"]
         before = protected_snapshot(qix, doc)
         reload_before = qix.call(doc, "GetAppLayout", [])["qLayout"].get("qLastReloadTime")
+        app_list = qix.call(doc, "CreateSessionObject", {"qProp": {
+            "qInfo": {"qType": "qlikgpt-title-preflight"},
+            "qAppObjectListDef": {"qType": "appprops", "qData": {}}}})["qReturn"]["qHandle"]
+        app_items = qix.call(app_list, "GetLayout", [])["qLayout"]["qAppObjectList"]["qItems"]
+        if len(app_items) != 1:
+            raise RuntimeError("Expected exactly one existing app properties object")
+        app_id = app_items[0]["qInfo"]["qId"]
+        app_handle = qix.call(doc, "GetObject", {"qId": app_id})["qReturn"]["qHandle"]
+        app_before = qix.call(app_handle, "GetFullPropertyTree", [])["qPropEntry"]
+        app_target = styled_app_tree(app_before)
         listing = qix.call(doc, "CreateSessionObject", {"qProp": {
             "qInfo": {"qType": "qlikgpt-native-preflight"},
             "qAppObjectListDef": {"qType": "sheet", "qData": {}}}})["qReturn"]["qHandle"]
@@ -52,10 +72,23 @@ def main():
             previous = qix.call(sheet, "GetFullPropertyTree", [])["qPropEntry"]
             if previous["qProperty"].get("description") != "qlikgpt-native-cli-v1":
                 raise RuntimeError("Sheet ID is owned by another implementation")
-            if set(p["qInfo"]["qId"] for p in walk(previous)) - set(expected):
-                raise RuntimeError("Unmanaged children exist; refusing to replace them")
+            retired = {p["qInfo"]["qId"]: p for p in walk(previous)
+                       if p["qInfo"]["qId"] not in expected}
+            # Only the duplicate header explicitly requested for removal may retire.
+            for ident, prop in retired.items():
+                if (ident != "qlikgpt_native_header" or prop["qInfo"]["qType"] != "text-image"
+                        or prop.get("title") != "Sales Intelligence"):
+                    raise RuntimeError("Unmanaged children exist; refusing to replace them")
 
-        # This is the only persistent write path. GenericObjectEntry recursively
+        # All persistent writes are full-tree imports via the CLI.
+        # Preserve unrelated app styling, theme and children; change only native title colors.
+        app_source = ROOT / "ui/native-overview/app-title.generated.json"
+        app_source.write_text(json.dumps([app_target], ensure_ascii=False), encoding="utf-8")
+        cli("app", "object", "set", str(app_source), "--app", APP)
+        if qix.call(app_handle, "GetFullPropertyTree", [])["qPropEntry"] != app_target:
+            raise RuntimeError("Native title colors or unrelated app properties differ after CLI import")
+        print("NATIVE APP TITLE VERIFIED: navy background, white text; unrelated settings preserved", flush=True)
+        # This is the only sheet write path. GenericObjectEntry recursively
         # materializes native children; qChildren is never a custom qProperty.
         cli("app", "object", "set", str(SOURCE), "--app", APP)
 
@@ -64,6 +97,7 @@ def main():
         actual = {p["qInfo"]["qId"]: p for p in walk(live)}
         if set(actual) != set(expected):
             raise RuntimeError("CLI did not persist the expected native object hierarchy")
+        data = {}
         for ident, target in expected.items():
             props = actual[ident]
             if props["qInfo"]["qType"] != target["qInfo"]["qType"]:
@@ -85,6 +119,7 @@ def main():
                 cube = qix.call(handle, "GetLayout", [])["qLayout"]["qHyperCube"]
                 if cube.get("qError") or cube.get("qSize", {}).get("qcy", 0) < 1:
                     raise RuntimeError("Native chart has no Engine data: " + ident)
+                data[ident] = cube
                 print("NATIVE DATA VERIFIED:", target["qInfo"]["qType"], ident, flush=True)
             target_list = target.get("qListObjectDef")
             if target_list:
@@ -94,6 +129,14 @@ def main():
                 if qix.call(handle, "GetLayout", [])["qLayout"]["qListObject"]["qSize"]["qcy"] < 1:
                     raise RuntimeError("Native filter has no values")
                 print("NATIVE FILTER VERIFIED:", ident, flush=True)
+        revenue = data["qlikgpt_native_kpi_0"]["qDataPages"][0]["qMatrix"][0][0]["qNum"]
+        for ident in ("qlikgpt_native_market_detail", "qlikgpt_native_channels"):
+            chart = data[ident]
+            rows = [row for page in chart["qDataPages"] for row in page["qMatrix"]]
+            if len(rows) != chart["qSize"]["qcy"] or not math.isclose(
+                    sum(row[1]["qNum"] for row in rows), revenue, rel_tol=1e-9, abs_tol=0.01):
+                raise RuntimeError("Breakdown revenue does not reconcile with KPI: " + ident)
+        print("BREAKDOWN REVENUE RECONCILED: table and donut equal governed revenue KPI", flush=True)
         if protected_snapshot(qix, doc) != before:
             raise RuntimeError("Protected semantic assets changed")
         if qix.call(doc, "GetAppLayout", [])["qLayout"].get("qLastReloadTime") != reload_before:
