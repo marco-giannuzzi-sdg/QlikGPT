@@ -31,9 +31,28 @@ The header is a native `text-image` visualization with Qlik rich-text markup (`%
 There are **two independent layers**:
 
 1. **Native object properties and grid** are deployed by the existing QIX/GitHub workflow on `main`. This path is **deploy-only**: it never initiates a data reload. The branch/PR itself does not deploy to Qlik Cloud.
-2. **The custom global theme** must be uploaded to Qlik Cloud as a ZIP and explicitly selected in the app (Settings > Appearance > Application theme). A commit alone does not import, upgrade or activate a theme. Qlik native styling, chart rounding, shadow and responsive spacing need an actual browser QA; JSON tests alone cannot prove visual rendering.
+2. **Custom global theme** is published by `ci/deploy_theme.py` through the authenticated GitHub Actions Qlik CLI step. It is then assigned to the first registered Presentation via the QIX `appprops.theme` property. Publication requires that the guarded workflow actually runs and that the API key has Manage themes permission; a merge alone does not confirm tenant success. Browser visual QA is still required.
 
 Package only these two files in the ZIP root: `theme.json` and `qlikgpt-executive-v1.qext`. Have an administrator upload it under the tenant's theme management. Then select the theme on each Presentation using app settings. If the theme is already installed with the same ID, coordinate an update rather than creating duplicate names.
+
+## Automated upload and activation (qlik-cli + QIX)
+
+The existing authenticated GitHub workflow now publishes this theme automatically as its final deployment step, **after** governed sheet objects have been synchronized:
+
+- `ci/deploy_theme.py` zips `theme.json` and the QEXT file at the ZIP root. The package is validated with `--package-only` without contacting Qlik.
+- `qlik theme ls --json` checks the existing QEXT identity; `qlik theme create --file …` creates it if absent; `qlik theme patch <id> --file …` updates it only if the QEXT version differs. Same-version uploads are skipped.
+- After a successful tenant readback, the QIX app object `appprops.theme` is updated on **Presentation 1 only**, preserving every other app property. The QIX Engine reads back the saved theme after `DoSave`. There is **no data reload**.
+- The Github job is guarded by `vars.QLIK_CICD_ENABLED == 'true'`. The `QLIK_API_KEY` secret must belong to a user with **Tenant administrator**, **Analytics administrator**, or a custom role allowing **Manage themes**, plus write permission on the target app.
+- A Git merge does not prove an upload completed: inspect [Actions](https://github.com/marco-giannuzzi-sdg/QlikGPT/actions/workflows/deploy-qlik-cloud.yml) for the `Publish QlikGPT Executive Premium theme` step. If the job is skipped or fails, the theme is **not** verified as installed.
+
+To run the exact process from an already authenticated Qlik CLI environment:
+
+```bash
+python3 ci/deploy_theme.py --package-only
+python3 ci/deploy_theme.py --apply-app presentation
+```
+
+Only the existing demonstration app is changed. To apply to the other registered demo, explicitly run `--apply-app presentation2`. Other client applications require a separate opt-in.
 
 ## Checks and rollout
 
