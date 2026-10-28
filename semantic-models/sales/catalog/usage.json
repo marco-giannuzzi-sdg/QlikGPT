@@ -26,21 +26,33 @@
       "visuals": [
         {
           "app": "presentation",
-          "sheet": "Sales Intelligence | Executive Overview",
+          "sheet": "Sales Intelligence | Overview",
           "visualId": "qlikgpt_kpi_revenue",
           "visualType": "kpi"
         },
         {
           "app": "presentation",
-          "sheet": "Sales Intelligence | Executive Overview",
+          "sheet": "Sales Intelligence | Overview",
           "visualId": "qlikgpt_chart_month",
           "visualType": "linechart"
         },
         {
           "app": "presentation",
-          "sheet": "Sales Intelligence | Executive Overview",
+          "sheet": "Sales Intelligence | Overview",
           "visualId": "qlikgpt_chart_market",
           "visualType": "barchart"
+        },
+        {
+          "app": "presentation",
+          "sheet": "Sales Intelligence | Overview",
+          "visualId": "qlikgpt_table_sales",
+          "visualType": "table"
+        },
+        {
+          "app": "presentation",
+          "sheet": "Sales Intelligence | Overview",
+          "visualId": "qlikgpt_chart_channel",
+          "visualType": "piechart"
         },
         {
           "app": "presentation2",
@@ -79,9 +91,15 @@
       "visuals": [
         {
           "app": "presentation",
-          "sheet": "Sales Intelligence | Executive Overview",
+          "sheet": "Sales Intelligence | Overview",
           "visualId": "qlikgpt_kpi_orders",
           "visualType": "kpi"
+        },
+        {
+          "app": "presentation",
+          "sheet": "Sales Intelligence | Overview",
+          "visualId": "qlikgpt_table_sales",
+          "visualType": "table"
         }
       ],
       "definitions": {
@@ -113,9 +131,15 @@
       "visuals": [
         {
           "app": "presentation",
-          "sheet": "Sales Intelligence | Executive Overview",
+          "sheet": "Sales Intelligence | Overview",
           "visualId": "qlikgpt_kpi_margin",
           "visualType": "kpi"
+        },
+        {
+          "app": "presentation",
+          "sheet": "Sales Intelligence | Overview",
+          "visualId": "qlikgpt_table_sales",
+          "visualType": "table"
         }
       ],
       "definitions": {
@@ -149,9 +173,15 @@
       "visuals": [
         {
           "app": "presentation",
-          "sheet": "Sales Intelligence | Executive Overview",
+          "sheet": "Sales Intelligence | Overview",
           "visualId": "qlikgpt_kpi_margin_pct",
           "visualType": "kpi"
+        },
+        {
+          "app": "presentation",
+          "sheet": "Sales Intelligence | Overview",
+          "visualId": "qlikgpt_table_sales",
+          "visualType": "table"
         },
         {
           "app": "presentation2",
@@ -217,9 +247,15 @@
       "visuals": [
         {
           "app": "presentation",
-          "sheet": "Sales Intelligence | Executive Overview",
+          "sheet": "Sales Intelligence | Overview",
           "visualId": "qlikgpt_chart_market",
           "visualType": "barchart"
+        },
+        {
+          "app": "presentation",
+          "sheet": "Sales Intelligence | Overview",
+          "visualId": "qlikgpt_table_sales",
+          "visualType": "table"
         },
         {
           "app": "presentation",
@@ -258,7 +294,7 @@
       "visuals": [
         {
           "app": "presentation",
-          "sheet": "Sales Intelligence | Executive Overview",
+          "sheet": "Sales Intelligence | Overview",
           "visualId": "qlikgpt_chart_month",
           "visualType": "linechart"
         }
@@ -351,6 +387,18 @@
         "presentation"
       ],
       "visuals": [
+        {
+          "app": "presentation",
+          "sheet": "Sales Intelligence | Overview",
+          "visualId": "qlikgpt_table_sales",
+          "visualType": "table"
+        },
+        {
+          "app": "presentation",
+          "sheet": "Sales Intelligence | Overview",
+          "visualId": "qlikgpt_chart_channel",
+          "visualType": "piechart"
+        },
         {
           "app": "presentation",
           "sheet": "Filtri",

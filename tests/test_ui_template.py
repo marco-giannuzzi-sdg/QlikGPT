@@ -62,15 +62,17 @@ class NativeUITemplateTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"overlapping"):
             ui.validate_dashboard(bad,ui.tokens(),"overlap")
 
-    def test_first_app_is_native_22_row_grid_with_governed_objects(self):
-        app=ui.read(ui.MODEL.root/"apps"/"presentation1-objects.json")[0]
-        self.assertEqual(app["rows"],22)
+    def test_first_app_uses_declared_native_components_and_same_governed_insights(self):
+        app=ui.read(ui.MODEL.root/"apps/presentation1-objects.json")[0]
+        self.assertEqual(app["rows"],40)
+        self.assertEqual(app["uiStyleProfile"],"native-overview-v2")
         byid={o["qInfo"]["qId"]:o for o in app["qChildren"]}
-        self.assertEqual(app["background"]["color"],ui.tokens()["colors"]["canvas"])
-        self.assertIn("qlikgpt_kpi_section",byid)
-        self.assertIn("qlikgpt_insights_section",byid)
-        self.assertNotIn("##",byid["qlikgpt_brand_header"]["markdown"])
-        self.assertEqual(byid["qlikgpt_nav_shared_kpis"]["navigation"]["action"],"openWebsite")
+        self.assertIn("qlikgpt_table_sales",byid)
+        self.assertIn("qlikgpt_chart_channel",byid)
+        self.assertNotIn("qlikgpt_brand_header",byid)
+        self.assertNotIn("qlikgpt_nav_shared_kpis",byid)
+        self.assertEqual(byid["qlikgpt_table_sales"]["qInfo"]["qType"],"table")
+        self.assertEqual(byid["qlikgpt_chart_channel"]["qInfo"]["qType"],"piechart")
 
     def test_navigation_is_native_and_https_only(self):
         t=ui.tokens()

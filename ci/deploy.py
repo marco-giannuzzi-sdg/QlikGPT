@@ -324,8 +324,8 @@ def main() -> None:
             for path in files_changed)
     )
     if refresh_p1_frontend:
-        # Central master dimensions and variables are provisioned by QIX.
-        # Qlik CLI does not fully materialize nested sheet children.
+        # Master items remain centrally provisioned. The Overview JSON is
+        # adapted to GenericObjectEntry and imported through Qlik CLI.
         subprocess.run(
             [sys.executable, "ci/deploy_visuals.py", state["presentation"]],
             cwd=ROOT, check=True,

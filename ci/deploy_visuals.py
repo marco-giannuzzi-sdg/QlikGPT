@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
-"""Deploy native Qlik Sales Overview sheet, charts, KPI and filters using QIX.
+"""Deploy authored Sales Overview JSON through Qlik CLI; QIX only audits state.
 
 QLIK_API_KEY stays in a GitHub secret and is never logged. Idempotent on reruns.
 """
 from __future__ import annotations
+from copy import deepcopy
 import json
+import math
+import subprocess
+import tempfile
 import os
 from pathlib import Path
 import sys
 import urllib.parse
 
-import websocket
 
 from model_registry import active_model
 
@@ -21,6 +24,7 @@ CONFIG = MODEL.root / "apps" / "presentation1-filters.json"
 
 class Qix:
     def __init__(self, app_id: str):
+        import websocket
         tenant = os.environ["QLIK_TENANT"].rstrip("/")
         token = os.environ["QLIK_API_KEY"]
         if not tenant.startswith("https://") or not token:
@@ -99,193 +103,225 @@ def sync_sheet_grid(qix: Qix, sheet: int, target: dict) -> None:
 
 
 
-def main() -> None:
+
+ALLOWED_TYPES = {"sheet", "kpi", "filterpane", "listbox", "text-image", "linechart", "barchart", "table", "piechart"}
+RETIRED = {"qlikgpt_brand_header": "text-image", "qlikgpt_nav_shared_kpis": "button"}
+SHEET = "qlikgpt_sales_overview"
+
+
+def nodes(tree):
+    yield tree["qProperty"]
+    for child in tree.get("qChildren", []):
+        yield from nodes(child)
+
+
+def property_tree(properties):
+    """Transport adapter only: authored JSON properties remain the source of truth."""
+    props = deepcopy(properties)
+    children = props.pop("qChildren", [])
+    tree = {"qProperty": props}
+    if children:
+        tree["qChildren"] = [property_tree(child) for child in children]
+    return tree
+
+
+def overview_tree(source, filters):
+    target = next((item for item in source if item.get("qInfo", {}).get("qId") == SHEET), None)
+    if target is None:
+        raise ValueError("Missing Sales Overview in presentation1-objects.json")
+    tree = property_tree(target)
+    panes = [item for item in tree.get("qChildren", [])
+             if item["qProperty"]["qInfo"]["qId"] == "qlikgpt_filter_panel"]
+    if len(panes) != 1:
+        raise ValueError("Expected the declared qlikgpt_filter_panel")
+    if panes[0].get("qChildren"):
+        raise ValueError("Filter definitions belong in presentation1-filters.json")
+    children = []
+    for item in filters:
+        ident, dimension, label = item["id"], item["dimensionId"], item["label"]
+        if not ident.startswith("qlikgpt_list_"):
+            raise ValueError("Unexpected filter ID: " + ident)
+        props = {
+            "qInfo": {"qId": ident, "qType": "listbox"}, "qExtendsId": "",
+            "visualization": "listbox", "title": label, "showTitle": True,
+            "searchEnabled": True, "autoConfirm": True,
+            "layoutOptions": {"dataLayout": "singleColumn", "dense": True},
+            "qListObjectDef": {"qStateName": "$", "qLibraryId": dimension,
+                "qInitialDataFetch": [{"qTop": 0, "qLeft": 0, "qWidth": 1, "qHeight": 1000}]},
+            "components": [{"key": "theme",
+                "header": {"fontFamily": "Arial", "fontSize": "12px",
+                           "fontColor": {"index": -1, "color": "#142840", "alpha": 1}},
+                "content": {"fontFamily": "Arial", "fontSize": "12px"}}],
+        }
+        children.append(property_tree(props))
+    panes[0]["qChildren"] = children
+    return tree
+
+
+def validate_tree(tree, manifest):
+    ids = set()
+    for prop in nodes(tree):
+        ident, kind = prop["qInfo"]["qId"], prop["qInfo"]["qType"]
+        if ident in ids or kind not in ALLOWED_TYPES:
+            raise ValueError("Duplicate ID or unsupported visualization: " + ident)
+        ids.add(ident)
+        cube = prop.get("qHyperCubeDef", {})
+        for measure in cube.get("qMeasures", []):
+            if measure.get("qLibraryId") not in manifest["catalogMeasures"]:
+                raise ValueError("Unsubscribed measure in " + ident)
+            if measure.get("qDef", {}).get("qDef", "").strip():
+                raise ValueError("Inline measure in " + ident)
+        for dim in cube.get("qDimensions", []):
+            if dim.get("qLibraryId") not in manifest["catalogDimensions"]:
+                raise ValueError("Unsubscribed dimension in " + ident)
+            if any(f.strip() for f in dim.get("qDef", {}).get("qFieldDefs", []) if isinstance(f, str)):
+                raise ValueError("Inline dimension in " + ident)
+        if prop.get("qListObjectDef", {}).get("qLibraryId") not in (None, *manifest["catalogDimensions"]):
+            raise ValueError("Unsubscribed filter dimension in " + ident)
+        if kind == "table":
+            width = len(cube["qDimensions"]) + len(cube["qMeasures"])
+            if (cube.get("columnOrder") != list(range(width)) or
+                    len(cube.get("columnWidths", [])) != width or
+                    cube["qInitialDataFetch"][0]["qWidth"] != width):
+                raise ValueError("Update the table column metadata for " + ident)
+
+
+def validate_retired(previous, expected_ids):
+    for prop in nodes(previous):
+        ident, kind = prop["qInfo"]["qId"], prop["qInfo"]["qType"]
+        if ident not in expected_ids and RETIRED.get(ident) != kind:
+            raise RuntimeError("Unmanaged child would be removed: " + ident)
+
+
+def cli(app_id, *arguments):
+    print("+ qlik app " + " ".join(arguments) + " --app " + app_id, flush=True)
+    result = subprocess.run(["qlik", "app", *arguments, "--app", app_id],
+                            cwd=ROOT, capture_output=True, text=True)
+    if result.returncode:
+        raise RuntimeError("Qlik CLI failed: " + result.stderr[-2000:])
+    return result.stdout
+
+
+def semantic_snapshot(qix, doc, manifest):
+    result = {"script": qix.call(doc, "GetScript", []).get("qScript"),
+              "reload": qix.call(doc, "GetAppLayout", [])["qLayout"].get("qLastReloadTime")}
+    for method, key in (("GetMeasure", "catalogMeasures"), ("GetDimension", "catalogDimensions")):
+        result[key] = {}
+        for ident in manifest[key]:
+            handle = qix.call(doc, method, {"qId": ident})["qReturn"]["qHandle"]
+            result[key][ident] = qix.call(handle, "GetProperties", [])["qProp"]
+    return result
+
+
+def sheet_snapshots(qix, doc):
+    listing = qix.call(doc, "CreateSessionObject", {"qProp": {
+        "qInfo": {"qType": "qlikgpt-overview-audit"},
+        "qAppObjectListDef": {"qType": "sheet", "qData": {}}}})["qReturn"]["qHandle"]
+    items = qix.call(listing, "GetLayout", [])["qLayout"]["qAppObjectList"]["qItems"]
+    snapshots = {}
+    for item in items:
+        ident = item["qInfo"]["qId"]
+        handle = qix.call(doc, "GetObject", {"qId": ident})["qReturn"]["qHandle"]
+        snapshots[ident] = qix.call(handle, "GetFullPropertyTree", [])["qPropEntry"]
+    return snapshots
+
+
+def audit(qix, doc, expected, actual):
+    wanted = {p["qInfo"]["qId"]: p for p in nodes(expected)}
+    observed = {p["qInfo"]["qId"]: p for p in nodes(actual)}
+    if set(wanted) != set(observed):
+        raise RuntimeError("Native Overview hierarchy differs from JSON")
+    for key in ("cells", "columns", "rows", "title"):
+        if actual["qProperty"].get(key) != expected["qProperty"].get(key):
+            raise RuntimeError("Overview sheet layout did not persist: " + key)
+    data = {}
+    for ident, target in wanted.items():
+        prop = observed[ident]
+        if prop["qInfo"]["qType"] != target["qInfo"]["qType"]:
+            raise RuntimeError("Native type differs: " + ident)
+        if prop.get("components", []) != target.get("components", []):
+            raise RuntimeError("Native styles differ: " + ident)
+        cube = target.get("qHyperCubeDef")
+        if cube:
+            for key in ("qMeasures", "qDimensions"):
+                if [v.get("qLibraryId") for v in prop["qHyperCubeDef"].get(key, [])] != [
+                        v.get("qLibraryId") for v in cube.get(key, [])]:
+                    raise RuntimeError("Master bindings differ: " + ident)
+            if any(v.get("qDef", {}).get("qDef", "").strip()
+                   for v in prop["qHyperCubeDef"]["qMeasures"]):
+                raise RuntimeError("Inline measure persisted: " + ident)
+            handle = qix.call(doc, "GetObject", {"qId": ident})["qReturn"]["qHandle"]
+            live_cube = qix.call(handle, "GetLayout", [])["qLayout"]["qHyperCube"]
+            if live_cube.get("qError") or live_cube["qSize"]["qcy"] < 1:
+                raise RuntimeError("Native object has no Engine data: " + ident)
+            data[ident] = live_cube
+            print("OVERVIEW DATA VERIFIED:", ident, flush=True)
+        if target.get("qListObjectDef"):
+            if prop["qListObjectDef"].get("qLibraryId") != target["qListObjectDef"]["qLibraryId"]:
+                raise RuntimeError("Filter master binding differs: " + ident)
+            handle = qix.call(doc, "GetObject", {"qId": ident})["qReturn"]["qHandle"]
+            if qix.call(handle, "GetLayout", [])["qLayout"]["qListObject"]["qSize"]["qcy"] < 1:
+                raise RuntimeError("Native filter has no values: " + ident)
+            print("OVERVIEW FILTER VERIFIED:", ident, flush=True)
+    revenue = data["qlikgpt_kpi_revenue"]["qDataPages"][0]["qMatrix"][0][0]["qNum"]
+    for ident in ("qlikgpt_chart_month", "qlikgpt_chart_market", "qlikgpt_table_sales", "qlikgpt_chart_channel"):
+        cube = data[ident]
+        rows = [row for page in cube["qDataPages"] for row in page["qMatrix"]]
+        if len(rows) != cube["qSize"]["qcy"] or not math.isclose(
+                sum(row[len(cube["qDimensionInfo"])]["qNum"] for row in rows),
+                revenue, rel_tol=1e-9, abs_tol=0.01):
+            raise RuntimeError("Revenue breakdown does not reconcile: " + ident)
+    print("OVERVIEW REVENUE RECONCILED: trend, market, detail and channel match KPI", flush=True)
+
+
+def main():
     if len(sys.argv) != 2:
         raise SystemExit("Expected presentation app ID as argument")
-    definitions = json.loads(CONFIG.read_text(encoding="utf-8"))
-    if not isinstance(definitions, list):
-        raise TypeError("apps/presentation1-filters.json must be an array")
-
-    source = json.loads((MODEL.root / "apps" / "presentation1-objects.json").read_text(encoding="utf-8"))
-    target = next(
-        (obj for obj in source if obj.get("qInfo", {}).get("qId") == "qlikgpt_sales_overview"),
-        None,
-    )
-    if target is None:
-        raise RuntimeError("Missing Sales Overview in apps/presentation1-objects.json")
-
-    qix = Qix(sys.argv[1])
+    app_id = sys.argv[1]
+    state = json.loads(MODEL.state_path.read_text(encoding="utf-8"))
+    if app_id != state["presentation"]:
+        raise ValueError("Only the registered first Presentation app may be updated")
+    manifest = json.loads(MODEL.presentation_manifests()["presentation"].read_text(encoding="utf-8"))
+    source = json.loads((ROOT / manifest["dashboardSource"]).read_text(encoding="utf-8"))
+    definitions = json.loads((ROOT / manifest["filterSource"]).read_text(encoding="utf-8"))
+    expected = overview_tree(source, definitions)
+    validate_tree(expected, manifest)
+    qix = Qix(app_id)
     try:
-        doc = qix.call(-1, "OpenDoc", {"qDocName": sys.argv[1]})["qReturn"]["qHandle"]
-        sheet = qix.call(doc, "GetObject", {"qId": "qlikgpt_sales_overview"})["qReturn"]["qHandle"]
-        if sheet is None:
-            raise RuntimeError("Qlik Sales Overview sheet not found")
-
-        sync_sheet_grid(qix, sheet, target)
-
-        # qlik app build may store an embedded qChildren JSON array without
-        # creating native QIX children. Ensure actual Engine relationships.
-        for props in target.get("qChildren", []):
-            child_id = props["qInfo"]["qId"]
-            native = find_child(qix, sheet, child_id)
-            qix_properties = {k: v for k, v in props.items() if k != "qChildren"}
-            qix_properties.setdefault("qExtendsId", "")
-            if native is None:
-                qix.call(sheet, "CreateChild", [qix_properties])
-                native = find_child(qix, sheet, child_id)
-                if native is None:
-                    raise RuntimeError(f"QIX did not create native sheet object: {child_id}")
-                print(f"Created native sheet object: {child_id}", flush=True)
-            else:
-                print(f"Native sheet object exists: {child_id}", flush=True)
-                qix.call(native, "SetProperties", [qix_properties])
-
-        pane = find_child(qix, sheet, "qlikgpt_filter_panel")
-        if pane is None:
-            raise RuntimeError("Native filterpane was not linked to sheet by QIX")
-        for item in definitions:
-            item_id, dim_id, label = item["id"], item["dimensionId"], item["label"]
-            if not item_id.startswith("qlikgpt_list_"):
-                raise ValueError(f"Unexpected listbox ID: {item_id}")
-            properties = {
-                "qInfo": {"qId": item_id, "qType": "listbox"},
-                "qExtendsId": "",
-                "visualization": "listbox",
-                "title": label,
-                "showTitle": True,
-                "searchEnabled": True,
-                "autoConfirm": True,
-                "layoutOptions": {"dataLayout": "singleColumn", "dense": True},
-                "qListObjectDef": {
-                    "qStateName": "$",
-                    "qLibraryId": dim_id,
-                    "qDef": {"qFieldDefs": [""], "qFieldLabels": [""]},
-                    "qInitialDataFetch": [
-                        {"qTop": 0, "qHeight": 100, "qLeft": 0, "qWidth": 1}
-                    ],
-                },
-            }
-            existing = find_child(qix, pane, item_id)
-            if existing is None:
-                qix.call(pane, "CreateChild", [properties])
-                existing = find_child(qix, pane, item_id)
-                if existing is None:
-                    raise RuntimeError(f"QIX did not create listbox: {item_id}")
-                print(f"Created native Qlik filter: {label}", flush=True)
-            else:
-                qix.call(existing, "SetProperties", [properties])
-                print(f"Updated native Qlik filter: {label}", flush=True)
-            native_filter_props = qix.call(existing, "GetProperties", [])["qProp"]
-            persisted_id = native_filter_props.get("qListObjectDef", {}).get("qLibraryId")
-            if persisted_id != dim_id:
-                raise RuntimeError(f"Listbox {item_id} must reference master dimension {dim_id}; got {persisted_id}")
-            list_layout = qix.call(existing, "GetLayout", [])["qLayout"]
-            row_count = list_layout.get("qListObject", {}).get("qSize", {}).get("qcy", 0)
-            if row_count < 1:
-                raise RuntimeError(f"Listbox {item_id} with master dimension {dim_id} has no values")
-            print(f"FILTER MASTER VERIFIED {item_id} => {dim_id}, values={row_count}", flush=True)
-
-        # Contract check: every chart/KPI must actually reference a catalog
-        # master measure, not merely contain a valid-looking qLibraryId in JSON.
-        for visual in target.get("qChildren", []):
-            wanted = visual.get("qHyperCubeDef", {}).get("qMeasures", [])
-            if not wanted:
-                continue
-            hid = find_child(qix, sheet, visual["qInfo"]["qId"])
-            props_read = qix.call(hid, "GetProperties", [])["qProp"]
-            actual = props_read.get("qHyperCubeDef", {}).get("qMeasures", [])
-            if len(actual) != len(wanted):
-                raise RuntimeError("Wrong number of visual measures")
-            for expected, observed in zip(wanted, actual):
-                mid = expected.get("qLibraryId")
-                if not mid or observed.get("qLibraryId") != mid:
-                    raise RuntimeError("Visual is not using catalog master: " + visual["qInfo"]["qId"])
-                if observed.get("qDef", {}).get("qDef", "").strip():
-                    raise RuntimeError("Inline master formula found in " + visual["qInfo"]["qId"])
-            expected_dims = visual.get("qHyperCubeDef", {}).get("qDimensions", [])
-            actual_dims = props_read.get("qHyperCubeDef", {}).get("qDimensions", [])
-            if len(expected_dims) != len(actual_dims):
-                raise RuntimeError(f"Unexpected dimension count in {visual['qInfo']['qId']}")
-            for wanted_dim, observed_dim in zip(expected_dims, actual_dims):
-                dimension_id = wanted_dim.get("qLibraryId")
-                if not dimension_id or observed_dim.get("qLibraryId") != dimension_id:
-                    raise RuntimeError(
-                        f"Chart {visual['qInfo']['qId']} is not linked to master dimension {dimension_id}"
-                    )
-                if any(f.strip() for f in observed_dim.get("qDef", {}).get("qFieldDefs", []) if isinstance(f,str)):
-                    raise RuntimeError(f"Chart {visual['qInfo']['qId']} still contains inline fields")
-                print(f"CHART DIMENSION MASTER VERIFIED {visual['qInfo']['qId']} => {dimension_id}", flush=True)
-            print("Catalog qLibraryId verified for " + visual["qInfo"]["qId"], flush=True)
-
-        # The visual brand block must carry real markdown, not just a title.
-        brand_handle = find_child(qix, sheet, "qlikgpt_brand_header")
-        if brand_handle is None:
-            raise RuntimeError("Branded header object missing from Qlik sheet")
-        brand_layout = qix.call(brand_handle, "GetLayout", [])["qLayout"]
-        if "QlikGPT" not in str(brand_layout.get("markdown", "")):
-            raise RuntimeError("QlikGPT brand markup was not saved in the header")
-        print("Brand header: native text-image with QlikGPT wordmark saved.", flush=True)
-
-        # Validate native chart Engine data, not merely object persistence.
-        # A sheet can contain a chart title while the visualization is blank.
-        for chart_id in ("qlikgpt_chart_month", "qlikgpt_chart_market"):
-            chart_handle = find_child(qix, sheet, chart_id)
-            if chart_handle is None:
-                raise RuntimeError("Native chart not addressable: " + chart_id)
-            layout = qix.call(chart_handle, "GetLayout", [])["qLayout"]
-            cube = layout.get("qHyperCube", {})
-            size = cube.get("qSize", {})
-            pages = cube.get("qDataPages", [])
-            sample = (pages[0].get("qMatrix", [])[:2] if pages else [])
-            print(
-                "QIX chart diagnostic %s: size=%s dim=%s measures=%s "
-                "pages=%s sample=%s" % (
-                    chart_id, size, cube.get("qDimensionInfo"),
-                    cube.get("qMeasureInfo"), len(pages), sample,
-                ), flush=True
-            )
-            if size.get("qcy", 0) == 0:
-                raise RuntimeError("Chart hypercube contains zero data rows: " + chart_id)
-
-        # Verify the live Engine hierarchy, not only JSON exported by Qlik CLI.
-        for props in target.get("qChildren", []):
-            if find_child(qix, sheet, props["qInfo"]["qId"]) is None:
-                raise RuntimeError(f"Sheet child missing: {props['qInfo']['qId']}")
-        for item in definitions:
-            if find_child(qix, pane, item["id"]) is None:
-                raise RuntimeError(f"Filter child missing: {item['id']}")
-        # Return the pilot app to a built-in Qlik theme; the Executive
-        # native UI must not depend on an uploaded custom theme package.
-        # Preserve any unrelated user-selected theme.
-        app_list = qix.call(doc, "CreateSessionObject", {"qProp": {
-            "qInfo": {"qType": "qlikgpt-theme-list"},
-            "qAppObjectListDef": {"qType": "appprops", "qData": {"theme": "/theme"}}
-        }})["qReturn"]["qHandle"]
-        list_items = qix.call(app_list, "GetLayout", [])["qLayout"].get(
-            "qAppObjectList", {}).get("qItems", [])
-        if len(list_items) == 1:
-            app_props_id = list_items[0].get("qInfo", {}).get("qId")
-            if app_props_id:
-                ap_handle = qix.call(doc, "GetObject", {"qId":app_props_id})["qReturn"]["qHandle"]
-                ap = qix.call(ap_handle,"GetProperties",[])["qProp"]
-                if ap.get("theme") == "qlikgpt-executive-v1":
-                    rebuilt=dict(ap)
-                    rebuilt["theme"]="horizon"
-                    rebuilt["sheetTitleBgColor"]="#142840"
-                    rebuilt["sheetTitleGradientColor"]="#3365D5"
-                    rebuilt["sheetTitleColor"]="#FFFFFF"
-                    qix.call(ap_handle,"SetProperties",[rebuilt])
-                    verify_theme=qix.call(ap_handle,"GetProperties",[])["qProp"]
-                    if verify_theme.get("theme")!="horizon":
-                        raise RuntimeError("Built-in Qlik theme restore failed")
-                    print("Custom theme detached; built-in horizon + native brand header assigned.",flush=True)
-
-        qix.call(doc, "DoSave", [])
-        print(
-            f"QIX hierarchy verified: {len(target['qChildren'])} sheet children, "
-            f"{len(definitions)} nested listboxes; app saved.",
-            flush=True,
-        )
+        doc = qix.call(-1, "OpenDoc", {"qDocName": app_id})["qReturn"]["qHandle"]
+        before = semantic_snapshot(qix, doc, manifest)
+        sheets_before = sheet_snapshots(qix, doc)
+        if SHEET not in sheets_before:
+            raise RuntimeError("The existing Sales Overview sheet was not found")
+        previous = sheets_before.pop(SHEET)
+        validate_retired(previous, {p["qInfo"]["qId"] for p in nodes(expected)})
+        # Preserve unrelated root properties; authored layout/styling takes precedence.
+        merged = deepcopy(previous["qProperty"])
+        merged.pop("qChildren", None)
+        merged.update(expected["qProperty"])
+        expected["qProperty"] = merged
+        with tempfile.TemporaryDirectory(prefix="qlikgpt-overview-") as directory:
+            payload = Path(directory) / "overview-entry.json"
+            payload.write_text(json.dumps([expected], ensure_ascii=False), encoding="utf-8")
+            # Sole persistent write: CLI imports declared properties as physical children.
+            cli(app_id, "object", "set", str(payload))
+        handle = qix.call(doc, "GetObject", {"qId": SHEET})["qReturn"]["qHandle"]
+        actual = qix.call(handle, "GetFullPropertyTree", [])["qPropEntry"]
+        audit(qix, doc, expected, actual)
+        exported = json.loads(cli(app_id, "object", "properties", SHEET, "--full", "--json"))
+        if isinstance(exported, list):
+            exported = exported[0]
+        exported = exported.get("qPropEntry", exported)
+        if {p["qInfo"]["qId"] for p in nodes(exported)} != {p["qInfo"]["qId"] for p in nodes(expected)}:
+            raise RuntimeError("CLI full-tree round trip differs")
+        if semantic_snapshot(qix, doc, manifest) != before:
+            raise RuntimeError("Semantic definitions or reload timestamp changed")
+        sheets_after = sheet_snapshots(qix, doc)
+        sheets_after.pop(SHEET)
+        if sheets_after != sheets_before:
+            raise RuntimeError("Another sheet changed during the Overview deployment")
+        print("OVERVIEW CLI FULL-TREE VERIFIED:", len(list(nodes(actual))), "native objects", flush=True)
+        print("SEMANTIC SNAPSHOT UNCHANGED. OTHER SHEETS UNCHANGED. DATA RELOADS: 0.", flush=True)
     finally:
         qix.close()
 

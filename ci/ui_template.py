@@ -238,18 +238,30 @@ def validate_dashboard(dashboard,t,filename):
                     occupied.add((x,y))
         if {c["name"] for c in sh.get("cells",[])}!=set(children):
             raise ValueError(f"{filename}: child without layout cell")
-        brands=[obj for obj in children.values()
-                if obj["qInfo"]["qType"]=="text-image" and "QlikGPT" in obj.get("markdown","")
-                and obj.get("background",{}).get("color")==t["colors"]["paleBlue"]]
-        if not brands:
-            raise ValueError(f"{filename}: missing executive branded header")
-        nav=[obj for obj in children.values() if obj["qInfo"]["qType"]=="button" and
-             obj.get("navigation",{}).get("action")=="openWebsite"]
-        if not nav:
-            raise ValueError(f"{filename}: missing native navigation button")
+        native_profile = sh.get("uiStyleProfile") == "native-overview-v2"
+        if native_profile:
+            supported = {"text-image", "filterpane", "kpi", "linechart", "barchart", "table", "piechart"}
+            for obj in children.values():
+                style = next((c for c in obj.get("components", []) if c.get("key") == "general"), None)
+                if obj["qInfo"]["qType"] not in supported or not style or "bgColor" not in style:
+                    raise ValueError(f"{filename}: missing native component styling")
+        else:
+            brands=[obj for obj in children.values()
+                    if obj["qInfo"]["qType"]=="text-image" and "QlikGPT" in obj.get("markdown","")
+                    and obj.get("background",{}).get("color")==t["colors"]["paleBlue"]]
+            if not brands:
+                raise ValueError(f"{filename}: missing executive branded header")
+            nav=[obj for obj in children.values() if obj["qInfo"]["qType"]=="button" and
+                 obj.get("navigation",{}).get("action")=="openWebsite"]
+            if not nav:
+                raise ValueError(f"{filename}: missing native navigation button")
         for obj in children.values():
             if obj["qInfo"]["qType"]=="kpi":
-                actual=obj.get("style",{}).get("background",{}).get("color",{}).get("color")
+                if native_profile:
+                    style = next(c for c in obj["components"] if c["key"] == "general")
+                    actual = style["bgColor"]["color"]["color"]
+                else:
+                    actual=obj.get("style",{}).get("background",{}).get("color",{}).get("color")
                 if actual not in {t["colors"]["card"], t["colors"]["softBlue"], t["colors"]["softTeal"]}:
                     raise ValueError(f"{filename}: KPI card diverges from design tokens")
     return len(dashboard)

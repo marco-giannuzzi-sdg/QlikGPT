@@ -7,286 +7,292 @@
     "qExtendsId": "",
     "qMetaDef": {
       "title": "Sales Intelligence | Overview",
-      "description": "Executive Premium · Native object styling / Theme independent"
+      "description": "Executive Overview · Governed native charts from JSON"
     },
-    "title": "Sales Intelligence | Executive Overview",
-    "description": "Native Executive Premium · Layer di visualizzazione indipendente dai master item",
+    "title": "Sales Intelligence | Overview",
+    "description": "qlikgpt-overview-json-v2",
     "rank": 0,
     "columns": 24,
-    "rows": 22,
+    "rows": 40,
     "gridMode": "edit",
+    "qChildListDef": {
+      "qData": {
+        "title": "/title",
+        "id": "/qInfo/qId",
+        "type": "/qInfo/qType"
+      }
+    },
     "cells": [
-      {
-        "name": "qlikgpt_brand_header",
-        "type": "text-image",
-        "col": 0,
-        "row": 0,
-        "colspan": 18,
-        "rowspan": 3,
-        "bounds": {
-          "x": 0,
-          "y": 0,
-          "width": 75,
-          "height": 13.636363636363637
-        }
-      },
-      {
-        "name": "qlikgpt_nav_shared_kpis",
-        "type": "button",
-        "col": 18,
-        "row": 0,
-        "colspan": 6,
-        "rowspan": 3,
-        "bounds": {
-          "x": 75,
-          "y": 0,
-          "width": 25,
-          "height": 13.636363636363637
-        }
-      },
       {
         "name": "qlikgpt_navigation_hint",
         "type": "text-image",
         "col": 0,
-        "row": 3,
-        "colspan": 10,
-        "rowspan": 3,
+        "row": 0,
+        "colspan": 11,
+        "rowspan": 2,
         "bounds": {
-          "x": 0,
-          "y": 13.636363636363637,
-          "width": 41.666666666666664,
-          "height": 13.636363636363637
+          "x": 0.0,
+          "y": 0.0,
+          "width": 45.833333333333336,
+          "height": 5.0
         }
       },
       {
         "name": "qlikgpt_filter_panel",
         "type": "filterpane",
-        "col": 10,
-        "row": 3,
-        "colspan": 14,
-        "rowspan": 3,
+        "col": 12,
+        "row": 1,
+        "colspan": 12,
+        "rowspan": 1,
         "bounds": {
-          "x": 41.666666666666664,
-          "y": 13.636363636363637,
-          "width": 58.333333333333336,
-          "height": 13.636363636363637
+          "x": 50,
+          "y": 2.5,
+          "width": 50,
+          "height": 2.5
         }
       },
       {
         "name": "qlikgpt_kpi_section",
         "type": "text-image",
         "col": 0,
-        "row": 6,
+        "row": 2,
         "colspan": 24,
         "rowspan": 1,
         "bounds": {
-          "x": 0,
-          "y": 27.272727272727273,
-          "width": 100,
-          "height": 4.545454545454546
+          "x": 0.0,
+          "y": 5.0,
+          "width": 100.0,
+          "height": 2.5
         }
       },
       {
         "name": "qlikgpt_kpi_revenue",
         "type": "kpi",
         "col": 0,
-        "row": 7,
-        "colspan": 5,
-        "rowspan": 4,
+        "row": 3,
+        "colspan": 6,
+        "rowspan": 5,
         "bounds": {
-          "x": 0,
-          "y": 31.818181818181817,
-          "width": 20.833333333333332,
-          "height": 18.181818181818183
+          "x": 0.0,
+          "y": 7.5,
+          "width": 25.0,
+          "height": 12.5
         }
       },
       {
         "name": "qlikgpt_kpi_orders",
         "type": "kpi",
         "col": 6,
-        "row": 7,
-        "colspan": 5,
-        "rowspan": 4,
+        "row": 3,
+        "colspan": 6,
+        "rowspan": 5,
         "bounds": {
-          "x": 25,
-          "y": 31.818181818181817,
-          "width": 20.833333333333332,
-          "height": 18.181818181818183
+          "x": 25.0,
+          "y": 7.5,
+          "width": 25.0,
+          "height": 12.5
         }
       },
       {
         "name": "qlikgpt_kpi_margin",
         "type": "kpi",
         "col": 12,
-        "row": 7,
-        "colspan": 5,
-        "rowspan": 4,
+        "row": 3,
+        "colspan": 6,
+        "rowspan": 5,
         "bounds": {
-          "x": 50,
-          "y": 31.818181818181817,
-          "width": 20.833333333333332,
-          "height": 18.181818181818183
+          "x": 50.0,
+          "y": 7.5,
+          "width": 25.0,
+          "height": 12.5
         }
       },
       {
         "name": "qlikgpt_kpi_margin_pct",
         "type": "kpi",
         "col": 18,
-        "row": 7,
+        "row": 3,
         "colspan": 6,
-        "rowspan": 4,
+        "rowspan": 5,
         "bounds": {
-          "x": 75,
-          "y": 31.818181818181817,
-          "width": 25,
-          "height": 18.181818181818183
+          "x": 75.0,
+          "y": 7.5,
+          "width": 25.0,
+          "height": 12.5
         }
       },
       {
         "name": "qlikgpt_insights_section",
         "type": "text-image",
         "col": 0,
-        "row": 11,
+        "row": 8,
         "colspan": 24,
         "rowspan": 1,
         "bounds": {
-          "x": 0,
-          "y": 50,
-          "width": 100,
-          "height": 4.545454545454546
+          "x": 0.0,
+          "y": 20.0,
+          "width": 100.0,
+          "height": 2.5
         }
       },
       {
         "name": "qlikgpt_chart_month",
         "type": "linechart",
         "col": 0,
-        "row": 12,
+        "row": 9,
         "colspan": 15,
-        "rowspan": 10,
+        "rowspan": 13,
         "bounds": {
-          "x": 0,
-          "y": 54.54545454545455,
+          "x": 0.0,
+          "y": 22.5,
           "width": 62.5,
-          "height": 45.45454545454545
+          "height": 32.5
         }
       },
       {
         "name": "qlikgpt_chart_market",
         "type": "barchart",
-        "col": 16,
-        "row": 12,
-        "colspan": 8,
-        "rowspan": 10,
+        "col": 15,
+        "row": 9,
+        "colspan": 9,
+        "rowspan": 13,
         "bounds": {
-          "x": 66.66666666666667,
-          "y": 54.54545454545455,
-          "width": 33.333333333333336,
-          "height": 45.45454545454545
+          "x": 62.5,
+          "y": 22.5,
+          "width": 37.5,
+          "height": 32.5
+        }
+      },
+      {
+        "name": "qlikgpt_breakdown_section",
+        "type": "text-image",
+        "col": 0,
+        "row": 22,
+        "colspan": 24,
+        "rowspan": 1,
+        "bounds": {
+          "x": 0.0,
+          "y": 55.0,
+          "width": 100.0,
+          "height": 2.5
+        }
+      },
+      {
+        "name": "qlikgpt_table_sales",
+        "type": "table",
+        "col": 0,
+        "row": 23,
+        "colspan": 15,
+        "rowspan": 15,
+        "bounds": {
+          "x": 0.0,
+          "y": 57.5,
+          "width": 62.5,
+          "height": 37.5
+        }
+      },
+      {
+        "name": "qlikgpt_chart_channel",
+        "type": "piechart",
+        "col": 15,
+        "row": 23,
+        "colspan": 9,
+        "rowspan": 15,
+        "bounds": {
+          "x": 62.5,
+          "y": 57.5,
+          "width": 37.5,
+          "height": 37.5
+        }
+      },
+      {
+        "name": "qlikgpt_overview_footer",
+        "type": "text-image",
+        "col": 0,
+        "row": 38,
+        "colspan": 24,
+        "rowspan": 2,
+        "bounds": {
+          "x": 0.0,
+          "y": 95.0,
+          "width": 100.0,
+          "height": 5.0
         }
       }
     ],
-    "qChildListDef": {
-      "qData": {
-        "title": "/title",
-        "description": "/description",
-        "type": "/qInfo/qType",
-        "id": "/qInfo/qId"
+    "components": [
+      {
+        "key": "general",
+        "bgColor": {
+          "useExpression": false,
+          "color": {
+            "index": -1,
+            "color": "#F2F2F2",
+            "alpha": 1
+          }
+        },
+        "borderWidth": "0px",
+        "borderColor": {
+          "index": -1,
+          "color": "#E5EBF3",
+          "alpha": 1
+        },
+        "borderRadius": "0px",
+        "shadow": {
+          "boxShadow": "none",
+          "boxShadowColor": {
+            "index": -1,
+            "color": "rgba(36,59,86,0.07)",
+            "alpha": 1
+          }
+        },
+        "title": {
+          "main": {
+            "fontFamily": "Arial",
+            "fontSize": "16px",
+            "fontStyle": [
+              "bold"
+            ],
+            "color": {
+              "index": -1,
+              "color": "#142840",
+              "alpha": 1
+            }
+          },
+          "subTitle": {
+            "fontFamily": "Arial",
+            "fontSize": "12px",
+            "fontStyle": [],
+            "color": {
+              "index": -1,
+              "color": "#718096",
+              "alpha": 1
+            }
+          },
+          "footer": {
+            "fontFamily": "Arial",
+            "fontSize": "10px",
+            "fontStyle": [],
+            "color": {
+              "index": -1,
+              "color": "#718096",
+              "alpha": 1
+            }
+          }
+        }
       }
+    ],
+    "background": {
+      "color": "#F2F2F2"
     },
+    "backgroundColor": {
+      "index": -1,
+      "color": "#F2F2F2",
+      "alpha": 1
+    },
+    "backgroundMode": "custom",
+    "uiStyleProfile": "native-overview-v2",
     "qChildren": [
-      {
-        "qInfo": {
-          "qId": "qlikgpt_brand_header",
-          "qType": "text-image"
-        },
-        "qExtendsId": "",
-        "visualization": "text-image",
-        "title": "QlikGPT / Sales Intelligence",
-        "showTitles": false,
-        "markdown": "%[QlikGPT  /  Sales Intelligence](6)^[EXECUTIVE OVERVIEW • GOVERNED BI](2)",
-        "images": [],
-        "responsive": true,
-        "background": {
-          "color": "#EDF3FF"
-        },
-        "style": {
-          "background": {
-            "useColorExpression": false,
-            "color": {
-              "index": -1,
-              "color": "#EDF3FF"
-            }
-          },
-          "border": {
-            "width": 0,
-            "radius": 12,
-            "color": {
-              "index": -1,
-              "color": "#E3E9F1"
-            }
-          },
-          "shadow": {
-            "size": "none",
-            "color": {
-              "index": -1,
-              "color": "#A7B7D1"
-            }
-          }
-        }
-      },
-      {
-        "qInfo": {
-          "qId": "qlikgpt_nav_shared_kpis",
-          "qType": "button"
-        },
-        "qExtendsId": "",
-        "visualization": "button",
-        "title": "Esplora KPI condivisi",
-        "showTitles": false,
-        "showDetails": false,
-        "actions": [],
-        "navigation": {
-          "action": "openWebsite",
-          "websiteUrl": "https://sdggroup-it.eu.qlikcloud.com/sense/app/04280b14-6ba5-4fe9-90d6-2ff8fa1c994f",
-          "sameWindow": false
-        },
-        "style": {
-          "background": {
-            "useColorExpression": false,
-            "color": {
-              "index": -1,
-              "color": "#142840"
-            }
-          },
-          "border": {
-            "width": 0,
-            "radius": 12,
-            "color": {
-              "index": -1,
-              "color": "#E3E9F1"
-            }
-          },
-          "shadow": {
-            "size": "none",
-            "color": {
-              "index": -1,
-              "color": "#A7B7D1"
-            }
-          },
-          "label": "KPI CONDIVISI  →",
-          "showLabel": true,
-          "font": {
-            "fontFamily": "Arial, Helvetica, sans-serif",
-            "color": {
-              "useColorExpression": false,
-              "color": {
-                "index": -1,
-                "color": "#FFFFFF"
-              }
-            }
-          }
-        }
-      },
       {
         "qInfo": {
           "qId": "qlikgpt_navigation_hint",
@@ -295,37 +301,75 @@
         "qExtendsId": "",
         "visualization": "text-image",
         "title": "Executive Overview",
-        "showTitles": false,
-        "markdown": "%[Executive Overview](5)^[Una visione completa delle performance di vendita per mercati e canali.](2)",
-        "images": [],
-        "responsive": true,
-        "background": {
-          "color": "#F5F7FB"
-        },
-        "style": {
-          "background": {
-            "useColorExpression": false,
-            "color": {
+        "showTitles": true,
+        "showDetails": false,
+        "disableNavMenu": true,
+        "components": [
+          {
+            "key": "general",
+            "bgColor": {
+              "useExpression": false,
+              "color": {
+                "index": -1,
+                "color": "#F2F2F2",
+                "alpha": 1
+              }
+            },
+            "borderWidth": "0px",
+            "borderColor": {
               "index": -1,
-              "color": "#F5F7FB"
-            }
-          },
-          "border": {
-            "width": 0,
-            "radius": 12,
-            "color": {
-              "index": -1,
-              "color": "#E3E9F1"
-            }
-          },
-          "shadow": {
-            "size": "none",
-            "color": {
-              "index": -1,
-              "color": "#A7B7D1"
+              "color": "#E5EBF3",
+              "alpha": 1
+            },
+            "borderRadius": "0px",
+            "shadow": {
+              "boxShadow": "none",
+              "boxShadowColor": {
+                "index": -1,
+                "color": "rgba(36,59,86,0.07)",
+                "alpha": 1
+              }
+            },
+            "title": {
+              "main": {
+                "fontFamily": "Arial",
+                "fontSize": "25px",
+                "fontStyle": [
+                  "bold"
+                ],
+                "color": {
+                  "index": -1,
+                  "color": "#142840",
+                  "alpha": 1
+                }
+              },
+              "subTitle": {
+                "fontFamily": "Arial",
+                "fontSize": "12px",
+                "fontStyle": [],
+                "color": {
+                  "index": -1,
+                  "color": "#718096",
+                  "alpha": 1
+                }
+              },
+              "footer": {
+                "fontFamily": "Arial",
+                "fontSize": "10px",
+                "fontStyle": [],
+                "color": {
+                  "index": -1,
+                  "color": "#718096",
+                  "alpha": 1
+                }
+              }
             }
           }
-        }
+        ],
+        "subtitle": "Una visione chiara delle performance di vendita.",
+        "markdown": "​",
+        "images": [],
+        "responsive": false
       },
       {
         "qInfo": {
@@ -336,35 +380,75 @@
         "visualization": "filterpane",
         "title": "Filtri · Anno, Mercato e Canale",
         "showTitles": false,
+        "showDetails": false,
+        "disableNavMenu": true,
+        "components": [
+          {
+            "key": "general",
+            "bgColor": {
+              "useExpression": false,
+              "color": {
+                "index": -1,
+                "color": "#F2F2F2",
+                "alpha": 1
+              }
+            },
+            "borderWidth": "0px",
+            "borderColor": {
+              "index": -1,
+              "color": "#E5EBF3",
+              "alpha": 1
+            },
+            "borderRadius": "0px",
+            "shadow": {
+              "boxShadow": "none",
+              "boxShadowColor": {
+                "index": -1,
+                "color": "rgba(36,59,86,0.07)",
+                "alpha": 1
+              }
+            },
+            "title": {
+              "main": {
+                "fontFamily": "Arial",
+                "fontSize": "12px",
+                "fontStyle": [
+                  "bold"
+                ],
+                "color": {
+                  "index": -1,
+                  "color": "#142840",
+                  "alpha": 1
+                }
+              },
+              "subTitle": {
+                "fontFamily": "Arial",
+                "fontSize": "12px",
+                "fontStyle": [],
+                "color": {
+                  "index": -1,
+                  "color": "#718096",
+                  "alpha": 1
+                }
+              },
+              "footer": {
+                "fontFamily": "Arial",
+                "fontSize": "10px",
+                "fontStyle": [],
+                "color": {
+                  "index": -1,
+                  "color": "#718096",
+                  "alpha": 1
+                }
+              }
+            }
+          }
+        ],
         "qChildListDef": {
           "qData": {
             "title": "/title",
             "id": "/qInfo/qId",
             "type": "/qInfo/qType"
-          }
-        },
-        "style": {
-          "background": {
-            "useColorExpression": false,
-            "color": {
-              "index": -1,
-              "color": "#FFFFFF"
-            }
-          },
-          "border": {
-            "width": 1,
-            "radius": 12,
-            "color": {
-              "index": -1,
-              "color": "#E3E9F1"
-            }
-          },
-          "shadow": {
-            "size": "small",
-            "color": {
-              "index": -1,
-              "color": "#A7B7D1"
-            }
           }
         }
       },
@@ -375,39 +459,76 @@
         },
         "qExtendsId": "",
         "visualization": "text-image",
-        "title": "qlikgpt_kpi_section",
-        "showTitles": false,
+        "title": "BUSINESS PULSE",
+        "showTitles": true,
         "showDetails": false,
-        "markdown": "%[01 / BUSINESS PULSE](3)^[Quattro indicatori chiave, sempre collegati alle selezioni attive](2)",
-        "images": [],
-        "responsive": true,
-        "background": {
-          "color": "#F5F7FB"
-        },
-        "style": {
-          "background": {
-            "useColorExpression": false,
-            "color": {
+        "disableNavMenu": true,
+        "components": [
+          {
+            "key": "general",
+            "bgColor": {
+              "useExpression": false,
+              "color": {
+                "index": -1,
+                "color": "#F2F2F2",
+                "alpha": 1
+              }
+            },
+            "borderWidth": "0px",
+            "borderColor": {
               "index": -1,
-              "color": "#F5F7FB"
-            }
-          },
-          "border": {
-            "width": 0,
-            "radius": 12,
-            "color": {
-              "index": -1,
-              "color": "#E3E9F1"
-            }
-          },
-          "shadow": {
-            "size": "none",
-            "color": {
-              "index": -1,
-              "color": "#A7B7D1"
+              "color": "#E5EBF3",
+              "alpha": 1
+            },
+            "borderRadius": "0px",
+            "shadow": {
+              "boxShadow": "none",
+              "boxShadowColor": {
+                "index": -1,
+                "color": "rgba(36,59,86,0.07)",
+                "alpha": 1
+              }
+            },
+            "title": {
+              "main": {
+                "fontFamily": "Arial",
+                "fontSize": "11px",
+                "fontStyle": [
+                  "bold"
+                ],
+                "color": {
+                  "index": -1,
+                  "color": "#142840",
+                  "alpha": 1
+                }
+              },
+              "subTitle": {
+                "fontFamily": "Arial",
+                "fontSize": "12px",
+                "fontStyle": [],
+                "color": {
+                  "index": -1,
+                  "color": "#718096",
+                  "alpha": 1
+                }
+              },
+              "footer": {
+                "fontFamily": "Arial",
+                "fontSize": "10px",
+                "fontStyle": [],
+                "color": {
+                  "index": -1,
+                  "color": "#718096",
+                  "alpha": 1
+                }
+              }
             }
           }
-        }
+        ],
+        "subtitle": "",
+        "markdown": "​",
+        "images": [],
+        "responsive": false
       },
       {
         "qInfo": {
@@ -418,58 +539,132 @@
         "visualization": "kpi",
         "title": "Fatturato",
         "showTitles": true,
+        "showDetails": false,
+        "disableNavMenu": true,
+        "components": [
+          {
+            "key": "general",
+            "bgColor": {
+              "useExpression": false,
+              "color": {
+                "index": -1,
+                "color": "#FFFFFF",
+                "alpha": 1
+              }
+            },
+            "borderWidth": "1px",
+            "borderColor": {
+              "index": -1,
+              "color": "#E5EBF3",
+              "alpha": 1
+            },
+            "borderRadius": "16px",
+            "shadow": {
+              "boxShadow": "0px 4px 15px 0px",
+              "boxShadowColor": {
+                "index": -1,
+                "color": "rgba(36,59,86,0.07)",
+                "alpha": 1
+              }
+            },
+            "title": {
+              "main": {
+                "fontFamily": "Arial",
+                "fontSize": "13px",
+                "fontStyle": [
+                  "bold"
+                ],
+                "color": {
+                  "index": -1,
+                  "color": "#718096",
+                  "alpha": 1
+                }
+              },
+              "subTitle": {
+                "fontFamily": "Arial",
+                "fontSize": "12px",
+                "fontStyle": [],
+                "color": {
+                  "index": -1,
+                  "color": "#718096",
+                  "alpha": 1
+                }
+              },
+              "footer": {
+                "fontFamily": "Arial",
+                "fontSize": "10px",
+                "fontStyle": [],
+                "color": {
+                  "index": -1,
+                  "color": "#718096",
+                  "alpha": 1
+                }
+              }
+            },
+            "bgImage": {
+              "mode": "expression",
+              "expressionUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI3NiI+PHJlY3QgeD0iMjAiIHk9IjE4IiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHJ4PSIxMSIgZmlsbD0iI0VFRjNGRiIvPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI4IDI2KSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMzg2NUM1IiBzdHJva2Utd2lkdGg9IjEuNyIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMTYgNWE3IDcgMCAxIDAgMCAxNE00IDEwaDEwTTQgMTRoOSIvPjwvZz48L3N2Zz4=",
+              "sizing": "originalSize",
+              "position": "top-right"
+            }
+          }
+        ],
         "qHyperCubeDef": {
+          "qStateName": "$",
           "qDimensions": [],
           "qMeasures": [
             {
               "qLibraryId": "qlikgpt_shared_revenue",
-              "qType": "measure",
               "qDef": {
-                "qDef": "",
-                "qLabel": "Fatturato"
+                "qDef": ""
+              },
+              "coloring": {
+                "baseColor": {
+                  "index": -1,
+                  "color": "#142840",
+                  "alpha": 1
+                }
+              },
+              "conditionalColoring": {
+                "useConditionalColoring": false,
+                "useBaseColors": false,
+                "paletteSingleColor": {
+                  "index": -1,
+                  "color": "#142840",
+                  "alpha": 1
+                },
+                "segments": {
+                  "limits": [],
+                  "paletteColors": [
+                    {
+                      "index": -1,
+                      "color": "#142840",
+                      "alpha": 1
+                    }
+                  ]
+                }
               }
             }
           ],
           "qInitialDataFetch": [
             {
-              "qLeft": 0,
               "qTop": 0,
+              "qLeft": 0,
               "qWidth": 1,
               "qHeight": 1
             }
-          ]
+          ],
+          "qSuppressMissing": true,
+          "qSuppressZero": false
         },
-        "subtitle": "01 / COMMERCIAL VALUE",
-        "version": "1.0.0",
-        "showDetails": false,
-        "textAlign": "left",
-        "layoutBehavior": "Responsive",
-        "fontSize": "M",
+        "textAlign": "center",
+        "layoutBehavior": "fixed",
+        "fontSize": "S",
         "showMeasureTitle": false,
-        "style": {
-          "background": {
-            "useColorExpression": false,
-            "color": {
-              "index": -1,
-              "color": "#FFFFFF"
-            }
-          },
-          "border": {
-            "width": 1,
-            "radius": 12,
-            "color": {
-              "index": -1,
-              "color": "#E3E9F1"
-            }
-          },
-          "shadow": {
-            "size": "small",
-            "color": {
-              "index": -1,
-              "color": "#A7B7D1"
-            }
-          }
-        }
+        "showSecondMeasureTitle": false,
+        "footnote": "Valore commerciale",
+        "version": "2.5.0",
+        "useLink": false
       },
       {
         "qInfo": {
@@ -480,58 +675,132 @@
         "visualization": "kpi",
         "title": "Ordini",
         "showTitles": true,
+        "showDetails": false,
+        "disableNavMenu": true,
+        "components": [
+          {
+            "key": "general",
+            "bgColor": {
+              "useExpression": false,
+              "color": {
+                "index": -1,
+                "color": "#FFFFFF",
+                "alpha": 1
+              }
+            },
+            "borderWidth": "1px",
+            "borderColor": {
+              "index": -1,
+              "color": "#E5EBF3",
+              "alpha": 1
+            },
+            "borderRadius": "16px",
+            "shadow": {
+              "boxShadow": "0px 4px 15px 0px",
+              "boxShadowColor": {
+                "index": -1,
+                "color": "rgba(36,59,86,0.07)",
+                "alpha": 1
+              }
+            },
+            "title": {
+              "main": {
+                "fontFamily": "Arial",
+                "fontSize": "13px",
+                "fontStyle": [
+                  "bold"
+                ],
+                "color": {
+                  "index": -1,
+                  "color": "#718096",
+                  "alpha": 1
+                }
+              },
+              "subTitle": {
+                "fontFamily": "Arial",
+                "fontSize": "12px",
+                "fontStyle": [],
+                "color": {
+                  "index": -1,
+                  "color": "#718096",
+                  "alpha": 1
+                }
+              },
+              "footer": {
+                "fontFamily": "Arial",
+                "fontSize": "10px",
+                "fontStyle": [],
+                "color": {
+                  "index": -1,
+                  "color": "#718096",
+                  "alpha": 1
+                }
+              }
+            },
+            "bgImage": {
+              "mode": "expression",
+              "expressionUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI3NiI+PHJlY3QgeD0iMjAiIHk9IjE4IiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHJ4PSIxMSIgZmlsbD0iI0VFRjNGRiIvPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI4IDI2KSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMzg2NUM1IiBzdHJva2Utd2lkdGg9IjEuNyIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSI1IiB5PSI2IiB3aWR0aD0iMTQiIGhlaWdodD0iMTUiIHJ4PSIyIi8+PHBhdGggZD0iTTkgNlYzaDZ2M005IDExaDZNOSAxNWg2Ii8+PC9nPjwvc3ZnPg==",
+              "sizing": "originalSize",
+              "position": "top-right"
+            }
+          }
+        ],
         "qHyperCubeDef": {
+          "qStateName": "$",
           "qDimensions": [],
           "qMeasures": [
             {
               "qLibraryId": "qlikgpt_shared_orders",
-              "qType": "measure",
               "qDef": {
-                "qDef": "",
-                "qLabel": "Ordini"
+                "qDef": ""
+              },
+              "coloring": {
+                "baseColor": {
+                  "index": -1,
+                  "color": "#142840",
+                  "alpha": 1
+                }
+              },
+              "conditionalColoring": {
+                "useConditionalColoring": false,
+                "useBaseColors": false,
+                "paletteSingleColor": {
+                  "index": -1,
+                  "color": "#142840",
+                  "alpha": 1
+                },
+                "segments": {
+                  "limits": [],
+                  "paletteColors": [
+                    {
+                      "index": -1,
+                      "color": "#142840",
+                      "alpha": 1
+                    }
+                  ]
+                }
               }
             }
           ],
           "qInitialDataFetch": [
             {
-              "qLeft": 0,
               "qTop": 0,
+              "qLeft": 0,
               "qWidth": 1,
               "qHeight": 1
             }
-          ]
+          ],
+          "qSuppressMissing": true,
+          "qSuppressZero": false
         },
-        "subtitle": "02 / SALES VOLUME",
-        "version": "1.0.0",
-        "showDetails": false,
-        "textAlign": "left",
-        "layoutBehavior": "Responsive",
-        "fontSize": "M",
+        "textAlign": "center",
+        "layoutBehavior": "fixed",
+        "fontSize": "S",
         "showMeasureTitle": false,
-        "style": {
-          "background": {
-            "useColorExpression": false,
-            "color": {
-              "index": -1,
-              "color": "#F0F5FF"
-            }
-          },
-          "border": {
-            "width": 1,
-            "radius": 12,
-            "color": {
-              "index": -1,
-              "color": "#E3E9F1"
-            }
-          },
-          "shadow": {
-            "size": "small",
-            "color": {
-              "index": -1,
-              "color": "#A7B7D1"
-            }
-          }
-        }
+        "showSecondMeasureTitle": false,
+        "footnote": "Volume delle vendite",
+        "version": "2.5.0",
+        "useLink": false
       },
       {
         "qInfo": {
@@ -542,58 +811,132 @@
         "visualization": "kpi",
         "title": "Margine lordo",
         "showTitles": true,
+        "showDetails": false,
+        "disableNavMenu": true,
+        "components": [
+          {
+            "key": "general",
+            "bgColor": {
+              "useExpression": false,
+              "color": {
+                "index": -1,
+                "color": "#FFFFFF",
+                "alpha": 1
+              }
+            },
+            "borderWidth": "1px",
+            "borderColor": {
+              "index": -1,
+              "color": "#E5EBF3",
+              "alpha": 1
+            },
+            "borderRadius": "16px",
+            "shadow": {
+              "boxShadow": "0px 4px 15px 0px",
+              "boxShadowColor": {
+                "index": -1,
+                "color": "rgba(36,59,86,0.07)",
+                "alpha": 1
+              }
+            },
+            "title": {
+              "main": {
+                "fontFamily": "Arial",
+                "fontSize": "13px",
+                "fontStyle": [
+                  "bold"
+                ],
+                "color": {
+                  "index": -1,
+                  "color": "#718096",
+                  "alpha": 1
+                }
+              },
+              "subTitle": {
+                "fontFamily": "Arial",
+                "fontSize": "12px",
+                "fontStyle": [],
+                "color": {
+                  "index": -1,
+                  "color": "#718096",
+                  "alpha": 1
+                }
+              },
+              "footer": {
+                "fontFamily": "Arial",
+                "fontSize": "10px",
+                "fontStyle": [],
+                "color": {
+                  "index": -1,
+                  "color": "#718096",
+                  "alpha": 1
+                }
+              }
+            },
+            "bgImage": {
+              "mode": "expression",
+              "expressionUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI3NiI+PHJlY3QgeD0iMjAiIHk9IjE4IiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHJ4PSIxMSIgZmlsbD0iI0U4RjdGNCIvPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI4IDI2KSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMTQ5NThEIiBzdHJva2Utd2lkdGg9IjEuNyIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNNCAxOVY1TTQgMTloMTdNOCAxNWw0LTUgNCAyIDUtNyIvPjwvZz48L3N2Zz4=",
+              "sizing": "originalSize",
+              "position": "top-right"
+            }
+          }
+        ],
         "qHyperCubeDef": {
+          "qStateName": "$",
           "qDimensions": [],
           "qMeasures": [
             {
               "qLibraryId": "qlikgpt_shared_margin",
-              "qType": "measure",
               "qDef": {
-                "qDef": "",
-                "qLabel": "Margine lordo"
+                "qDef": ""
+              },
+              "coloring": {
+                "baseColor": {
+                  "index": -1,
+                  "color": "#142840",
+                  "alpha": 1
+                }
+              },
+              "conditionalColoring": {
+                "useConditionalColoring": false,
+                "useBaseColors": false,
+                "paletteSingleColor": {
+                  "index": -1,
+                  "color": "#142840",
+                  "alpha": 1
+                },
+                "segments": {
+                  "limits": [],
+                  "paletteColors": [
+                    {
+                      "index": -1,
+                      "color": "#142840",
+                      "alpha": 1
+                    }
+                  ]
+                }
               }
             }
           ],
           "qInitialDataFetch": [
             {
-              "qLeft": 0,
               "qTop": 0,
+              "qLeft": 0,
               "qWidth": 1,
               "qHeight": 1
             }
-          ]
+          ],
+          "qSuppressMissing": true,
+          "qSuppressZero": false
         },
-        "subtitle": "03 / PROFITABILITY",
-        "version": "1.0.0",
-        "showDetails": false,
-        "textAlign": "left",
-        "layoutBehavior": "Responsive",
-        "fontSize": "M",
+        "textAlign": "center",
+        "layoutBehavior": "fixed",
+        "fontSize": "S",
         "showMeasureTitle": false,
-        "style": {
-          "background": {
-            "useColorExpression": false,
-            "color": {
-              "index": -1,
-              "color": "#FFFFFF"
-            }
-          },
-          "border": {
-            "width": 1,
-            "radius": 12,
-            "color": {
-              "index": -1,
-              "color": "#E3E9F1"
-            }
-          },
-          "shadow": {
-            "size": "small",
-            "color": {
-              "index": -1,
-              "color": "#A7B7D1"
-            }
-          }
-        }
+        "showSecondMeasureTitle": false,
+        "footnote": "Redditività delle vendite",
+        "version": "2.5.0",
+        "useLink": false
       },
       {
         "qInfo": {
@@ -604,58 +947,132 @@
         "visualization": "kpi",
         "title": "Margine %",
         "showTitles": true,
+        "showDetails": false,
+        "disableNavMenu": true,
+        "components": [
+          {
+            "key": "general",
+            "bgColor": {
+              "useExpression": false,
+              "color": {
+                "index": -1,
+                "color": "#FFFFFF",
+                "alpha": 1
+              }
+            },
+            "borderWidth": "1px",
+            "borderColor": {
+              "index": -1,
+              "color": "#E5EBF3",
+              "alpha": 1
+            },
+            "borderRadius": "16px",
+            "shadow": {
+              "boxShadow": "0px 4px 15px 0px",
+              "boxShadowColor": {
+                "index": -1,
+                "color": "rgba(36,59,86,0.07)",
+                "alpha": 1
+              }
+            },
+            "title": {
+              "main": {
+                "fontFamily": "Arial",
+                "fontSize": "13px",
+                "fontStyle": [
+                  "bold"
+                ],
+                "color": {
+                  "index": -1,
+                  "color": "#718096",
+                  "alpha": 1
+                }
+              },
+              "subTitle": {
+                "fontFamily": "Arial",
+                "fontSize": "12px",
+                "fontStyle": [],
+                "color": {
+                  "index": -1,
+                  "color": "#718096",
+                  "alpha": 1
+                }
+              },
+              "footer": {
+                "fontFamily": "Arial",
+                "fontSize": "10px",
+                "fontStyle": [],
+                "color": {
+                  "index": -1,
+                  "color": "#718096",
+                  "alpha": 1
+                }
+              }
+            },
+            "bgImage": {
+              "mode": "expression",
+              "expressionUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI3NiI+PHJlY3QgeD0iMjAiIHk9IjE4IiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHJ4PSIxMSIgZmlsbD0iI0U4RjdGNCIvPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI4IDI2KSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMTQ5NThEIiBzdHJva2Utd2lkdGg9IjEuNyIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNNiAxOUwxOCA1Ii8+PGNpcmNsZSBjeD0iNiIgY3k9IjYiIHI9IjMiLz48Y2lyY2xlIGN4PSIxOCIgY3k9IjE4IiByPSIzIi8+PC9nPjwvc3ZnPg==",
+              "sizing": "originalSize",
+              "position": "top-right"
+            }
+          }
+        ],
         "qHyperCubeDef": {
+          "qStateName": "$",
           "qDimensions": [],
           "qMeasures": [
             {
               "qLibraryId": "qlikgpt_shared_margin_pct",
-              "qType": "measure",
               "qDef": {
-                "qDef": "",
-                "qLabel": "Margine %"
+                "qDef": ""
+              },
+              "coloring": {
+                "baseColor": {
+                  "index": -1,
+                  "color": "#142840",
+                  "alpha": 1
+                }
+              },
+              "conditionalColoring": {
+                "useConditionalColoring": false,
+                "useBaseColors": false,
+                "paletteSingleColor": {
+                  "index": -1,
+                  "color": "#142840",
+                  "alpha": 1
+                },
+                "segments": {
+                  "limits": [],
+                  "paletteColors": [
+                    {
+                      "index": -1,
+                      "color": "#142840",
+                      "alpha": 1
+                    }
+                  ]
+                }
               }
             }
           ],
           "qInitialDataFetch": [
             {
-              "qLeft": 0,
               "qTop": 0,
+              "qLeft": 0,
               "qWidth": 1,
               "qHeight": 1
             }
-          ]
+          ],
+          "qSuppressMissing": true,
+          "qSuppressZero": false
         },
-        "subtitle": "04 / MARGIN RATIO",
-        "version": "1.0.0",
-        "showDetails": false,
-        "textAlign": "left",
-        "layoutBehavior": "Responsive",
-        "fontSize": "M",
+        "textAlign": "center",
+        "layoutBehavior": "fixed",
+        "fontSize": "S",
         "showMeasureTitle": false,
-        "style": {
-          "background": {
-            "useColorExpression": false,
-            "color": {
-              "index": -1,
-              "color": "#EAF8F6"
-            }
-          },
-          "border": {
-            "width": 1,
-            "radius": 12,
-            "color": {
-              "index": -1,
-              "color": "#E3E9F1"
-            }
-          },
-          "shadow": {
-            "size": "small",
-            "color": {
-              "index": -1,
-              "color": "#A7B7D1"
-            }
-          }
-        }
+        "showSecondMeasureTitle": false,
+        "footnote": "Margine sul fatturato",
+        "version": "2.5.0",
+        "useLink": false
       },
       {
         "qInfo": {
@@ -664,39 +1081,76 @@
         },
         "qExtendsId": "",
         "visualization": "text-image",
-        "title": "qlikgpt_insights_section",
-        "showTitles": false,
+        "title": "PERFORMANCE EXPLORER",
+        "showTitles": true,
         "showDetails": false,
-        "markdown": "%[02 / PERFORMANCE EXPLORER](3)^[Trend e confronto dei ricavi — dati sempre coerenti con il Semantic Catalog](2)",
-        "images": [],
-        "responsive": true,
-        "background": {
-          "color": "#F5F7FB"
-        },
-        "style": {
-          "background": {
-            "useColorExpression": false,
-            "color": {
+        "disableNavMenu": true,
+        "components": [
+          {
+            "key": "general",
+            "bgColor": {
+              "useExpression": false,
+              "color": {
+                "index": -1,
+                "color": "#F2F2F2",
+                "alpha": 1
+              }
+            },
+            "borderWidth": "0px",
+            "borderColor": {
               "index": -1,
-              "color": "#F5F7FB"
-            }
-          },
-          "border": {
-            "width": 0,
-            "radius": 12,
-            "color": {
-              "index": -1,
-              "color": "#E3E9F1"
-            }
-          },
-          "shadow": {
-            "size": "none",
-            "color": {
-              "index": -1,
-              "color": "#A7B7D1"
+              "color": "#E5EBF3",
+              "alpha": 1
+            },
+            "borderRadius": "0px",
+            "shadow": {
+              "boxShadow": "none",
+              "boxShadowColor": {
+                "index": -1,
+                "color": "rgba(36,59,86,0.07)",
+                "alpha": 1
+              }
+            },
+            "title": {
+              "main": {
+                "fontFamily": "Arial",
+                "fontSize": "11px",
+                "fontStyle": [
+                  "bold"
+                ],
+                "color": {
+                  "index": -1,
+                  "color": "#142840",
+                  "alpha": 1
+                }
+              },
+              "subTitle": {
+                "fontFamily": "Arial",
+                "fontSize": "12px",
+                "fontStyle": [],
+                "color": {
+                  "index": -1,
+                  "color": "#718096",
+                  "alpha": 1
+                }
+              },
+              "footer": {
+                "fontFamily": "Arial",
+                "fontSize": "10px",
+                "fontStyle": [],
+                "color": {
+                  "index": -1,
+                  "color": "#718096",
+                  "alpha": 1
+                }
+              }
             }
           }
-        }
+        ],
+        "subtitle": "",
+        "markdown": "​",
+        "images": [],
+        "responsive": false
       },
       {
         "qInfo": {
@@ -707,48 +1161,112 @@
         "visualization": "linechart",
         "title": "Andamento del fatturato",
         "showTitles": true,
+        "showDetails": false,
+        "disableNavMenu": true,
+        "components": [
+          {
+            "key": "general",
+            "bgColor": {
+              "useExpression": false,
+              "color": {
+                "index": -1,
+                "color": "#FFFFFF",
+                "alpha": 1
+              }
+            },
+            "borderWidth": "1px",
+            "borderColor": {
+              "index": -1,
+              "color": "#E5EBF3",
+              "alpha": 1
+            },
+            "borderRadius": "16px",
+            "shadow": {
+              "boxShadow": "0px 4px 15px 0px",
+              "boxShadowColor": {
+                "index": -1,
+                "color": "rgba(36,59,86,0.07)",
+                "alpha": 1
+              }
+            },
+            "title": {
+              "main": {
+                "fontFamily": "Arial",
+                "fontSize": "16px",
+                "fontStyle": [
+                  "bold"
+                ],
+                "color": {
+                  "index": -1,
+                  "color": "#142840",
+                  "alpha": 1
+                }
+              },
+              "subTitle": {
+                "fontFamily": "Arial",
+                "fontSize": "12px",
+                "fontStyle": [],
+                "color": {
+                  "index": -1,
+                  "color": "#718096",
+                  "alpha": 1
+                }
+              },
+              "footer": {
+                "fontFamily": "Arial",
+                "fontSize": "10px",
+                "fontStyle": [],
+                "color": {
+                  "index": -1,
+                  "color": "#718096",
+                  "alpha": 1
+                }
+              }
+            }
+          },
+          {
+            "key": "line",
+            "style": {
+              "lineThickness": 3,
+              "dataPointSize": 5,
+              "lineCurve": "linear",
+              "lineType": "solid"
+            }
+          }
+        ],
         "qHyperCubeDef": {
+          "qStateName": "$",
           "qDimensions": [
             {
+              "qLibraryId": "qlikgpt_d_yearmonth",
+              "qNullSuppression": true,
               "qDef": {
-                "qGrouping": "N",
-                "qFieldDefs": [
-                  ""
-                ],
-                "qFieldLabels": [
-                  ""
-                ],
                 "autoSort": false,
                 "qSortCriterias": [
                   {
-                    "qSortByNumeric": 1
+                    "qSortByNumeric": 1,
+                    "qSortByAscii": 1
                   }
                 ]
-              },
-              "qLibraryId": "qlikgpt_d_yearmonth",
-              "qNullSuppression": true
+              }
             }
           ],
           "qMeasures": [
             {
               "qLibraryId": "qlikgpt_shared_revenue",
-              "qType": "measure",
               "qDef": {
-                "qDef": "",
-                "qLabel": "TREND DEL FATTURATO"
+                "qDef": ""
               }
             }
           ],
           "qInitialDataFetch": [
             {
-              "qLeft": 0,
               "qTop": 0,
+              "qLeft": 0,
               "qWidth": 2,
               "qHeight": 100
             }
           ],
-          "qStateName": "$",
-          "qMode": "S",
           "qSuppressMissing": true,
           "qSuppressZero": false,
           "qInterColumnSortOrder": [
@@ -756,14 +1274,10 @@
             1
           ]
         },
-        "version": "1.0.0",
-        "subtitle": "Evoluzione mensile · 12 mesi completi",
-        "showDetails": false,
-        "showDisclaimer": false,
+        "subtitle": "Evoluzione mensile dei ricavi",
         "legend": {
           "show": false,
-          "showTitle": false,
-          "dock": "auto"
+          "showTitle": false
         },
         "color": {
           "auto": false,
@@ -771,66 +1285,33 @@
           "useBaseColors": "off",
           "paletteColor": {
             "index": -1,
-            "color": "#3365D5"
+            "color": "#3365D5",
+            "alpha": 1
           }
         },
-        "lineType": "area",
-        "preferContinuousAxis": false,
         "dimensionAxis": {
           "show": "labels",
           "label": "auto",
-          "continuousAuto": false,
           "dock": "near",
-          "axisDisplayMode": "auto"
+          "continuousAuto": false
         },
         "measureAxis": {
           "show": "labels",
           "autoMinMax": true,
           "dock": "near"
         },
-        "dataPoint": {
-          "show": true,
-          "showLabels": false
-        },
-        "components": [
-          {
-            "key": "line",
-            "style": {
-              "dataPointSize": 5,
-              "lineThickness": 3,
-              "lineType": "solid",
-              "lineCurve": "linear"
-            }
-          }
-        ],
-        "nullMode": "gap",
         "gridLine": {
           "auto": false,
           "spacing": 2
         },
-        "style": {
-          "background": {
-            "useColorExpression": false,
-            "color": {
-              "index": -1,
-              "color": "#FFFFFF"
-            }
-          },
-          "border": {
-            "width": 1,
-            "radius": 12,
-            "color": {
-              "index": -1,
-              "color": "#E3E9F1"
-            }
-          },
-          "shadow": {
-            "size": "small",
-            "color": {
-              "index": -1,
-              "color": "#A7B7D1"
-            }
-          }
+        "preferContinuousAxis": false,
+        "showDisclaimer": false,
+        "version": "1.0.0",
+        "lineType": "area",
+        "nullMode": "gap",
+        "dataPoint": {
+          "show": true,
+          "showLabels": false
         }
       },
       {
@@ -842,27 +1323,74 @@
         "visualization": "barchart",
         "title": "Performance per mercato",
         "showTitles": true,
+        "showDetails": false,
+        "disableNavMenu": true,
+        "components": [
+          {
+            "key": "general",
+            "bgColor": {
+              "useExpression": false,
+              "color": {
+                "index": -1,
+                "color": "#FFFFFF",
+                "alpha": 1
+              }
+            },
+            "borderWidth": "1px",
+            "borderColor": {
+              "index": -1,
+              "color": "#E5EBF3",
+              "alpha": 1
+            },
+            "borderRadius": "16px",
+            "shadow": {
+              "boxShadow": "0px 4px 15px 0px",
+              "boxShadowColor": {
+                "index": -1,
+                "color": "rgba(36,59,86,0.07)",
+                "alpha": 1
+              }
+            },
+            "title": {
+              "main": {
+                "fontFamily": "Arial",
+                "fontSize": "16px",
+                "fontStyle": [
+                  "bold"
+                ],
+                "color": {
+                  "index": -1,
+                  "color": "#142840",
+                  "alpha": 1
+                }
+              },
+              "subTitle": {
+                "fontFamily": "Arial",
+                "fontSize": "12px",
+                "fontStyle": [],
+                "color": {
+                  "index": -1,
+                  "color": "#718096",
+                  "alpha": 1
+                }
+              },
+              "footer": {
+                "fontFamily": "Arial",
+                "fontSize": "10px",
+                "fontStyle": [],
+                "color": {
+                  "index": -1,
+                  "color": "#718096",
+                  "alpha": 1
+                }
+              }
+            }
+          }
+        ],
         "qHyperCubeDef": {
+          "qStateName": "$",
           "qDimensions": [
             {
-              "qDef": {
-                "qGrouping": "N",
-                "qFieldDefs": [
-                  ""
-                ],
-                "qFieldLabels": [
-                  ""
-                ],
-                "autoSort": false,
-                "qSortCriterias": [
-                  {
-                    "qSortByExpression": -1,
-                    "qExpression": {
-                      "qv": "Sum(Revenue)"
-                    }
-                  }
-                ]
-              },
               "qLibraryId": "qlikgpt_d_market",
               "qNullSuppression": true
             }
@@ -870,38 +1398,33 @@
           "qMeasures": [
             {
               "qLibraryId": "qlikgpt_shared_revenue",
-              "qType": "measure",
               "qDef": {
-                "qDef": "",
-                "qLabel": "RICAVI PER MERCATO"
+                "qDef": ""
+              },
+              "qSortBy": {
+                "qSortByNumeric": -1
               }
             }
           ],
           "qInitialDataFetch": [
             {
-              "qLeft": 0,
               "qTop": 0,
+              "qLeft": 0,
               "qWidth": 2,
               "qHeight": 100
             }
           ],
-          "qStateName": "$",
-          "qMode": "S",
           "qSuppressMissing": true,
           "qSuppressZero": false,
           "qInterColumnSortOrder": [
-            0,
-            1
+            1,
+            0
           ]
         },
-        "version": "1.0.0",
         "subtitle": "Confronto dei ricavi per area",
-        "showDetails": false,
-        "showDisclaimer": false,
         "legend": {
           "show": false,
-          "showTitle": false,
-          "dock": "auto"
+          "showTitle": false
         },
         "color": {
           "auto": false,
@@ -909,76 +1432,533 @@
           "useBaseColors": "off",
           "paletteColor": {
             "index": -1,
-            "color": "#16A39A"
+            "color": "#16A39A",
+            "alpha": 1
           }
-        },
-        "orientation": "horizontal",
-        "preferContinuousAxis": false,
-        "barGrouping": {
-          "grouping": "grouped"
-        },
-        "dataPoint": {
-          "showLabels": true,
-          "showSegmentLabels": false,
-          "showTotalLabels": false
-        },
-        "gridLine": {
-          "auto": false,
-          "spacing": 1
         },
         "dimensionAxis": {
           "show": "labels",
           "label": "auto",
-          "dock": "near"
+          "dock": "near",
+          "continuousAuto": false
         },
         "measureAxis": {
           "show": "labels",
           "autoMinMax": true,
           "dock": "near"
         },
-        "scrollbar": "none",
-        "style": {
-          "background": {
-            "useColorExpression": false,
-            "color": {
+        "gridLine": {
+          "auto": false,
+          "spacing": 2
+        },
+        "preferContinuousAxis": false,
+        "showDisclaimer": false,
+        "version": "1.0.0",
+        "orientation": "horizontal",
+        "barGrouping": {
+          "grouping": "grouped"
+        },
+        "dataPoint": {
+          "showLabels": true,
+          "showSegmentLabels": false
+        },
+        "scrollbar": "none"
+      },
+      {
+        "qInfo": {
+          "qId": "qlikgpt_breakdown_section",
+          "qType": "text-image"
+        },
+        "qExtendsId": "",
+        "visualization": "text-image",
+        "title": "SALES BREAKDOWN",
+        "showTitles": true,
+        "showDetails": false,
+        "disableNavMenu": true,
+        "components": [
+          {
+            "key": "general",
+            "bgColor": {
+              "useExpression": false,
+              "color": {
+                "index": -1,
+                "color": "#F2F2F2",
+                "alpha": 1
+              }
+            },
+            "borderWidth": "0px",
+            "borderColor": {
               "index": -1,
-              "color": "#FFFFFF"
-            }
-          },
-          "border": {
-            "width": 1,
-            "radius": 12,
-            "color": {
-              "index": -1,
-              "color": "#E3E9F1"
-            }
-          },
-          "shadow": {
-            "size": "small",
-            "color": {
-              "index": -1,
-              "color": "#A7B7D1"
+              "color": "#E5EBF3",
+              "alpha": 1
+            },
+            "borderRadius": "0px",
+            "shadow": {
+              "boxShadow": "none",
+              "boxShadowColor": {
+                "index": -1,
+                "color": "rgba(36,59,86,0.07)",
+                "alpha": 1
+              }
+            },
+            "title": {
+              "main": {
+                "fontFamily": "Arial",
+                "fontSize": "11px",
+                "fontStyle": [
+                  "bold"
+                ],
+                "color": {
+                  "index": -1,
+                  "color": "#142840",
+                  "alpha": 1
+                }
+              },
+              "subTitle": {
+                "fontFamily": "Arial",
+                "fontSize": "12px",
+                "fontStyle": [],
+                "color": {
+                  "index": -1,
+                  "color": "#718096",
+                  "alpha": 1
+                }
+              },
+              "footer": {
+                "fontFamily": "Arial",
+                "fontSize": "10px",
+                "fontStyle": [],
+                "color": {
+                  "index": -1,
+                  "color": "#718096",
+                  "alpha": 1
+                }
+              }
             }
           }
+        ],
+        "subtitle": "",
+        "markdown": "​",
+        "images": [],
+        "responsive": false
+      },
+      {
+        "qInfo": {
+          "qId": "qlikgpt_table_sales",
+          "qType": "table"
+        },
+        "qExtendsId": "",
+        "visualization": "table",
+        "title": "Dettaglio vendite",
+        "showTitles": true,
+        "showDetails": false,
+        "disableNavMenu": true,
+        "components": [
+          {
+            "key": "general",
+            "bgColor": {
+              "useExpression": false,
+              "color": {
+                "index": -1,
+                "color": "#FFFFFF",
+                "alpha": 1
+              }
+            },
+            "borderWidth": "1px",
+            "borderColor": {
+              "index": -1,
+              "color": "#E5EBF3",
+              "alpha": 1
+            },
+            "borderRadius": "16px",
+            "shadow": {
+              "boxShadow": "0px 4px 15px 0px",
+              "boxShadowColor": {
+                "index": -1,
+                "color": "rgba(36,59,86,0.07)",
+                "alpha": 1
+              }
+            },
+            "title": {
+              "main": {
+                "fontFamily": "Arial",
+                "fontSize": "16px",
+                "fontStyle": [
+                  "bold"
+                ],
+                "color": {
+                  "index": -1,
+                  "color": "#142840",
+                  "alpha": 1
+                }
+              },
+              "subTitle": {
+                "fontFamily": "Arial",
+                "fontSize": "12px",
+                "fontStyle": [],
+                "color": {
+                  "index": -1,
+                  "color": "#718096",
+                  "alpha": 1
+                }
+              },
+              "footer": {
+                "fontFamily": "Arial",
+                "fontSize": "10px",
+                "fontStyle": [],
+                "color": {
+                  "index": -1,
+                  "color": "#718096",
+                  "alpha": 1
+                }
+              }
+            }
+          },
+          {
+            "key": "theme",
+            "content": {
+              "fontSize": 13,
+              "fontColor": {
+                "index": -1,
+                "color": "#142840",
+                "alpha": 1
+              }
+            },
+            "header": {
+              "fontSize": 12,
+              "fontColor": {
+                "index": -1,
+                "color": "#718096",
+                "alpha": 1
+              }
+            }
+          }
+        ],
+        "qHyperCubeDef": {
+          "qStateName": "$",
+          "qDimensions": [
+            {
+              "qLibraryId": "qlikgpt_d_market",
+              "qNullSuppression": true
+            },
+            {
+              "qLibraryId": "qlikgpt_d_channel",
+              "qNullSuppression": true
+            }
+          ],
+          "qMeasures": [
+            {
+              "qLibraryId": "qlikgpt_shared_revenue",
+              "qDef": {
+                "qDef": ""
+              },
+              "qSortBy": {
+                "qSortByNumeric": -1
+              }
+            },
+            {
+              "qLibraryId": "qlikgpt_shared_orders",
+              "qDef": {
+                "qDef": ""
+              }
+            },
+            {
+              "qLibraryId": "qlikgpt_shared_margin",
+              "qDef": {
+                "qDef": ""
+              }
+            },
+            {
+              "qLibraryId": "qlikgpt_shared_margin_pct",
+              "qDef": {
+                "qDef": ""
+              }
+            }
+          ],
+          "qInitialDataFetch": [
+            {
+              "qTop": 0,
+              "qLeft": 0,
+              "qWidth": 6,
+              "qHeight": 100
+            }
+          ],
+          "qSuppressMissing": true,
+          "qSuppressZero": false,
+          "qColumnOrder": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "columnOrder": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "columnWidths": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "qInterColumnSortOrder": [
+            2,
+            0,
+            1,
+            3,
+            4,
+            5
+          ]
+        },
+        "subtitle": "Ricavi, volumi e redditività per mercato e canale",
+        "totals": {
+          "show": true,
+          "position": "top",
+          "label": "Totale"
+        },
+        "scrolling": {
+          "horizontal": true,
+          "keepFirstColumnInView": true
+        },
+        "multiline": {
+          "wrapTextInHeaders": false,
+          "wrapTextInCells": false
         }
-      }
-    ],
-    "style": {
-      "background": {
-        "useColorExpression": false,
+      },
+      {
+        "qInfo": {
+          "qId": "qlikgpt_chart_channel",
+          "qType": "piechart"
+        },
+        "qExtendsId": "",
+        "visualization": "piechart",
+        "title": "Mix per canale",
+        "showTitles": true,
+        "showDetails": false,
+        "disableNavMenu": true,
+        "components": [
+          {
+            "key": "general",
+            "bgColor": {
+              "useExpression": false,
+              "color": {
+                "index": -1,
+                "color": "#FFFFFF",
+                "alpha": 1
+              }
+            },
+            "borderWidth": "1px",
+            "borderColor": {
+              "index": -1,
+              "color": "#E5EBF3",
+              "alpha": 1
+            },
+            "borderRadius": "16px",
+            "shadow": {
+              "boxShadow": "0px 4px 15px 0px",
+              "boxShadowColor": {
+                "index": -1,
+                "color": "rgba(36,59,86,0.07)",
+                "alpha": 1
+              }
+            },
+            "title": {
+              "main": {
+                "fontFamily": "Arial",
+                "fontSize": "16px",
+                "fontStyle": [
+                  "bold"
+                ],
+                "color": {
+                  "index": -1,
+                  "color": "#142840",
+                  "alpha": 1
+                }
+              },
+              "subTitle": {
+                "fontFamily": "Arial",
+                "fontSize": "12px",
+                "fontStyle": [],
+                "color": {
+                  "index": -1,
+                  "color": "#718096",
+                  "alpha": 1
+                }
+              },
+              "footer": {
+                "fontFamily": "Arial",
+                "fontSize": "10px",
+                "fontStyle": [],
+                "color": {
+                  "index": -1,
+                  "color": "#718096",
+                  "alpha": 1
+                }
+              }
+            }
+          },
+          {
+            "key": "pie",
+            "style": {
+              "innerRadius": 0.65,
+              "cornerRadius": 4,
+              "strokeWidth": "small",
+              "strokeColor": {
+                "index": -1,
+                "color": "#FFFFFF",
+                "alpha": 1
+              }
+            }
+          }
+        ],
+        "qHyperCubeDef": {
+          "qStateName": "$",
+          "qDimensions": [
+            {
+              "qLibraryId": "qlikgpt_d_channel",
+              "qNullSuppression": true
+            }
+          ],
+          "qMeasures": [
+            {
+              "qLibraryId": "qlikgpt_shared_revenue",
+              "qDef": {
+                "qDef": ""
+              },
+              "qAttributeExpressions": [
+                {
+                  "id": "colorByExpression",
+                  "qExpression": "If(Channel='Online',RGB(51,101,213),If(Channel='Partner',RGB(22,163,154),RGB(20,40,64)))"
+                }
+              ],
+              "qSortBy": {
+                "qSortByNumeric": -1
+              }
+            }
+          ],
+          "qInitialDataFetch": [
+            {
+              "qTop": 0,
+              "qLeft": 0,
+              "qWidth": 2,
+              "qHeight": 100
+            }
+          ],
+          "qSuppressMissing": true,
+          "qSuppressZero": false,
+          "qInterColumnSortOrder": [
+            1,
+            0
+          ]
+        },
+        "subtitle": "Quota di fatturato per canale di vendita",
+        "donut": {
+          "showAsDonut": true
+        },
+        "dimensionTitle": false,
+        "dataPoint": {
+          "auto": false,
+          "labelMode": "share"
+        },
+        "legend": {
+          "show": true,
+          "dock": "right",
+          "showTitle": false
+        },
         "color": {
-          "index": -1,
-          "color": "#F5F7FB"
+          "auto": false,
+          "mode": "byExpression",
+          "expressionIsColor": true,
+          "colorExpression": "=If(Channel='Online',RGB(51,101,213),If(Channel='Partner',RGB(22,163,154),RGB(20,40,64)))",
+          "useBaseColors": "off"
         }
+      },
+      {
+        "qInfo": {
+          "qId": "qlikgpt_overview_footer",
+          "qType": "text-image"
+        },
+        "qExtendsId": "",
+        "visualization": "text-image",
+        "title": "Sales Intelligence · Executive Overview",
+        "showTitles": true,
+        "showDetails": false,
+        "disableNavMenu": true,
+        "components": [
+          {
+            "key": "general",
+            "bgColor": {
+              "useExpression": false,
+              "color": {
+                "index": -1,
+                "color": "#F2F2F2",
+                "alpha": 1
+              }
+            },
+            "borderWidth": "0px",
+            "borderColor": {
+              "index": -1,
+              "color": "#E5EBF3",
+              "alpha": 1
+            },
+            "borderRadius": "0px",
+            "shadow": {
+              "boxShadow": "none",
+              "boxShadowColor": {
+                "index": -1,
+                "color": "rgba(36,59,86,0.07)",
+                "alpha": 1
+              }
+            },
+            "title": {
+              "main": {
+                "fontFamily": "Arial",
+                "fontSize": "10px",
+                "fontStyle": [
+                  "bold"
+                ],
+                "color": {
+                  "index": -1,
+                  "color": "#142840",
+                  "alpha": 1
+                }
+              },
+              "subTitle": {
+                "fontFamily": "Arial",
+                "fontSize": "12px",
+                "fontStyle": [],
+                "color": {
+                  "index": -1,
+                  "color": "#718096",
+                  "alpha": 1
+                }
+              },
+              "footer": {
+                "fontFamily": "Arial",
+                "fontSize": "10px",
+                "fontStyle": [],
+                "color": {
+                  "index": -1,
+                  "color": "#718096",
+                  "alpha": 1
+                }
+              }
+            }
+          }
+        ],
+        "subtitle": "Grafici nativi Qlik · Metriche dal catalogo",
+        "markdown": "​",
+        "images": [],
+        "responsive": false
       }
-    },
-    "backgroundColor": {
-      "index": -1,
-      "color": "#F5F7FB"
-    },
-    "background": {
-      "color": "#F5F7FB"
-    },
-    "backgroundMode": "custom"
+    ]
   }
 ]
