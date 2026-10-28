@@ -144,7 +144,7 @@ def sheet(key, title, measures, destination):
     rows=22
     header=text_block(
         prefix+"_header",
-        "%["+title+"](6)^[EXECUTIVE OVERVIEW  •  GOVERNED ANALYTICS](2)",
+        "%[QlikGPT  /  "+title+"](6)^[EXECUTIVE OVERVIEW  •  GOVERNED ANALYTICS](2)",
         dark=True,
     )
     nav=navigation_button(prefix+"_nav", "APRI OVERVIEW  →", destination)
