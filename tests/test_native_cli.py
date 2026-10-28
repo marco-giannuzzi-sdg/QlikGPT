@@ -66,3 +66,10 @@ class NativeCliTests(unittest.TestCase):
             if p["qInfo"]["qType"] == "kpi":
                 self.assertEqual(p["layoutBehavior"], "fixed")
                 self.assertEqual(general["borderRadius"], "16px")
+
+    def test_text_blocks_have_no_empty_visualization_prompt_and_months_sort_numerically(self):
+        for p in self.objects:
+            if p["qInfo"]["qType"] == "text-image":
+                self.assertTrue(p["markdown"])
+            if p["qInfo"]["qType"] == "linechart":
+                self.assertEqual(p["qHyperCubeDef"]["qDimensions"][0]["qDef"]["qSortCriterias"][0]["qSortByNumeric"], 1)

@@ -28,7 +28,7 @@ def general(background="#FFFFFF", decorated=True, title_size=16, title_color=Non
         "borderWidth": "1px" if decorated else "0px",
         "borderColor": color(C["border"]), "borderRadius": "16px" if decorated else "0px",
         "shadow": {"boxShadow": "0px 4px 15px 0px" if decorated else "none",
-                   "boxShadowColor": color("#243B56", 0.07)},
+                   "boxShadowColor": color("rgba(36,59,86,0.07)")},
         "title": {"main": font(title_size, title_color or C["navy"], True),
                   "subTitle": font(12, C["muted"]), "footer": font(10, C["muted"])}}
 
@@ -46,7 +46,7 @@ def common(ident, typ, title, style):
 def text(ident, title, subtitle="", background=None, size=16):
     style = general(background or C["canvas"], False, size)
     props = common(ident, "text-image", title, style)
-    props.update({"subtitle": subtitle, "markdown": "", "images": [], "responsive": False})
+    props.update({"subtitle": subtitle, "markdown": "\u200b", "images": [], "responsive": False})
     return entry(props)
 
 def cube(measures, dimension=None):
@@ -85,8 +85,8 @@ def make():
     head_style["borderRadius"] = "16px"
     head_style["title"]["main"] = font(26, "#FFFFFF", True)
     head_style["title"]["subTitle"] = font(11, "#BDCCE0")
-    add(header, 0, 0, 24, 2)
-    add(text("intro", "Executive Overview", "Una visione chiara delle performance di vendita.", size=25), 0, 2, 11, 2)
+    add(header, 0, 0, 24, 1)
+    add(text("intro", "Executive Overview", "Una visione chiara delle performance di vendita.", size=25), 0, 1, 11, 2)
     for i, (key, label, dimension) in enumerate(FILTERS):
         props = common("filter_" + key, "filterpane", label, general(decorated=True, title_size=12))
         props["showTitles"] = False
@@ -99,8 +99,8 @@ def make():
             "layoutOptions": {"dataLayout": "singleColumn", "dense": False},
             "components": [{"key": "theme", "header": {"fontFamily": "Arial", "fontSize": "12px",
                 "fontColor": color(C["navy"])}, "content": {"fontFamily": "Arial", "fontSize": "12px"}}]}
-        add(entry(props, [entry(listing)]), 12 + i*4, 3, 4, 1)
-    add(text("pulse", "BUSINESS PULSE", size=11), 0, 4, 24, 1)
+        add(entry(props, [entry(listing)]), 12 + i*4, 2, 4, 1)
+    add(text("pulse", "BUSINESS PULSE", size=11), 0, 3, 24, 1)
     labels = ["Fatturato", "Ordini", "Margine lordo", "Margine %"]
     notes = ["Valore commerciale", "Volume delle vendite", "Redditività delle vendite", "Margine sul fatturato"]
     for i, (mid, label, note) in enumerate(zip(MEASURES, labels, notes)):
@@ -110,13 +110,14 @@ def make():
         props.update({"qHyperCubeDef": cube([mid]), "textAlign": "left", "layoutBehavior": "fixed",
             "fontSize": "M", "showMeasureTitle": False, "showSecondMeasureTitle": False,
             "footnote": note, "version": "2.5.0", "useLink": False})
+        props["qHyperCubeDef"]["qMeasures"][0]["coloring"] = {"baseColor": color(C["navy"])}
         props["qHyperCubeDef"]["qMeasures"][0]["conditionalColoring"] = {
             "useConditionalColoring": False, "useBaseColors": False, "paletteSingleColor": color(C["navy"]),
             "segments": {"limits": [], "paletteColors": [color(C["navy"])]}}
         props["components"].append({"key": "theme", "label": {
             "value": {"fontFamily": "Arial", "fontSize": "36px", "fontStyle": ["bold"]}}})
-        add(entry(props), i*6, 5, 6, 3)
-    add(text("explorer", "PERFORMANCE EXPLORER", size=11), 0, 8, 24, 1)
+        add(entry(props), i*6, 4, 6, 3)
+    add(text("explorer", "PERFORMANCE EXPLORER", size=11), 0, 7, 24, 1)
     for ident, typ, title, subtitle, dimension, ink, col, width in [
         ("trend", "linechart", "Andamento del fatturato", "Evoluzione mensile dei ricavi", "qlikgpt_d_yearmonth", C["blue"], 0, 15),
         ("markets", "barchart", "Performance per mercato", "Confronto dei ricavi per area", "qlikgpt_d_market", C["teal"], 15, 9)]:
@@ -129,6 +130,9 @@ def make():
             "gridLine": {"auto": False, "spacing": 2}, "preferContinuousAxis": False,
             "showDisclaimer": False, "version": "1.0.0"})
         if typ == "linechart":
+            props["qHyperCubeDef"]["qInterColumnSortOrder"] = [0, 1]
+            props["qHyperCubeDef"]["qDimensions"][0]["qDef"] = {
+                "autoSort": False, "qSortCriterias": [{"qSortByNumeric": 1, "qSortByAscii": 1}]}
             props.update({"lineType": "area", "nullMode": "gap",
                           "dataPoint": {"show": True, "showLabels": False}})
             props["components"].append({"key": "line", "style": {
@@ -139,8 +143,8 @@ def make():
                           "scrollbar": "none"})
             props["qHyperCubeDef"]["qInterColumnSortOrder"] = [1, 0]
             props["qHyperCubeDef"]["qMeasures"][0]["qSortBy"] = {"qSortByNumeric": -1}
-        add(entry(props), col, 9, width, 9)
-    add(text("footer", "Sales Intelligence · Executive Overview", "Grafici nativi Qlik · Metriche dal catalogo", size=10), 0, 18, 24, 1)
+        add(entry(props), col, 8, width, 7)
+    add(text("footer", "Sales Intelligence · Executive Overview", "Grafici nativi Qlik · Metriche dal catalogo", size=10), 0, 15, 24, 1)
     sheet = {"qInfo": {"qId": SHEET, "qType": "sheet"}, "qExtendsId": "",
         "qMetaDef": {"title": "Sales Intelligence | Native", "description": "Native Qlik CLI premium composition"},
         "title": "Sales Intelligence | Native", "description": "qlikgpt-native-cli-v1",
