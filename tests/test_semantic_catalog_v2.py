@@ -88,7 +88,10 @@ class CatalogV2Tests(unittest.TestCase):
 
     def test_unsubscribed_library_measure_rejected(self):
         apps=report.read_apps()
-        apps["presentation2"]["visuals"][0]["qChildren"][0]["qHyperCubeDef"]["qMeasures"][0]["qLibraryId"]="unknown"
+        p2_children = apps["presentation2"]["visuals"][0]["qChildren"]
+        p2_kpi = next(child for child in p2_children
+                      if child.get("qInfo", {}).get("qType") == "kpi")
+        p2_kpi["qHyperCubeDef"]["qMeasures"][0]["qLibraryId"] = "unknown"
         with patch.object(report,"read_apps",return_value=apps):
             with self.assertRaisesRegex(ValueError,"missing catalog subscription"):
                 report.generate()
