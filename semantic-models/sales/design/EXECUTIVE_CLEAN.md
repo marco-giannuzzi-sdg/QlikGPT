@@ -1,34 +1,30 @@
-# Sales — QlikGPT Executive V1 (Frontend Native)
+# Sales Intelligence — Executive Premium pilot
 
-Questa cartella descrive l'applicazione del **[Design System globale](../../../ui/README.md)** alle due Presentation Sales; la Source of Truth della UI è [ui/design-tokens.json](../../../ui/design-tokens.json). Il Semantic Catalog [formatting.json](../catalog/formatting.json) continua a governare la **formattazione delle misure** (non la palette e le superfici dell'interfaccia).
+This is the **first visual pilot** of the [global Executive Premium UI Kit](../../../ui/README.md), version 1.1.0. No ETL, metric formulas, field lineage or existing visualization identifiers are changed.
 
-## Palette attuale
+## First Presentation — Sales Overview
 
-| Ruolo | Token | Valore |
-| --- | --- | --- |
-| Header / brand ink | `navy` | `#142B49` |
-| Primary data accent | `teal` | `#0E7490` |
-| Primary interaction | `blue` | `#2563EB` |
-| KPI / filter card | `card` | `#F5F8FC` |
-| Chart surface | `surface` | `#FFFFFF` |
-| App canvas (theme, optional) | `canvas` | `#F3F6FB` |
-| Secondary labels | `muted` | `#64748B` |
+- [Governed native sheet](../apps/presentation1-objects.json): 24 columns x 18 rows, refreshed hero and navigation rail, dedicated filter control strip, four KPI cards, section separators, and dual-chart insight area.
+- Visual master measures remain: `qlikgpt_shared_revenue`, `qlikgpt_shared_orders`, `qlikgpt_shared_margin`, `qlikgpt_shared_margin_pct`.
+- The two existing charts retain their `qLibraryId`-based dimensions and measure subscriptions, including the monthly revenue trend and market comparison.
+- Native button opens the already provisioned [Shared KPI Presentation](https://sdggroup-it.eu.qlikcloud.com/sense/app/04280b14-6ba5-4fe9-90d6-2ff8fa1c994f).
+- The header uses native Qlik text-image rich-text markup rather than raw Markdown. A browser visual check is still required to confirm it renders as intended.
 
-## Presentation 1 — Sales Overview
+## Companion Presentation — Shared KPI
 
-La [sorgente JSON](../apps/presentation1-objects.json) riutilizza i KPI con gli ID originali, i due grafici `qlikgpt_chart_month` e `qlikgpt_chart_market` e i filtri Qlik native. L'header `qlikgpt_brand_header` usa navy e il nuovo pulsante `qlikgpt_nav_shared_kpis` apre l'altra app, senza reload. Il nuovo blocco breadcrumb `qlikgpt_navigation_hint` distingue il contesto.
+The [second native sheet](../apps/presentation2-objects.json) adopts the same palette and has a native navigation button back to Sales Overview. Original KPI and master measure identifiers stay unchanged.
 
-## Presentation 2 — Shared KPI
+## How to complete the visual rollout
 
-La [sorgente JSON](../apps/presentation2-objects.json) mantiene i due KPI originali, ma introduce header `qlikgpt_p2_header`, sezione KPI, nota di governance e pulsante `qlikgpt_p2_nav_overview` per tornare a Sales Overview. L'azione di navigazione è un `openWebsite` nativo Qlik che punta all'altra app, non a uno sheet inesistente.
+1. Review and merge the Executive Premium PR to `main`, after the static checks. With `QLIK_CICD_ENABLED=true`, the existing GitHub workflow can synchronize the native QIX frontend **without reloading data**.
+2. In the Qlik tenant, upload the global custom theme ZIP built from `ui/themes/qlikgpt-executive-v1/` and select it from **App settings > Appearance > Application theme**. This action is not automated by the current repository.
+3. Open [Sales Overview](https://sdggroup-it.eu.qlikcloud.com/sense/app/07dfa926-4895-4fb2-af4c-eac90e9eb2cb) and verify header readability, filter alignment, KPI layout, navigation, title styles, line chart and market sorting.
+4. Only after visual approval roll out to client-facing apps. The source Qlik objects and the custom theme are separate layers.
 
-## Controlli e accettazione
+## Acceptance criteria
 
-- La CI con `python3 ci/ui_template.py --check` controlla che entrambe le Presentation rispettino il template, senza grid overlap o child orphan.
-- `ci/deploy_visuals.py` e `ci/semantic_catalog.py` continuano a verificare master IDs, oggetti QIX e componenti nativi senza ricaricare i dati.
-- **La verifica tecnica non equivale alla verifica visiva**: font, spaziature e comportamento responsive vanno controllati nel browser Qlik Cloud prima di approvare il design come standard per clienti.
-- Il [Qlik Custom Theme](../../../ui/themes/qlikgpt-executive-v1/theme.json) è pronto come sorgente versionata ma non è stato importato o attivato automaticamente sul tenant.
-
-## Nuova Presentation
-
-Il generatore `python3 ci/ui_template.py` può preparare manifest e JSON Qlik con un unico comando di anteprima, sottoscrivendo le master measures del modello Sales via `qLibraryId`. Per un nuovo modello semantico si riutilizza lo stesso sistema di token, mentre ciascun modello mantiene i propri cataloghi, script e App ID.
+- No blank or orphan QIX objects and no overlapping grid cells.
+- No inline metric expressions: every KPI/chart keeps governed `qLibraryId` references.
+- No fake KPIs/deltas or fabricated selection counts.
+- `qlikgpt_brand_header` displays properly formatted text, not literal `##`.
+- The browser matches the design tokens sufficiently, or deviations are documented before approval.

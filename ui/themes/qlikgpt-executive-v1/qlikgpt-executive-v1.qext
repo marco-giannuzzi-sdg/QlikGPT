@@ -1,7 +1,7 @@
 {
   "name": "qlikgpt-executive-v1",
-  "description": "QlikGPT Executive V1 native theme",
+  "description": "QlikGPT Executive Premium model-agnostic Qlik Cloud theme",
   "type": "theme",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": "QlikGPT"
 }

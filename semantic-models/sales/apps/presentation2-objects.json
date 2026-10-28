@@ -119,11 +119,20 @@
         "visualization": "text-image",
         "title": "Sales Intelligence",
         "showTitles": false,
-        "markdown": "## QlikGPT  |  Sales Intelligence\n**SHARED KPI**  ·  Governed Analytics",
+        "markdown": "%[QlikGPT  /  SHARED KPI LIBRARY](4)^[GOVERNED ANALYTICS  ·  ONE SEMANTIC LANGUAGE](inherit)",
         "images": [],
         "responsive": true,
         "background": {
-          "color": "#142B49"
+          "color": "#EDF3FF"
+        },
+        "style": {
+          "background": {
+            "useColorExpression": false,
+            "color": {
+              "index": -1,
+              "color": "#EDF3FF"
+            }
+          }
         }
       },
       {
@@ -137,7 +146,7 @@
         "showTitles": true,
         "showDetails": false,
         "fontSize": "M",
-        "textAlign": "center",
+        "textAlign": "left",
         "qHyperCubeDef": {
           "qDimensions": [],
           "qMeasures": [
@@ -160,7 +169,7 @@
             "useColorExpression": false,
             "color": {
               "index": -1,
-              "color": "#F5F8FC"
+              "color": "#F0F5FF"
             }
           }
         },
@@ -178,7 +187,7 @@
         "showTitles": true,
         "showDetails": false,
         "fontSize": "M",
-        "textAlign": "center",
+        "textAlign": "left",
         "qHyperCubeDef": {
           "qDimensions": [],
           "qMeasures": [
@@ -201,7 +210,7 @@
             "useColorExpression": false,
             "color": {
               "index": -1,
-              "color": "#F5F8FC"
+              "color": "#EAF8F6"
             }
           }
         },
@@ -225,7 +234,7 @@
           "sameWindow": false
         },
         "style": {
-          "label": "Apri Sales Overview ↗",
+          "label": "TORNA A OVERVIEW  →",
           "showLabel": true,
           "font": {
             "fontFamily": "Arial, Helvetica, sans-serif",
@@ -233,7 +242,7 @@
               "useColorExpression": false,
               "color": {
                 "index": -1,
-                "color": "#142B49"
+                "color": "#FFFFFF"
               }
             }
           },
@@ -241,7 +250,7 @@
             "useColorExpression": false,
             "color": {
               "index": -1,
-              "color": "#F5F8FC"
+              "color": "#142840"
             }
           }
         }
@@ -255,11 +264,20 @@
         "visualization": "text-image",
         "title": "qlikgpt_p2_section",
         "showTitles": false,
-        "markdown": "**METRICHE CONDIVISE**  ·  Stessa definizione semantica, applicazione indipendente",
+        "markdown": "01  /  SHARED METRICS     •     Definizioni coerenti tra applicazioni",
         "images": [],
         "responsive": true,
         "background": {
-          "color": "#FFFFFF"
+          "color": "#F5F7FB"
+        },
+        "style": {
+          "background": {
+            "useColorExpression": false,
+            "color": {
+              "index": -1,
+              "color": "#F5F7FB"
+            }
+          }
         }
       },
       {
@@ -271,11 +289,20 @@
         "visualization": "text-image",
         "title": "qlikgpt_p2_footnote",
         "showTitles": false,
-        "markdown": "**Governance QlikGPT**  ·  Le misure provengono dal Semantic Catalog e mantengono gli stessi ID.  \nUsa il pulsante in alto per tornare alla dashboard Sales Overview.",
+        "markdown": "GOVERNANCE  /  Master measures condivise dal Semantic Catalog. Usa il pulsante in alto per aprire l'Overview.",
         "images": [],
         "responsive": true,
         "background": {
-          "color": "#FFFFFF"
+          "color": "#F0F5FF"
+        },
+        "style": {
+          "background": {
+            "useColorExpression": false,
+            "color": {
+              "index": -1,
+              "color": "#F0F5FF"
+            }
+          }
         }
       }
     ]

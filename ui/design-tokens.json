@@ -1,21 +1,24 @@
 {
   "schemaVersion": 1,
   "templateId": "qlikgpt-executive-v1",
-  "name": "QlikGPT Executive",
-  "version": "1.0.0",
-  "purpose": "Reusable native Qlik Cloud presentation style for governed BI models",
+  "name": "QlikGPT Executive Premium",
+  "version": "1.1.0",
+  "purpose": "Model-agnostic, Qlik-native premium presentation system",
   "colors": {
-    "canvas": "#F3F6FB",
+    "canvas": "#F5F7FB",
     "surface": "#FFFFFF",
-    "card": "#F5F8FC",
-    "navy": "#142B49",
-    "teal": "#0E7490",
-    "blue": "#2563EB",
-    "success": "#15803D",
-    "text": "#1E293B",
-    "muted": "#64748B",
-    "border": "#E2E8F0",
-    "inverse": "#FFFFFF"
+    "card": "#FFFFFF",
+    "navy": "#142840",
+    "teal": "#16A39A",
+    "blue": "#3365D5",
+    "success": "#16A34A",
+    "text": "#1F2A37",
+    "muted": "#6B7280",
+    "border": "#E3E9F1",
+    "inverse": "#FFFFFF",
+    "paleBlue": "#EDF3FF",
+    "softTeal": "#EAF8F6",
+    "softBlue": "#F0F5FF"
   },
   "fontFamily": "Arial, Helvetica, sans-serif",
   "grid": {
@@ -27,12 +30,12 @@
   },
   "styles": {
     "header": {
-      "background": "navy",
-      "text": "inverse"
+      "background": "paleBlue",
+      "text": "navy"
     },
     "navigation": {
-      "background": "surface",
-      "text": "navy",
+      "background": "navy",
+      "text": "inverse",
       "accent": "blue"
     },
     "kpi": {
@@ -41,10 +44,10 @@
     },
     "chart": {
       "background": "surface",
-      "title": "text"
+      "title": "navy"
     },
     "filter": {
-      "background": "card",
+      "background": "surface",
       "text": "text"
     }
   },
@@ -53,6 +56,9 @@
     "minimumKpiColumns": 6,
     "masterMeasuresOnly": true,
     "masterDimensionsOnly": true,
-    "neverDeployReloadOnStyleChange": true
+    "neverDeployReloadOnStyleChange": true,
+    "visualLanguage": "executive-premium",
+    "designContract": "no-inline-metrics",
+    "noMockDeltas": true
   }
 }
