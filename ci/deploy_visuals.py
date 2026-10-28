@@ -72,6 +72,33 @@ def find_child(qix: Qix, parent: int, child_id: str) -> int | None:
         raise
 
 
+def sync_sheet_grid(qix: Qix, sheet: int, target: dict) -> None:
+    """Reconcile the persisted sheet grid before updating child visuals."""
+    existing_sheet = qix.call(sheet, "GetProperties", [])["qProp"]
+    updated_sheet = dict(existing_sheet)
+    updated_sheet.update({k: v for k, v in target.items()
+                          if k not in {"qChildren", "qInfo"}})
+    qix.call(sheet, "SetProperties", [updated_sheet])
+    live_sheet = qix.call(sheet, "GetProperties", [])["qProp"]
+    if live_sheet.get("columns") != target["columns"] or live_sheet.get("rows") != target["rows"]:
+        raise RuntimeError("Native sheet dimensions did not persist")
+    expected_cells = {
+        (cell["name"], cell["col"], cell["row"], cell["colspan"], cell["rowspan"])
+        for cell in target["cells"]
+    }
+    actual_cells = {
+        (cell["name"], cell["col"], cell["row"], cell["colspan"], cell["rowspan"])
+        for cell in live_sheet.get("cells", [])
+    }
+    if actual_cells != expected_cells:
+        raise RuntimeError("Native sheet cell placement differs from versioned layout")
+    print(
+        f"Native sheet geometry VERIFIED: {target['columns']}x{target['rows']} "
+        f"/ {len(expected_cells)} cells", flush=True
+    )
+
+
+
 def main() -> None:
     if len(sys.argv) != 2:
         raise SystemExit("Expected presentation app ID as argument")
@@ -94,28 +121,7 @@ def main() -> None:
         if sheet is None:
             raise RuntimeError("Qlik Sales Overview sheet not found")
 
-        # V2: QIX sheet grids are not updated by changing the child objects.
-        # Previously the overview kept the old 13-row geometry even though
-        # GitHub had the new layout. Synchronize the sheet itself first.
-        existing_sheet = qix.call(sheet, "GetProperties", [])["qProp"]
-        updated_sheet = dict(existing_sheet)
-        updated_sheet.update({k: v for k, v in target.items()
-                              if k not in {"qChildren", "qInfo"}})
-        qix.call(sheet, "SetProperties", [updated_sheet])
-        live_sheet = qix.call(sheet, "GetProperties", [])["qProp"]
-        if live_sheet.get("columns") != target["columns"] or live_sheet.get("rows") != target["rows"]:
-            raise RuntimeError("Native sheet dimensions did not persist")
-        expected_cells = {
-            (cell["name"],cell["col"],cell["row"],cell["colspan"],cell["rowspan"])
-            for cell in target["cells"]
-        }
-        actual_cells = {
-            (cell["name"],cell["col"],cell["row"],cell["colspan"],cell["rowspan"])
-            for cell in live_sheet.get("cells", [])
-        }
-        if actual_cells != expected_cells:
-            raise RuntimeError("Native sheet cell placement differs from versioned layout")
-        print(f"Native sheet geometry VERIFIED: {target['columns']}x{target['rows']} / {len(expected_cells)} cells",flush=True)
+        sync_sheet_grid(qix, sheet, target)
 
         # qlik app build may store an embedded qChildren JSON array without
         # creating native QIX children. Ensure actual Engine relationships.
