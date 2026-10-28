@@ -9,7 +9,7 @@ import unittest
 
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"ci"))
 from model_registry import ROOT
-from deploy_visuals import sync_sheet_grid
+from deploy_visuals import sync_sheet_grid, overview_tree, validate_tree, validate_retired, nodes, property_tree
 import ui_template
 
 
@@ -36,8 +36,8 @@ class NativeSheetSyncTests(unittest.TestCase):
 
         qix=FakeQix()
         sync_sheet_grid(qix,21,self.sheet)
-        self.assertEqual(qix.saved["rows"],22)
-        self.assertEqual(len(qix.saved["cells"]),12)
+        self.assertEqual(qix.saved["rows"],40)
+        self.assertEqual(len(qix.saved["cells"]),14)
         self.assertTrue(qix.saved["preserve"])
         self.assertEqual(qix.saved["qInfo"],qix.original["qInfo"])
         self.assertEqual(qix.calls,["GetProperties","SetProperties","GetProperties"])
@@ -55,24 +55,52 @@ class NativeSheetSyncTests(unittest.TestCase):
 
     def test_first_presentation_is_true_native_overview(self):
         sh=self.sheet
-        self.assertEqual(sh["rows"],22)
-        self.assertEqual(sh["background"]["color"],"#F5F7FB")
+        self.assertEqual(sh["rows"],40)
+        self.assertEqual(sh["background"]["color"],"#F2F2F2")
         ids={o["qInfo"]["qId"]:o for o in sh["qChildren"]}
-        self.assertEqual(len(ids),12)
+        self.assertEqual(len(ids),14)
         self.assertEqual(
             ids["qlikgpt_chart_month"]["lineType"],"area"
         )
         for ident in ("qlikgpt_kpi_revenue","qlikgpt_kpi_orders",
                       "qlikgpt_kpi_margin","qlikgpt_kpi_margin_pct",
                       "qlikgpt_chart_month","qlikgpt_chart_market"):
-            st=ids[ident]["style"]
-            self.assertEqual(st["border"]["radius"],12)
-            self.assertEqual(st["shadow"]["size"],"small")
-            self.assertEqual(st["border"]["color"]["color"],"#E3E9F1")
+            st=next(c for c in ids[ident]["components"] if c["key"]=="general")
+            self.assertEqual(st["borderRadius"],"16px")
+            self.assertEqual(st["borderWidth"],"1px")
+            self.assertEqual(st["borderColor"]["color"],"#E5EBF3")
         for o in ids.values():
             for m in o.get("qHyperCubeDef",{}).get("qMeasures",[]):
                 self.assertTrue(m["qLibraryId"])
                 self.assertFalse(m.get("qDef",{}).get("qDef","").strip())
+
+    def test_cli_adapter_preserves_json_and_adds_real_master_bound_filter_children(self):
+        original=deepcopy(self.sheet)
+        filters=json.loads((ROOT/"semantic-models/sales/apps/presentation1-filters.json").read_text())
+        tree=overview_tree([self.sheet],filters)
+        self.assertEqual(self.sheet,original)
+        objects={p["qInfo"]["qId"]:p for p in nodes(tree)}
+        self.assertEqual(len(objects),18)
+        self.assertNotIn("qChildren",tree["qProperty"])
+        for f in filters:
+            self.assertEqual(objects[f["id"]]["qListObjectDef"]["qLibraryId"],f["dimensionId"])
+        manifest=json.loads((ROOT/"semantic-models/sales/apps/presentation1.json").read_text())
+        validate_tree(tree,manifest)
+
+    def test_unmanaged_children_cannot_be_removed_by_cli_import(self):
+        previous=property_tree(self.sheet)
+        previous["qChildren"].append({"qProperty":{"qInfo":{"qId":"user-chart","qType":"kpi"}}})
+        with self.assertRaisesRegex(RuntimeError,"Unmanaged child"):
+            validate_retired(previous,{p["qInfo"]["qId"] for p in nodes(property_tree(self.sheet))})
+
+    def test_missing_table_column_metadata_is_rejected_before_deploy(self):
+        filters=json.loads((ROOT/"semantic-models/sales/apps/presentation1-filters.json").read_text())
+        tree=overview_tree([self.sheet],filters)
+        table=next(p for p in nodes(tree) if p["qInfo"]["qType"]=="table")
+        table["qHyperCubeDef"]["columnWidths"].pop()
+        manifest=json.loads((ROOT/"semantic-models/sales/apps/presentation1.json").read_text())
+        with self.assertRaisesRegex(ValueError,"column metadata"):
+            validate_tree(tree,manifest)
 
     def test_generator_cannot_depend_on_custom_theme_files(self):
         self.assertEqual(ui_template.tokens()["grid"]["columns"],24)

@@ -68,7 +68,7 @@ class CatalogV2Tests(unittest.TestCase):
         self.assertEqual(len(r["items"]),13)
         rev=next(m for m in r["items"] if m["id"]=="qlikgpt_shared_revenue")
         self.assertEqual(set(rev["apps"]),{"presentation","presentation2"})
-        self.assertEqual(len(rev["visuals"]),4)
+        self.assertEqual(len(rev["visuals"]),6)
         unused=next(m for m in r["items"] if m["id"]=="qlikgpt_shared_average_order")
         self.assertEqual(unused["apps"],[])
         d=next(m for m in r["items"] if m["id"]=="qlikgpt_d_market")
@@ -76,7 +76,8 @@ class CatalogV2Tests(unittest.TestCase):
         self.assertEqual(
             {(v["app"],v["visualId"]) for v in d["visuals"]},
             {("presentation","qlikgpt_chart_market"),
-             ("presentation","qlikgpt_list_market")}
+             ("presentation","qlikgpt_list_market"),
+             ("presentation","qlikgpt_table_sales")}
         )
         self.assertEqual(r["warnings"],[])
         ym = next(x for x in r["items"] if x["id"] == "qlikgpt_d_yearmonth")
@@ -120,7 +121,7 @@ class CatalogV2Tests(unittest.TestCase):
         import json
         def patched(path,*args,**kwargs):
             body = original(path,*args,**kwargs)
-            if str(path).endswith("apps/presentation1-objects.json"):
+            if path.as_posix().endswith("apps/presentation1-objects.json"):
                 sheets = json.loads(body)
                 for child in sheets[0]["qChildren"]:
                     if child.get("qInfo",{}).get("qId")=="qlikgpt_chart_month":

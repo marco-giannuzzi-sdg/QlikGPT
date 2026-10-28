@@ -50,6 +50,8 @@ class EndToEndTests(unittest.TestCase):
             "object:presentation:qlikgpt_kpi_revenue",
             "object:presentation:qlikgpt_chart_month",
             "object:presentation:qlikgpt_chart_market",
+            "object:presentation:qlikgpt_table_sales",
+            "object:presentation:qlikgpt_chart_channel",
             "object:presentation2:qlikgpt_p2_kpi_revenue",
         }
         self.assertEqual({x["id"] for x in item["impactedObjects"]},expected)
@@ -69,11 +71,14 @@ class EndToEndTests(unittest.TestCase):
         self.assertIn("table:presentation:Calendar.SalesYear",sources)
         self.assertIn("table:presentation:FactSales.OrderDate",sources)
 
-    def test_sort_expression_kept_separate_from_master_measure(self):
+    def test_market_sort_uses_master_measure_without_inline_formula(self):
         edges=[x for x in self.g["edges"] if
                x["to"]=="object:presentation:qlikgpt_chart_market" and
                x["kind"]=="inline_sort"]
-        self.assertEqual([x["from"] for x in edges],["logical:presentation:Revenue"])
+        self.assertEqual(edges,[])
+        self.assertTrue(any(x["from"]=="subscription:presentation:measure:qlikgpt_shared_revenue" and
+                            x["to"]=="object:presentation:qlikgpt_chart_market"
+                            for x in self.g["edges"]))
 
     def test_unsupported_qvs_does_not_infer_unknown_source_fields(self):
         script="A:\nLOAD Ghost AS Value FROM [lib://DataFiles/outside.qvd] (qvd);\n"

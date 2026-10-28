@@ -15,16 +15,16 @@
 
 | Tipo | Elemento | presentation | presentation2 | Grafici collegati |
 | --- | --- | :---: | :---: | ---: |
-| measure | `qlikgpt_shared_revenue` — Fatturato | ✓ | ✓ | 4 |
-| measure | `qlikgpt_shared_orders` — Numero ordini | ✓ | — | 1 |
-| measure | `qlikgpt_shared_margin` — Margine lordo | ✓ | — | 1 |
-| measure | `qlikgpt_shared_margin_pct` — Margine % | ✓ | ✓ | 2 |
+| measure | `qlikgpt_shared_revenue` — Fatturato | ✓ | ✓ | 6 |
+| measure | `qlikgpt_shared_orders` — Numero ordini | ✓ | — | 2 |
+| measure | `qlikgpt_shared_margin` — Margine lordo | ✓ | — | 2 |
+| measure | `qlikgpt_shared_margin_pct` — Margine % | ✓ | ✓ | 3 |
 | measure | `qlikgpt_shared_average_order` — Valore medio ordine | — | — | 0 |
-| dimension | `qlikgpt_d_market` — Mercato | ✓ | ✓ | 2 |
+| dimension | `qlikgpt_d_market` — Mercato | ✓ | ✓ | 3 |
 | dimension | `qlikgpt_d_yearmonth` — Anno / Mese | ✓ | ✓ | 1 |
 | dimension | `qlikgpt_d_category` — Categoria | ✓ | — | 0 |
 | dimension | `qlikgpt_d_year` — Anno | ✓ | — | 1 |
-| dimension | `qlikgpt_d_channel` — Canale | ✓ | — | 1 |
+| dimension | `qlikgpt_d_channel` — Canale | ✓ | — | 3 |
 | dimension | `qlikgpt_d_quarter` — Trimestre | — | — | 0 |
 | variable | `qlikgpt_v_target_margin` — vQlikGPTTargetMargin | ✓ | ✓ | 0 |
 | variable | `qlikgpt_v_currency_label` — vQlikGPTCurrencyLabel | — | — | 0 |
@@ -36,22 +36,22 @@ In caso di modifica, il deployment sincronizza **solo le app sottoscritte**. Le 
 ### Fatturato · `qlikgpt_shared_revenue`
 **Tipo:** measure · **Versione:** 1.0.2
 **Applicazioni:** [presentation](https://sdggroup-it.eu.qlikcloud.com/sense/app/07dfa926-4895-4fb2-af4c-eac90e9eb2cb), [presentation2](https://sdggroup-it.eu.qlikcloud.com/sense/app/04280b14-6ba5-4fe9-90d6-2ff8fa1c994f)
-**Visualizzazioni collegate:** `presentation/qlikgpt_kpi_revenue`, `presentation/qlikgpt_chart_month`, `presentation/qlikgpt_chart_market`, `presentation2/qlikgpt_p2_kpi_revenue`
+**Visualizzazioni collegate:** `presentation/qlikgpt_kpi_revenue`, `presentation/qlikgpt_chart_month`, `presentation/qlikgpt_chart_market`, `presentation/qlikgpt_table_sales`, `presentation/qlikgpt_chart_channel`, `presentation2/qlikgpt_p2_kpi_revenue`
 
 ### Numero ordini · `qlikgpt_shared_orders`
 **Tipo:** measure · **Versione:** 1.0.0
 **Applicazioni:** [presentation](https://sdggroup-it.eu.qlikcloud.com/sense/app/07dfa926-4895-4fb2-af4c-eac90e9eb2cb)
-**Visualizzazioni collegate:** `presentation/qlikgpt_kpi_orders`
+**Visualizzazioni collegate:** `presentation/qlikgpt_kpi_orders`, `presentation/qlikgpt_table_sales`
 
 ### Margine lordo · `qlikgpt_shared_margin`
 **Tipo:** measure · **Versione:** 1.0.0
 **Applicazioni:** [presentation](https://sdggroup-it.eu.qlikcloud.com/sense/app/07dfa926-4895-4fb2-af4c-eac90e9eb2cb)
-**Visualizzazioni collegate:** `presentation/qlikgpt_kpi_margin`
+**Visualizzazioni collegate:** `presentation/qlikgpt_kpi_margin`, `presentation/qlikgpt_table_sales`
 
 ### Margine % · `qlikgpt_shared_margin_pct`
 **Tipo:** measure · **Versione:** 1.0.1
 **Applicazioni:** [presentation](https://sdggroup-it.eu.qlikcloud.com/sense/app/07dfa926-4895-4fb2-af4c-eac90e9eb2cb), [presentation2](https://sdggroup-it.eu.qlikcloud.com/sense/app/04280b14-6ba5-4fe9-90d6-2ff8fa1c994f)
-**Visualizzazioni collegate:** `presentation/qlikgpt_kpi_margin_pct`, `presentation2/qlikgpt_p2_kpi_marginpct`
+**Visualizzazioni collegate:** `presentation/qlikgpt_kpi_margin_pct`, `presentation/qlikgpt_table_sales`, `presentation2/qlikgpt_p2_kpi_marginpct`
 
 ### Valore medio ordine · `qlikgpt_shared_average_order`
 **Tipo:** measure · **Versione:** 1.0.0
@@ -61,7 +61,7 @@ In caso di modifica, il deployment sincronizza **solo le app sottoscritte**. Le 
 ### Mercato · `qlikgpt_d_market`
 **Tipo:** dimension · **Versione:** 1.0.0
 **Applicazioni:** [presentation](https://sdggroup-it.eu.qlikcloud.com/sense/app/07dfa926-4895-4fb2-af4c-eac90e9eb2cb), [presentation2](https://sdggroup-it.eu.qlikcloud.com/sense/app/04280b14-6ba5-4fe9-90d6-2ff8fa1c994f)
-**Visualizzazioni collegate:** `presentation/qlikgpt_chart_market`, `presentation/qlikgpt_list_market`
+**Visualizzazioni collegate:** `presentation/qlikgpt_chart_market`, `presentation/qlikgpt_table_sales`, `presentation/qlikgpt_list_market`
 
 ### Anno / Mese · `qlikgpt_d_yearmonth`
 **Tipo:** dimension · **Versione:** 1.0.0
@@ -81,7 +81,7 @@ In caso di modifica, il deployment sincronizza **solo le app sottoscritte**. Le 
 ### Canale · `qlikgpt_d_channel`
 **Tipo:** dimension · **Versione:** 1.0.0
 **Applicazioni:** [presentation](https://sdggroup-it.eu.qlikcloud.com/sense/app/07dfa926-4895-4fb2-af4c-eac90e9eb2cb)
-**Visualizzazioni collegate:** `presentation/qlikgpt_list_channel`
+**Visualizzazioni collegate:** `presentation/qlikgpt_table_sales`, `presentation/qlikgpt_chart_channel`, `presentation/qlikgpt_list_channel`
 
 ### Trimestre · `qlikgpt_d_quarter`
 **Tipo:** dimension · **Versione:** 1.0.0

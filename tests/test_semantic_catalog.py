@@ -109,7 +109,7 @@ class CatalogValidationTests(unittest.TestCase):
         from unittest.mock import mock_open
         original = Path.read_text
         def read(path, *args, **kwargs):
-            if str(path).endswith("apps/presentation1-objects.json"):
+            if path.as_posix().endswith("apps/presentation1-objects.json"):
                 content = json.loads(original(path, *args, **kwargs))
                 visual = next(v for v in content[0]["qChildren"] if v.get("qHyperCubeDef"))
                 visual["qHyperCubeDef"]["qMeasures"][0] = {"qDef":{"qDef":"Sum(Revenue)"}}
