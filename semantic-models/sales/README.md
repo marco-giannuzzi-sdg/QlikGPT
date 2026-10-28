@@ -12,6 +12,8 @@ Tutti gli asset del modello Sales sono in questa cartella. [model.json](model.js
 - [Design System](design/EXECUTIVE_CLEAN.md).
 - [App ID](deployment/app-ids.json): gli ID Qlik esistenti restano invariati.
 
+Entrambe le Presentation usano il **[QlikGPT Executive V1](../../ui/README.md)**: header brandizzato, navigazione nativa tra le due app, KPI su card e disposizione su griglia a 24 colonne. La UI è parametrizzata dal manifest `uiTemplate`, mantenendo master item e App ID invariati.
+
 Il framework condiviso risiede in [ci](../../ci/), [tests](../../tests/) e [GitHub Actions](../../.github/workflows/deploy-qlik-cloud.yml). I QVS sono distribuiti senza reload e i reload dati richiedono un comando esplicito.
 
 Il registry supporta l'aggiunta di cartelle sorelle con altri `model.json`, ma il job di deployment corrente lavora su un modello alla volta e resta configurato su `sales`.

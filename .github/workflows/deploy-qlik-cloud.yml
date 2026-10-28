@@ -23,6 +23,7 @@ on:
       - 'semantic-models/**'
       - 'tests/**'
       - 'ci/**'
+      - 'ui/**'
       - '.github/workflows/deploy-qlik-cloud.yml'
 
 # Explicit opt-in: initially off. Enable only after storing secrets.
@@ -94,7 +95,11 @@ jobs:
         shell: bash
         run: |
           python3 -m unittest discover -s tests -v
-          python3 -m py_compile ci/semantic_catalog.py ci/semantic_assets.py ci/catalog_report.py ci/app_lineage.py ci/field_lineage.py ci/model_registry.py ci/deployment_plan.py ci/reload_chain.py ci/deploy.py ci/deploy_visuals.py
+          python3 -m py_compile ci/semantic_catalog.py ci/semantic_assets.py ci/catalog_report.py ci/app_lineage.py ci/field_lineage.py ci/model_registry.py ci/deployment_plan.py ci/reload_chain.py ci/deploy.py ci/deploy_visuals.py ci/ui_template.py
+
+      - name: Validate reusable native Qlik frontend template
+        shell: bash
+        run: python3 ci/ui_template.py --check
 
       - name: Authenticate to Qlik Cloud
         shell: bash

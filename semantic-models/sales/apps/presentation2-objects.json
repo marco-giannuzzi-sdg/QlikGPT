@@ -6,42 +6,98 @@
     },
     "qExtendsId": "",
     "qMetaDef": {
-      "title": "Shared Semantic Measures",
+      "title": "Sales Intelligence | KPI condivisi",
       "description": "Master measures distribuite dal catalogo GitHub centrale"
     },
-    "title": "Shared Semantic Measures",
+    "title": "Sales Intelligence | KPI condivisi",
     "description": "Ricavi e Margine % collegati via qLibraryId",
     "rank": 0,
     "columns": 24,
-    "rows": 8,
+    "rows": 9,
     "gridMode": "edit",
     "cells": [
+      {
+        "name": "qlikgpt_p2_header",
+        "type": "text-image",
+        "col": 0,
+        "row": 0,
+        "colspan": 17,
+        "rowspan": 1,
+        "bounds": {
+          "x": 0,
+          "y": 0,
+          "width": 70.83333333333333,
+          "height": 11.11111111111111
+        }
+      },
+      {
+        "name": "qlikgpt_p2_nav_overview",
+        "type": "button",
+        "col": 17,
+        "row": 0,
+        "colspan": 7,
+        "rowspan": 1,
+        "bounds": {
+          "x": 70.83333333333333,
+          "y": 0,
+          "width": 29.166666666666668,
+          "height": 11.11111111111111
+        }
+      },
+      {
+        "name": "qlikgpt_p2_section",
+        "type": "text-image",
+        "col": 0,
+        "row": 1,
+        "colspan": 24,
+        "rowspan": 1,
+        "bounds": {
+          "x": 0,
+          "y": 11.11111111111111,
+          "width": 100,
+          "height": 11.11111111111111
+        }
+      },
       {
         "name": "qlikgpt_p2_kpi_revenue",
         "type": "kpi",
         "col": 0,
-        "row": 0,
+        "row": 2,
         "colspan": 12,
         "rowspan": 4,
         "bounds": {
           "x": 0,
-          "y": 0,
+          "y": 22.22222222222222,
           "width": 50,
-          "height": 50
+          "height": 44.44444444444444
         }
       },
       {
         "name": "qlikgpt_p2_kpi_marginpct",
         "type": "kpi",
         "col": 12,
-        "row": 0,
+        "row": 2,
         "colspan": 12,
         "rowspan": 4,
         "bounds": {
           "x": 50,
-          "y": 0,
+          "y": 22.22222222222222,
           "width": 50,
-          "height": 50
+          "height": 44.44444444444444
+        }
+      },
+      {
+        "name": "qlikgpt_p2_footnote",
+        "type": "text-image",
+        "col": 0,
+        "row": 6,
+        "colspan": 24,
+        "rowspan": 3,
+        "bounds": {
+          "x": 0,
+          "y": 66.66666666666667,
+          "width": 100,
+          "height": 33.333333333333336
         }
       }
     ],
@@ -54,6 +110,22 @@
       }
     },
     "qChildren": [
+      {
+        "qInfo": {
+          "qId": "qlikgpt_p2_header",
+          "qType": "text-image"
+        },
+        "qExtendsId": "",
+        "visualization": "text-image",
+        "title": "Sales Intelligence",
+        "showTitles": false,
+        "markdown": "## QlikGPT  |  Sales Intelligence\n**SHARED KPI**  ·  Governed Analytics",
+        "images": [],
+        "responsive": true,
+        "background": {
+          "color": "#142B49"
+        }
+      },
       {
         "qInfo": {
           "qId": "qlikgpt_p2_kpi_revenue",
@@ -82,7 +154,18 @@
               "qHeight": 1
             }
           ]
-        }
+        },
+        "style": {
+          "background": {
+            "useColorExpression": false,
+            "color": {
+              "index": -1,
+              "color": "#F5F8FC"
+            }
+          }
+        },
+        "layoutBehavior": "Responsive",
+        "showMeasureTitle": false
       },
       {
         "qInfo": {
@@ -112,6 +195,87 @@
               "qHeight": 1
             }
           ]
+        },
+        "style": {
+          "background": {
+            "useColorExpression": false,
+            "color": {
+              "index": -1,
+              "color": "#F5F8FC"
+            }
+          }
+        },
+        "layoutBehavior": "Responsive",
+        "showMeasureTitle": false
+      },
+      {
+        "qInfo": {
+          "qId": "qlikgpt_p2_nav_overview",
+          "qType": "button"
+        },
+        "qExtendsId": "",
+        "visualization": "button",
+        "title": "Apri Sales Overview ↗",
+        "showTitles": false,
+        "showDetails": false,
+        "actions": [],
+        "navigation": {
+          "action": "openWebsite",
+          "websiteUrl": "https://sdggroup-it.eu.qlikcloud.com/sense/app/07dfa926-4895-4fb2-af4c-eac90e9eb2cb",
+          "sameWindow": false
+        },
+        "style": {
+          "label": "Apri Sales Overview ↗",
+          "showLabel": true,
+          "font": {
+            "fontFamily": "Arial, Helvetica, sans-serif",
+            "color": {
+              "useColorExpression": false,
+              "color": {
+                "index": -1,
+                "color": "#142B49"
+              }
+            }
+          },
+          "background": {
+            "useColorExpression": false,
+            "color": {
+              "index": -1,
+              "color": "#F5F8FC"
+            }
+          }
+        }
+      },
+      {
+        "qInfo": {
+          "qId": "qlikgpt_p2_section",
+          "qType": "text-image"
+        },
+        "qExtendsId": "",
+        "visualization": "text-image",
+        "title": "qlikgpt_p2_section",
+        "showTitles": false,
+        "markdown": "**METRICHE CONDIVISE**  ·  Stessa definizione semantica, applicazione indipendente",
+        "images": [],
+        "responsive": true,
+        "background": {
+          "color": "#FFFFFF"
+        }
+      },
+      {
+        "qInfo": {
+          "qId": "qlikgpt_p2_footnote",
+          "qType": "text-image"
+        },
+        "qExtendsId": "",
+        "visualization": "text-image",
+        "title": "qlikgpt_p2_footnote",
+        "showTitles": false,
+        "markdown": "**Governance QlikGPT**  ·  Le misure provengono dal Semantic Catalog e mantengono gli stessi ID.  \nUsa il pulsante in alto per tornare alla dashboard Sales Overview.",
+        "images": [],
+        "responsive": true,
+        "background": {
+          "color": "#FFFFFF"
         }
       }
     ]

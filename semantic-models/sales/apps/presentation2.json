@@ -14,5 +14,6 @@
   ],
   "catalogVariables": [
     "qlikgpt_v_target_margin"
-  ]
+  ],
+  "uiTemplate": "qlikgpt-executive-v1"
 }

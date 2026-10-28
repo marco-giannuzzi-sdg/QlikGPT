@@ -1,0 +1,53 @@
+{
+  "_inherit": true,
+  "_cards": true,
+  "_variables": {
+    "@qlikgpt-navy": "#142B49",
+    "@qlikgpt-teal": "#0E7490",
+    "@qlikgpt-ink": "#1E293B",
+    "@qlikgpt-muted": "#64748B",
+    "@qlikgpt-surface": "#FFFFFF",
+    "@qlikgpt-canvas": "#F3F6FB"
+  },
+  "color": "@qlikgpt-ink",
+  "fontFamily": "Arial, Helvetica, sans-serif",
+  "fontSize": "13px",
+  "backgroundColor": "@qlikgpt-surface",
+  "dataColors": {
+    "primaryColor": "#0E7490",
+    "othersColor": "#64748B",
+    "errorColor": "#C2410C",
+    "nullColor": "#CBD5E1",
+    "selected": "#0E7490",
+    "alternative": "#D1D5DB",
+    "excluded": "#94A3B8",
+    "selectedExcluded": "#64748B",
+    "possible": "#FFFFFF"
+  },
+  "object": {
+    "title": {
+      "main": {
+        "color": "@qlikgpt-navy",
+        "fontFamily": "Arial, Helvetica, sans-serif",
+        "fontSize": "14px"
+      },
+      "subTitle": {
+        "color": "@qlikgpt-muted",
+        "fontFamily": "Arial, Helvetica, sans-serif",
+        "fontSize": "12px"
+      }
+    },
+    "kpi": {
+      "backgroundColor": "@qlikgpt-surface"
+    },
+    "barChart": {
+      "backgroundColor": "@qlikgpt-surface"
+    },
+    "lineChart": {
+      "backgroundColor": "@qlikgpt-surface"
+    },
+    "filterpane": {
+      "backgroundColor": "@qlikgpt-surface"
+    }
+  }
+}

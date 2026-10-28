@@ -61,6 +61,18 @@ Per avviare reload espliciti: [GitHub Actions — QlikGPT](https://github.com/ma
 
 GitHub resta la fonte autorevole delle misure, dimensioni, variabili e dashboard. Le app sottoscrivono i master item tramite `qLibraryId`. I report di lineage e Usage sono derivati dai file versionati (non da telemetria runtime del tenant).
 
+## QlikGPT Executive V1 — Frontend Template
+
+Il **[Design System globale](ui/README.md)** governa palette, sfondi, tipografia, griglia, header, navigazione e KPI delle nuove Presentation. Il [tema custom Qlik](ui/themes/qlikgpt-executive-v1/theme.json) è versionato ma **non viene importato automaticamente** nel tenant; per ora il layout e i colori sono proprietà native dei JSON.
+
+Le due app Sales sono state allineate al template mantenendo gli ID delle visualizzazioni e le formule governate. Per generare una nuova Presentation in anteprima:
+
+```bash
+python3 ci/ui_template.py --new-key presentation3 --app-name "QlikGPT - PRODUCT ANALYTICS" --measures qlikgpt_shared_revenue,qlikgpt_shared_margin_pct
+```
+
+Il comando di anteprima non crea file o app; `--write` crea soltanto i JSON locali, che non vanno committati senza una decisione esplicita sul bootstrap della nuova app.
+
 ## Architettura evolutiva
 
 [ci/model_registry.py](ci/model_registry.py) individua i `semantic-models/*/model.json` e risolve i file relativi al modello. Gli App ID appartengono al modello corrispondente. Attualmente il workflow di deployment è **configurato su sales** e distribuisce un modello per job; per gestire più modelli in una singola esecuzione servirà estendere l'orchestrazione e isolare i namespace dove necessario.
@@ -72,6 +84,7 @@ python3 -m unittest discover -s tests -v
 python3 ci/catalog_report.py --check
 python3 ci/app_lineage.py --check
 python3 ci/field_lineage.py --check
+python3 ci/ui_template.py --check
 ```
 
 Le credenziali Qlik restano nei GitHub Secrets. Nessun Reverse Sync automatico dai master item Qlik a GitHub. Rollback compensativo best effort: il deploy su più app non è una singola transazione atomica.

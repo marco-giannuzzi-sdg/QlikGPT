@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "templateId": "qlikgpt-executive-v1",
+  "name": "QlikGPT Executive",
+  "version": "1.0.0",
+  "purpose": "Reusable native Qlik Cloud presentation style for governed BI models",
+  "colors": {
+    "canvas": "#F3F6FB",
+    "surface": "#FFFFFF",
+    "card": "#F5F8FC",
+    "navy": "#142B49",
+    "teal": "#0E7490",
+    "blue": "#2563EB",
+    "success": "#15803D",
+    "text": "#1E293B",
+    "muted": "#64748B",
+    "border": "#E2E8F0",
+    "inverse": "#FFFFFF"
+  },
+  "fontFamily": "Arial, Helvetica, sans-serif",
+  "grid": {
+    "columns": 24,
+    "minimumRows": 9,
+    "headerRows": 1,
+    "navigationRows": 1,
+    "kpiRows": 3
+  },
+  "styles": {
+    "header": {
+      "background": "navy",
+      "text": "inverse"
+    },
+    "navigation": {
+      "background": "surface",
+      "text": "navy",
+      "accent": "blue"
+    },
+    "kpi": {
+      "background": "card",
+      "title": "navy"
+    },
+    "chart": {
+      "background": "surface",
+      "title": "text"
+    },
+    "filter": {
+      "background": "card",
+      "text": "text"
+    }
+  },
+  "rules": {
+    "maxKpisPerRow": 4,
+    "minimumKpiColumns": 6,
+    "masterMeasuresOnly": true,
+    "masterDimensionsOnly": true,
+    "neverDeployReloadOnStyleChange": true
+  }
+}

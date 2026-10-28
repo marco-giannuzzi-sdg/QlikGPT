@@ -468,14 +468,34 @@ def deploy_governed_sheets(qix: Qix, doc: int, manifest: dict) -> None:
                 raise RuntimeError(f"Unable to create native linked KPI {cid}")
         else:
             qix.call(h, "SetProperties", [child])
+        props_read = qix.call(h, "GetProperties", [])["qProp"]
+        child_type = child["qInfo"]["qType"]
+        # A governed sheet can include reusable headers and native navigation
+        # controls as well as KPIs. Only hypercubes require a measure audit.
+        if child_type == "text-image":
+            if props_read.get("markdown") != child.get("markdown"):
+                raise RuntimeError(f"Native header/section {cid} did not persist")
+            print(f"[{manifest['appKey']}] native text block {cid} verified", flush=True)
+            continue
+        if child_type == "button":
+            nav = child.get("navigation", {})
+            actual_nav = props_read.get("navigation", {})
+            if (actual_nav.get("action") != nav.get("action") or
+                    actual_nav.get("websiteUrl") != nav.get("websiteUrl")):
+                raise RuntimeError(f"Native navigation button {cid} did not persist")
+            print(f"[{manifest['appKey']}] navigation button {cid} verified", flush=True)
+            continue
+        expected_measures = child.get("qHyperCubeDef", {}).get("qMeasures", [])
+        if not expected_measures:
+            raise ValueError(f"{manifest['appKey']}: unsupported governed object type {child_type}")
         layout = qix.call(h, "GetLayout", [])["qLayout"]
         cube = layout.get("qHyperCube", {})
-        measure_id = child["qHyperCubeDef"]["qMeasures"][0]["qLibraryId"]
-        props_read = qix.call(h, "GetProperties", [])["qProp"]
-        ref = props_read["qHyperCubeDef"]["qMeasures"][0].get("qLibraryId")
-        if ref != measure_id or cube.get("qSize", {}).get("qcy", 0) < 1:
-            raise RuntimeError(f"Native KPI {cid} did not bind to master measure {measure_id}")
-        print(f"[{manifest['appKey']}] KPI {cid} linked to qLibraryId={measure_id}", flush=True)
+        real_measures = props_read.get("qHyperCubeDef", {}).get("qMeasures", [])
+        expected_ids = [v["qLibraryId"] for v in expected_measures]
+        actual_ids = [v.get("qLibraryId") for v in real_measures]
+        if actual_ids != expected_ids or cube.get("qSize", {}).get("qcy", 0) < 1:
+            raise RuntimeError(f"Native object {cid} did not bind to subscribed measures {expected_ids}")
+        print(f"[{manifest['appKey']}] governed visual {cid} linked to {expected_ids}", flush=True)
 
 
 def orchestrate_semantic_catalog(state: dict, *, run: Callable,
