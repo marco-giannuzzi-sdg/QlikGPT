@@ -5,12 +5,12 @@
     "presentation": {
       "name": "QlikGPT - 03 PRESENTATION",
       "appId": "07dfa926-4895-4fb2-af4c-eac90e9eb2cb",
-      "manifest": "apps/presentation1.json"
+      "manifest": "semantic-models/sales/apps/presentation1.json"
     },
     "presentation2": {
       "name": "QlikGPT - 04 PRESENTATION SHARED",
       "appId": "04280b14-6ba5-4fe9-90d6-2ff8fa1c994f",
-      "manifest": "apps/presentation2.json"
+      "manifest": "semantic-models/sales/apps/presentation2.json"
     }
   },
   "items": [

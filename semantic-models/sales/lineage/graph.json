@@ -7,7 +7,7 @@
       "key": "etl1",
       "name": "QlikGPT - 01 ETL RAW",
       "type": "etl",
-      "script": "scripts/etl1.qvs",
+      "script": "semantic-models/sales/scripts/etl1.qvs",
       "appId": "932480d2-415d-4535-9267-c699f44c55c6",
       "reads": [],
       "writes": [
@@ -27,7 +27,7 @@
       "key": "etl2",
       "name": "QlikGPT - 02 ETL TRANSFORM",
       "type": "etl",
-      "script": "scripts/etl2.qvs",
+      "script": "semantic-models/sales/scripts/etl2.qvs",
       "appId": "70ba9d05-24b7-46ec-8b8c-560e8169c3d1",
       "reads": [
         {
@@ -53,8 +53,8 @@
       "key": "presentation",
       "name": "QlikGPT - 03 PRESENTATION",
       "type": "presentation",
-      "script": "scripts/presentation.qvs",
-      "manifest": "apps/presentation1.json",
+      "script": "semantic-models/sales/scripts/presentation.qvs",
+      "manifest": "semantic-models/sales/apps/presentation1.json",
       "appId": "07dfa926-4895-4fb2-af4c-eac90e9eb2cb",
       "reads": [
         {
@@ -73,8 +73,8 @@
       "key": "presentation2",
       "name": "QlikGPT - 04 PRESENTATION SHARED",
       "type": "presentation",
-      "script": "scripts/presentation.qvs",
-      "manifest": "apps/presentation2.json",
+      "script": "semantic-models/sales/scripts/presentation.qvs",
+      "manifest": "semantic-models/sales/apps/presentation2.json",
       "appId": "04280b14-6ba5-4fe9-90d6-2ff8fa1c994f",
       "reads": [
         {
@@ -102,7 +102,7 @@
       "reads": [
         {
           "app": "etl2",
-          "script": "scripts/etl2.qvs",
+          "script": "semantic-models/sales/scripts/etl2.qvs",
           "uri": "lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd",
           "format": "qvd",
           "line": 16
@@ -111,7 +111,7 @@
       "writes": [
         {
           "app": "etl1",
-          "script": "scripts/etl1.qvs",
+          "script": "semantic-models/sales/scripts/etl1.qvs",
           "uri": "lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd",
           "format": "qvd",
           "line": 31,
@@ -131,14 +131,14 @@
       "reads": [
         {
           "app": "presentation",
-          "script": "scripts/presentation.qvs",
+          "script": "semantic-models/sales/scripts/presentation.qvs",
           "uri": "lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd",
           "format": "qvd",
           "line": 27
         },
         {
           "app": "presentation2",
-          "script": "scripts/presentation.qvs",
+          "script": "semantic-models/sales/scripts/presentation.qvs",
           "uri": "lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd",
           "format": "qvd",
           "line": 27
@@ -147,7 +147,7 @@
       "writes": [
         {
           "app": "etl2",
-          "script": "scripts/etl2.qvs",
+          "script": "semantic-models/sales/scripts/etl2.qvs",
           "uri": "lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd",
           "format": "qvd",
           "line": 38,

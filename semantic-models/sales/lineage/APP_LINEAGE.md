@@ -36,18 +36,18 @@ flowchart LR
 
 | Applicazione | Script QVS | Legge | Produce |
 | --- | --- | --- | --- |
-| [QlikGPT - 01 ETL RAW](https://sdggroup-it.eu.qlikcloud.com/sense/app/932480d2-415d-4535-9267-c699f44c55c6) | [scripts/etl1.qvs](../scripts/etl1.qvs) | — | `RawOrders.qvd` |
-| [QlikGPT - 02 ETL TRANSFORM](https://sdggroup-it.eu.qlikcloud.com/sense/app/70ba9d05-24b7-46ec-8b8c-560e8169c3d1) | [scripts/etl2.qvs](../scripts/etl2.qvs) | `RawOrders.qvd` | `Sales_Clean.qvd` |
-| [QlikGPT - 03 PRESENTATION](https://sdggroup-it.eu.qlikcloud.com/sense/app/07dfa926-4895-4fb2-af4c-eac90e9eb2cb) | [scripts/presentation.qvs](../scripts/presentation.qvs) | `Sales_Clean.qvd` | — |
-| [QlikGPT - 04 PRESENTATION SHARED](https://sdggroup-it.eu.qlikcloud.com/sense/app/04280b14-6ba5-4fe9-90d6-2ff8fa1c994f) | [scripts/presentation.qvs](../scripts/presentation.qvs) | `Sales_Clean.qvd` | — |
+| [QlikGPT - 01 ETL RAW](https://sdggroup-it.eu.qlikcloud.com/sense/app/932480d2-415d-4535-9267-c699f44c55c6) | [semantic-models/sales/scripts/etl1.qvs](../scripts/etl1.qvs) | — | `RawOrders.qvd` |
+| [QlikGPT - 02 ETL TRANSFORM](https://sdggroup-it.eu.qlikcloud.com/sense/app/70ba9d05-24b7-46ec-8b8c-560e8169c3d1) | [semantic-models/sales/scripts/etl2.qvs](../scripts/etl2.qvs) | `RawOrders.qvd` | `Sales_Clean.qvd` |
+| [QlikGPT - 03 PRESENTATION](https://sdggroup-it.eu.qlikcloud.com/sense/app/07dfa926-4895-4fb2-af4c-eac90e9eb2cb) | [semantic-models/sales/scripts/presentation.qvs](../scripts/presentation.qvs) | `Sales_Clean.qvd` | — |
+| [QlikGPT - 04 PRESENTATION SHARED](https://sdggroup-it.eu.qlikcloud.com/sense/app/04280b14-6ba5-4fe9-90d6-2ff8fa1c994f) | [semantic-models/sales/scripts/presentation.qvs](../scripts/presentation.qvs) | `Sales_Clean.qvd` | — |
 
 ## Dipendenze dirette
 
 | App sorgente | App dipendente | QVD o file condiviso | Evidenza QVS |
 | --- | --- | --- | --- |
-| [QlikGPT - 01 ETL RAW](https://sdggroup-it.eu.qlikcloud.com/sense/app/932480d2-415d-4535-9267-c699f44c55c6) | [QlikGPT - 02 ETL TRANSFORM](https://sdggroup-it.eu.qlikcloud.com/sense/app/70ba9d05-24b7-46ec-8b8c-560e8169c3d1) | `lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd` | [scripts/etl1.qvs](../scripts/etl1.qvs#L31) (STORE) / [scripts/etl2.qvs](../scripts/etl2.qvs#L16) (FROM) |
-| [QlikGPT - 02 ETL TRANSFORM](https://sdggroup-it.eu.qlikcloud.com/sense/app/70ba9d05-24b7-46ec-8b8c-560e8169c3d1) | [QlikGPT - 03 PRESENTATION](https://sdggroup-it.eu.qlikcloud.com/sense/app/07dfa926-4895-4fb2-af4c-eac90e9eb2cb) | `lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd` | [scripts/etl2.qvs](../scripts/etl2.qvs#L38) (STORE) / [scripts/presentation.qvs](../scripts/presentation.qvs#L27) (FROM) |
-| [QlikGPT - 02 ETL TRANSFORM](https://sdggroup-it.eu.qlikcloud.com/sense/app/70ba9d05-24b7-46ec-8b8c-560e8169c3d1) | [QlikGPT - 04 PRESENTATION SHARED](https://sdggroup-it.eu.qlikcloud.com/sense/app/04280b14-6ba5-4fe9-90d6-2ff8fa1c994f) | `lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd` | [scripts/etl2.qvs](../scripts/etl2.qvs#L38) (STORE) / [scripts/presentation.qvs](../scripts/presentation.qvs#L27) (FROM) |
+| [QlikGPT - 01 ETL RAW](https://sdggroup-it.eu.qlikcloud.com/sense/app/932480d2-415d-4535-9267-c699f44c55c6) | [QlikGPT - 02 ETL TRANSFORM](https://sdggroup-it.eu.qlikcloud.com/sense/app/70ba9d05-24b7-46ec-8b8c-560e8169c3d1) | `lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd` | [semantic-models/sales/scripts/etl1.qvs](../scripts/etl1.qvs#L31) (STORE) / [semantic-models/sales/scripts/etl2.qvs](../scripts/etl2.qvs#L16) (FROM) |
+| [QlikGPT - 02 ETL TRANSFORM](https://sdggroup-it.eu.qlikcloud.com/sense/app/70ba9d05-24b7-46ec-8b8c-560e8169c3d1) | [QlikGPT - 03 PRESENTATION](https://sdggroup-it.eu.qlikcloud.com/sense/app/07dfa926-4895-4fb2-af4c-eac90e9eb2cb) | `lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd` | [semantic-models/sales/scripts/etl2.qvs](../scripts/etl2.qvs#L38) (STORE) / [semantic-models/sales/scripts/presentation.qvs](../scripts/presentation.qvs#L27) (FROM) |
+| [QlikGPT - 02 ETL TRANSFORM](https://sdggroup-it.eu.qlikcloud.com/sense/app/70ba9d05-24b7-46ec-8b8c-560e8169c3d1) | [QlikGPT - 04 PRESENTATION SHARED](https://sdggroup-it.eu.qlikcloud.com/sense/app/04280b14-6ba5-4fe9-90d6-2ff8fa1c994f) | `lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd` | [semantic-models/sales/scripts/etl2.qvs](../scripts/etl2.qvs#L38) (STORE) / [semantic-models/sales/scripts/presentation.qvs](../scripts/presentation.qvs#L27) (FROM) |
 
 ## Impact Analysis — a valle di ogni app
 
@@ -65,43 +65,43 @@ Impatto **potenziale** della modifica o indisponibilità di un'app/del suo outpu
 ### QlikGPT - 01 ETL RAW
 
 - **Qlik Cloud:** [QlikGPT - 01 ETL RAW](https://sdggroup-it.eu.qlikcloud.com/sense/app/932480d2-415d-4535-9267-c699f44c55c6)
-- **Script:** [scripts/etl1.qvs](../scripts/etl1.qvs)
+- **Script:** [semantic-models/sales/scripts/etl1.qvs](../scripts/etl1.qvs)
 - **Upstream diretti:** Nessuno nel repository
 - **Downstream diretti:** etl2
 - **Downstream complessivi:** etl2, presentation, presentation2
 - **Sorgente dati:** AUTOGENERATE 5000 (dati sintetici)
-- **STORE (qvd):** `lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd` — [scripts/etl1.qvs](../scripts/etl1.qvs#L31)
+- **STORE (qvd):** `lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd` — [semantic-models/sales/scripts/etl1.qvs](../scripts/etl1.qvs#L31)
 
 ### QlikGPT - 02 ETL TRANSFORM
 
 - **Qlik Cloud:** [QlikGPT - 02 ETL TRANSFORM](https://sdggroup-it.eu.qlikcloud.com/sense/app/70ba9d05-24b7-46ec-8b8c-560e8169c3d1)
-- **Script:** [scripts/etl2.qvs](../scripts/etl2.qvs)
+- **Script:** [semantic-models/sales/scripts/etl2.qvs](../scripts/etl2.qvs)
 - **Upstream diretti:** etl1
 - **Downstream diretti:** presentation, presentation2
 - **Downstream complessivi:** presentation, presentation2
 - **Tabelle RESIDENT locali:** RawOrders
-- **FROM (qvd):** `lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd` — [scripts/etl2.qvs](../scripts/etl2.qvs#L16)
-- **STORE (qvd):** `lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd` — [scripts/etl2.qvs](../scripts/etl2.qvs#L38)
+- **FROM (qvd):** `lib://DataFiles/QlikGPT/01_RAW/RawOrders.qvd` — [semantic-models/sales/scripts/etl2.qvs](../scripts/etl2.qvs#L16)
+- **STORE (qvd):** `lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd` — [semantic-models/sales/scripts/etl2.qvs](../scripts/etl2.qvs#L38)
 
 ### QlikGPT - 03 PRESENTATION
 
 - **Qlik Cloud:** [QlikGPT - 03 PRESENTATION](https://sdggroup-it.eu.qlikcloud.com/sense/app/07dfa926-4895-4fb2-af4c-eac90e9eb2cb)
-- **Script:** [scripts/presentation.qvs](../scripts/presentation.qvs)
+- **Script:** [semantic-models/sales/scripts/presentation.qvs](../scripts/presentation.qvs)
 - **Upstream diretti:** etl2
 - **Downstream diretti:** Nessuno
 - **Downstream complessivi:** Nessuno
 - **Tabelle RESIDENT locali:** FactSales
-- **FROM (qvd):** `lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd` — [scripts/presentation.qvs](../scripts/presentation.qvs#L27)
+- **FROM (qvd):** `lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd` — [semantic-models/sales/scripts/presentation.qvs](../scripts/presentation.qvs#L27)
 
 ### QlikGPT - 04 PRESENTATION SHARED
 
 - **Qlik Cloud:** [QlikGPT - 04 PRESENTATION SHARED](https://sdggroup-it.eu.qlikcloud.com/sense/app/04280b14-6ba5-4fe9-90d6-2ff8fa1c994f)
-- **Script:** [scripts/presentation.qvs](../scripts/presentation.qvs)
+- **Script:** [semantic-models/sales/scripts/presentation.qvs](../scripts/presentation.qvs)
 - **Upstream diretti:** etl2
 - **Downstream diretti:** Nessuno
 - **Downstream complessivi:** Nessuno
 - **Tabelle RESIDENT locali:** FactSales
-- **FROM (qvd):** `lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd` — [scripts/presentation.qvs](../scripts/presentation.qvs#L27)
+- **FROM (qvd):** `lib://DataFiles/QlikGPT/02_TRANSFORM/Sales_Clean.qvd` — [semantic-models/sales/scripts/presentation.qvs](../scripts/presentation.qvs#L27)
 
 ## Ambito e limiti
 

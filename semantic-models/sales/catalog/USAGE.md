@@ -6,8 +6,8 @@
 
 | Applicazione | Qlik Cloud | Manifest |
 | --- | --- | --- |
-| QlikGPT - 03 PRESENTATION | [Apri app](https://sdggroup-it.eu.qlikcloud.com/sense/app/07dfa926-4895-4fb2-af4c-eac90e9eb2cb) | [Manifest](../apps/presentation1.json) |
-| QlikGPT - 04 PRESENTATION SHARED | [Apri app](https://sdggroup-it.eu.qlikcloud.com/sense/app/04280b14-6ba5-4fe9-90d6-2ff8fa1c994f) | [Manifest](../apps/presentation2.json) |
+| QlikGPT - 03 PRESENTATION | [Apri app](https://sdggroup-it.eu.qlikcloud.com/sense/app/07dfa926-4895-4fb2-af4c-eac90e9eb2cb) | [Manifest](../../../semantic-models/sales/apps/presentation1.json) |
+| QlikGPT - 04 PRESENTATION SHARED | [Apri app](https://sdggroup-it.eu.qlikcloud.com/sense/app/04280b14-6ba5-4fe9-90d6-2ff8fa1c994f) | [Manifest](../../../semantic-models/sales/apps/presentation2.json) |
 
 ## Matrice delle dipendenze
 
@@ -100,6 +100,6 @@ In caso di modifica, il deployment sincronizza **solo le app sottoscritte**. Le 
 
 ## Come si usa
 
-Modifica **[catalog/measures.json](measures.json)**, **[catalog/dimensions.json](dimensions.json)** oppure **[catalog/variables.json](variables.json)**; associa gli ID alle app nei rispettivi manifest. Il report è aggiornato dal workflow GitHub Actions senza usare il computer dell'autore.
+Modifica **[measures.json](measures.json)**, **[dimensions.json](dimensions.json)** oppure **[variables.json](variables.json)**; associa gli ID alle app nei rispettivi manifest. Il report è aggiornato dal workflow GitHub Actions senza usare il computer dell'autore.
 
 Per i dettagli strutturati e per altri strumenti, usa **[usage.json](usage.json)**.
