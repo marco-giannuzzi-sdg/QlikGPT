@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "AI-Assisted Power BI Development"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "4d28497b-8f62-475b-b9bc-a89235daef47"
+  }
+}
