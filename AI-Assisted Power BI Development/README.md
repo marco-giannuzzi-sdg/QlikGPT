@@ -4,7 +4,7 @@ Progetto dimostrativo per costruire un report Power BI con assistenza AI e versi
 
 ## Apertura
 
-1. Aprire **AI-Assisted Power BI Development.pbip** in Power BI Desktop.
+1. Aprire **Sales Overview.pbip** in Power BI Desktop.
 2. Se il progetto viene spostato o clonato in un altro percorso, impostare il parametro Power Query **DataFolder** sulla cartella locale **data**, con una barra finale. Dal menu **Trasforma dati > Modifica parametri**, modificare DataFolder e applicare.
 3. Premere **Aggiorna** per importare i quattro Excel.
 
@@ -81,7 +81,7 @@ Le misure di base sono nella cartella **Indicatori** di Vendite. Sono state aggi
 - Anteprima tecnica del layout controllata per spaziatura e leggibilita; non costituisce uno screenshot di Power BI.
 - Apertura, calcolo DAX e rendering nel motore Power BI Desktop da verificare al primo avvio di questa versione. Su richiesta dell utente lo sviluppo e il versionamento avvengono esclusivamente sui file, senza controllare l app.
 
-La copia locale aggiornata e nella cartella **Sales Overview**. Aprire il relativo PBIP e premere **Aggiorna** anche se era gia stato aggiornato il precedente progetto vuoto.
+La copia locale aggiornata e nella cartella **Sales Overview**. Il file di apertura ha il nome univoco **Sales Overview.pbip** per distinguerlo dal precedente progetto vuoto. Aprire questo PBIP e premere **Aggiorna** anche se era gia stato aggiornato il precedente progetto vuoto.
 
 Totali attesi dopo Aggiorna: **Fatturato Netto 7.064.517,86 EUR**, **Costo Venduto 4.200.892,86 EUR**, **Quantita Venduta 35.038**, **Numero Ordini 4.780**.
 
