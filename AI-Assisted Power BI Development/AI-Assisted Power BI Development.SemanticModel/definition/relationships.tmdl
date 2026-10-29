@@ -1,24 +1,12 @@
 relationship 2bcdf6d5-9297-4901-970c-362143dca206
-	fromCardinality: many
-	toCardinality: one
 	fromColumn: Vendite.ProdottoID
 	toColumn: Prodotti.ProdottoID
-	crossFilteringBehavior: oneDirection
-	isActive: true
 
 relationship 068bc022-c848-4757-9105-a455aed24209
-	fromCardinality: many
-	toCardinality: one
 	fromColumn: Vendite.ClienteID
 	toColumn: Clienti.ClienteID
-	crossFilteringBehavior: oneDirection
-	isActive: true
 
 relationship b0ec71ea-5baa-4ac7-b9ac-7fa8ad3f77fe
-	fromCardinality: many
-	toCardinality: one
 	fromColumn: Vendite.DataVendita
 	toColumn: Calendario.Data
-	crossFilteringBehavior: oneDirection
-	isActive: true
 

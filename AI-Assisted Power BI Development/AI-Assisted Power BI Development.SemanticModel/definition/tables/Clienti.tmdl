@@ -4,8 +4,8 @@ table Clienti
 
 	column ClienteID
 		dataType: int64
-		isKey
 		isHidden
+		isKey
 		formatString: 0
 		lineageTag: 5907084f-49e1-4347-9eff-0991999587d0
 		summarizeBy: none
@@ -59,6 +59,14 @@ table Clienti
 				let
 				    Source = Excel.Workbook(File.Contents(DataFolder & "Clienti.xlsx"), null, true),
 				    Navigation = Source{[Item="Clienti", Kind="Table"]}[Data],
-				    Typed = Table.TransformColumnTypes(Navigation, {{"ClienteID", Int64.Type}, {"CodiceCliente", type text}, {"NomeCliente", type text}, {"Segmento", type text}, {"Citta", type text}, {"Regione", type text}, {"AreaGeografica", type text}, {"Paese", type text}}, "it-IT")
+				    Typed = Table.TransformColumnTypes(Navigation, {{"ClienteID", Int64.Type}, {"CodiceCliente", type text}, {"NomeCliente", type text}, {"Segmento", type text}, {"Citta", type text}, {"Regione", type text}, {"AreaGeografica", type text}, {"Paese", type text}}, "it-IT"),
+				    Display = Table.AddColumn(Typed, "OverviewGroup", each "Revenue", type text)
 				in
-				    Typed
+				        Display
+
+	column OverviewGroup
+		dataType: string
+		isHidden
+		lineageTag: 2df31dad-9e66-49f8-ae75-308433ac31f3
+		summarizeBy: none
+		sourceColumn: OverviewGroup

@@ -1,8 +1,1115 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.0.0/schema.json",
   "name": "97fc7040719ba8cbcea3",
-  "displayName": "Pagina 1",
+  "displayName": "Sales Overview",
   "displayOption": "FitToPage",
   "height": 1080,
-  "width": 1920
+  "width": 1920,
+  "objects": {
+    "background": [
+      {
+        "properties": {
+          "color": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#F5F6F2'"
+                  }
+                }
+              }
+            }
+          },
+          "transparency": {
+            "expr": {
+              "Literal": {
+                "Value": "0D"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "outspace": [
+      {
+        "properties": {
+          "color": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#F5F6F2'"
+                  }
+                }
+              }
+            }
+          },
+          "transparency": {
+            "expr": {
+              "Literal": {
+                "Value": "0D"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "visualInteractions": [
+    {
+      "source": "filter_period",
+      "target": "kpi_revenue",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_period",
+      "target": "detail_revenue",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_period",
+      "target": "kpi_margin",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_period",
+      "target": "detail_margin",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_period",
+      "target": "kpi_orders",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_period",
+      "target": "detail_orders",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_period",
+      "target": "kpi_units",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_period",
+      "target": "detail_units",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_period",
+      "target": "revenue_spark",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_period",
+      "target": "revenue_trend",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_period",
+      "target": "product_performance",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_period",
+      "target": "leading_regions",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_period",
+      "target": "customer_mix_bar",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_period",
+      "target": "customer_mix_table",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_period",
+      "target": "sales_channels",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_period",
+      "target": "footer_comparison",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_category",
+      "target": "kpi_revenue",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_category",
+      "target": "detail_revenue",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_category",
+      "target": "kpi_margin",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_category",
+      "target": "detail_margin",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_category",
+      "target": "kpi_orders",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_category",
+      "target": "detail_orders",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_category",
+      "target": "kpi_units",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_category",
+      "target": "detail_units",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_category",
+      "target": "revenue_spark",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_category",
+      "target": "revenue_trend",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_category",
+      "target": "product_performance",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_category",
+      "target": "leading_regions",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_category",
+      "target": "customer_mix_bar",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_category",
+      "target": "customer_mix_table",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_category",
+      "target": "sales_channels",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_category",
+      "target": "footer_comparison",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_region",
+      "target": "kpi_revenue",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_region",
+      "target": "detail_revenue",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_region",
+      "target": "kpi_margin",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_region",
+      "target": "detail_margin",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_region",
+      "target": "kpi_orders",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_region",
+      "target": "detail_orders",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_region",
+      "target": "kpi_units",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_region",
+      "target": "detail_units",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_region",
+      "target": "revenue_spark",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_region",
+      "target": "revenue_trend",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_region",
+      "target": "product_performance",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_region",
+      "target": "leading_regions",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_region",
+      "target": "customer_mix_bar",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_region",
+      "target": "customer_mix_table",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_region",
+      "target": "sales_channels",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_region",
+      "target": "footer_comparison",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_channel",
+      "target": "kpi_revenue",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_channel",
+      "target": "detail_revenue",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_channel",
+      "target": "kpi_margin",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_channel",
+      "target": "detail_margin",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_channel",
+      "target": "kpi_orders",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_channel",
+      "target": "detail_orders",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_channel",
+      "target": "kpi_units",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_channel",
+      "target": "detail_units",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_channel",
+      "target": "revenue_spark",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_channel",
+      "target": "revenue_trend",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_channel",
+      "target": "product_performance",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_channel",
+      "target": "leading_regions",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_channel",
+      "target": "customer_mix_bar",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_channel",
+      "target": "customer_mix_table",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_channel",
+      "target": "sales_channels",
+      "type": "DataFilter"
+    },
+    {
+      "source": "filter_channel",
+      "target": "footer_comparison",
+      "type": "DataFilter"
+    },
+    {
+      "source": "revenue_spark",
+      "target": "kpi_revenue",
+      "type": "DataFilter"
+    },
+    {
+      "source": "revenue_spark",
+      "target": "detail_revenue",
+      "type": "DataFilter"
+    },
+    {
+      "source": "revenue_spark",
+      "target": "kpi_margin",
+      "type": "DataFilter"
+    },
+    {
+      "source": "revenue_spark",
+      "target": "detail_margin",
+      "type": "DataFilter"
+    },
+    {
+      "source": "revenue_spark",
+      "target": "kpi_orders",
+      "type": "DataFilter"
+    },
+    {
+      "source": "revenue_spark",
+      "target": "detail_orders",
+      "type": "DataFilter"
+    },
+    {
+      "source": "revenue_spark",
+      "target": "kpi_units",
+      "type": "DataFilter"
+    },
+    {
+      "source": "revenue_spark",
+      "target": "detail_units",
+      "type": "DataFilter"
+    },
+    {
+      "source": "revenue_spark",
+      "target": "revenue_trend",
+      "type": "DataFilter"
+    },
+    {
+      "source": "revenue_spark",
+      "target": "product_performance",
+      "type": "DataFilter"
+    },
+    {
+      "source": "revenue_spark",
+      "target": "leading_regions",
+      "type": "DataFilter"
+    },
+    {
+      "source": "revenue_spark",
+      "target": "customer_mix_bar",
+      "type": "DataFilter"
+    },
+    {
+      "source": "revenue_spark",
+      "target": "customer_mix_table",
+      "type": "DataFilter"
+    },
+    {
+      "source": "revenue_spark",
+      "target": "sales_channels",
+      "type": "DataFilter"
+    },
+    {
+      "source": "revenue_spark",
+      "target": "footer_comparison",
+      "type": "NoFilter"
+    },
+    {
+      "source": "revenue_trend",
+      "target": "kpi_revenue",
+      "type": "DataFilter"
+    },
+    {
+      "source": "revenue_trend",
+      "target": "detail_revenue",
+      "type": "DataFilter"
+    },
+    {
+      "source": "revenue_trend",
+      "target": "kpi_margin",
+      "type": "DataFilter"
+    },
+    {
+      "source": "revenue_trend",
+      "target": "detail_margin",
+      "type": "DataFilter"
+    },
+    {
+      "source": "revenue_trend",
+      "target": "kpi_orders",
+      "type": "DataFilter"
+    },
+    {
+      "source": "revenue_trend",
+      "target": "detail_orders",
+      "type": "DataFilter"
+    },
+    {
+      "source": "revenue_trend",
+      "target": "kpi_units",
+      "type": "DataFilter"
+    },
+    {
+      "source": "revenue_trend",
+      "target": "detail_units",
+      "type": "DataFilter"
+    },
+    {
+      "source": "revenue_trend",
+      "target": "revenue_spark",
+      "type": "DataFilter"
+    },
+    {
+      "source": "revenue_trend",
+      "target": "product_performance",
+      "type": "DataFilter"
+    },
+    {
+      "source": "revenue_trend",
+      "target": "leading_regions",
+      "type": "DataFilter"
+    },
+    {
+      "source": "revenue_trend",
+      "target": "customer_mix_bar",
+      "type": "DataFilter"
+    },
+    {
+      "source": "revenue_trend",
+      "target": "customer_mix_table",
+      "type": "DataFilter"
+    },
+    {
+      "source": "revenue_trend",
+      "target": "sales_channels",
+      "type": "DataFilter"
+    },
+    {
+      "source": "revenue_trend",
+      "target": "footer_comparison",
+      "type": "NoFilter"
+    },
+    {
+      "source": "product_performance",
+      "target": "kpi_revenue",
+      "type": "DataFilter"
+    },
+    {
+      "source": "product_performance",
+      "target": "detail_revenue",
+      "type": "DataFilter"
+    },
+    {
+      "source": "product_performance",
+      "target": "kpi_margin",
+      "type": "DataFilter"
+    },
+    {
+      "source": "product_performance",
+      "target": "detail_margin",
+      "type": "DataFilter"
+    },
+    {
+      "source": "product_performance",
+      "target": "kpi_orders",
+      "type": "DataFilter"
+    },
+    {
+      "source": "product_performance",
+      "target": "detail_orders",
+      "type": "DataFilter"
+    },
+    {
+      "source": "product_performance",
+      "target": "kpi_units",
+      "type": "DataFilter"
+    },
+    {
+      "source": "product_performance",
+      "target": "detail_units",
+      "type": "DataFilter"
+    },
+    {
+      "source": "product_performance",
+      "target": "revenue_spark",
+      "type": "DataFilter"
+    },
+    {
+      "source": "product_performance",
+      "target": "revenue_trend",
+      "type": "DataFilter"
+    },
+    {
+      "source": "product_performance",
+      "target": "leading_regions",
+      "type": "DataFilter"
+    },
+    {
+      "source": "product_performance",
+      "target": "customer_mix_bar",
+      "type": "DataFilter"
+    },
+    {
+      "source": "product_performance",
+      "target": "customer_mix_table",
+      "type": "DataFilter"
+    },
+    {
+      "source": "product_performance",
+      "target": "sales_channels",
+      "type": "DataFilter"
+    },
+    {
+      "source": "product_performance",
+      "target": "footer_comparison",
+      "type": "NoFilter"
+    },
+    {
+      "source": "leading_regions",
+      "target": "kpi_revenue",
+      "type": "DataFilter"
+    },
+    {
+      "source": "leading_regions",
+      "target": "detail_revenue",
+      "type": "DataFilter"
+    },
+    {
+      "source": "leading_regions",
+      "target": "kpi_margin",
+      "type": "DataFilter"
+    },
+    {
+      "source": "leading_regions",
+      "target": "detail_margin",
+      "type": "DataFilter"
+    },
+    {
+      "source": "leading_regions",
+      "target": "kpi_orders",
+      "type": "DataFilter"
+    },
+    {
+      "source": "leading_regions",
+      "target": "detail_orders",
+      "type": "DataFilter"
+    },
+    {
+      "source": "leading_regions",
+      "target": "kpi_units",
+      "type": "DataFilter"
+    },
+    {
+      "source": "leading_regions",
+      "target": "detail_units",
+      "type": "DataFilter"
+    },
+    {
+      "source": "leading_regions",
+      "target": "revenue_spark",
+      "type": "DataFilter"
+    },
+    {
+      "source": "leading_regions",
+      "target": "revenue_trend",
+      "type": "DataFilter"
+    },
+    {
+      "source": "leading_regions",
+      "target": "product_performance",
+      "type": "DataFilter"
+    },
+    {
+      "source": "leading_regions",
+      "target": "customer_mix_bar",
+      "type": "DataFilter"
+    },
+    {
+      "source": "leading_regions",
+      "target": "customer_mix_table",
+      "type": "DataFilter"
+    },
+    {
+      "source": "leading_regions",
+      "target": "sales_channels",
+      "type": "DataFilter"
+    },
+    {
+      "source": "leading_regions",
+      "target": "footer_comparison",
+      "type": "NoFilter"
+    },
+    {
+      "source": "customer_mix_bar",
+      "target": "kpi_revenue",
+      "type": "DataFilter"
+    },
+    {
+      "source": "customer_mix_bar",
+      "target": "detail_revenue",
+      "type": "DataFilter"
+    },
+    {
+      "source": "customer_mix_bar",
+      "target": "kpi_margin",
+      "type": "DataFilter"
+    },
+    {
+      "source": "customer_mix_bar",
+      "target": "detail_margin",
+      "type": "DataFilter"
+    },
+    {
+      "source": "customer_mix_bar",
+      "target": "kpi_orders",
+      "type": "DataFilter"
+    },
+    {
+      "source": "customer_mix_bar",
+      "target": "detail_orders",
+      "type": "DataFilter"
+    },
+    {
+      "source": "customer_mix_bar",
+      "target": "kpi_units",
+      "type": "DataFilter"
+    },
+    {
+      "source": "customer_mix_bar",
+      "target": "detail_units",
+      "type": "DataFilter"
+    },
+    {
+      "source": "customer_mix_bar",
+      "target": "revenue_spark",
+      "type": "DataFilter"
+    },
+    {
+      "source": "customer_mix_bar",
+      "target": "revenue_trend",
+      "type": "DataFilter"
+    },
+    {
+      "source": "customer_mix_bar",
+      "target": "product_performance",
+      "type": "DataFilter"
+    },
+    {
+      "source": "customer_mix_bar",
+      "target": "leading_regions",
+      "type": "DataFilter"
+    },
+    {
+      "source": "customer_mix_bar",
+      "target": "customer_mix_table",
+      "type": "DataFilter"
+    },
+    {
+      "source": "customer_mix_bar",
+      "target": "sales_channels",
+      "type": "DataFilter"
+    },
+    {
+      "source": "customer_mix_bar",
+      "target": "footer_comparison",
+      "type": "NoFilter"
+    },
+    {
+      "source": "customer_mix_table",
+      "target": "kpi_revenue",
+      "type": "DataFilter"
+    },
+    {
+      "source": "customer_mix_table",
+      "target": "detail_revenue",
+      "type": "DataFilter"
+    },
+    {
+      "source": "customer_mix_table",
+      "target": "kpi_margin",
+      "type": "DataFilter"
+    },
+    {
+      "source": "customer_mix_table",
+      "target": "detail_margin",
+      "type": "DataFilter"
+    },
+    {
+      "source": "customer_mix_table",
+      "target": "kpi_orders",
+      "type": "DataFilter"
+    },
+    {
+      "source": "customer_mix_table",
+      "target": "detail_orders",
+      "type": "DataFilter"
+    },
+    {
+      "source": "customer_mix_table",
+      "target": "kpi_units",
+      "type": "DataFilter"
+    },
+    {
+      "source": "customer_mix_table",
+      "target": "detail_units",
+      "type": "DataFilter"
+    },
+    {
+      "source": "customer_mix_table",
+      "target": "revenue_spark",
+      "type": "DataFilter"
+    },
+    {
+      "source": "customer_mix_table",
+      "target": "revenue_trend",
+      "type": "DataFilter"
+    },
+    {
+      "source": "customer_mix_table",
+      "target": "product_performance",
+      "type": "DataFilter"
+    },
+    {
+      "source": "customer_mix_table",
+      "target": "leading_regions",
+      "type": "DataFilter"
+    },
+    {
+      "source": "customer_mix_table",
+      "target": "customer_mix_bar",
+      "type": "DataFilter"
+    },
+    {
+      "source": "customer_mix_table",
+      "target": "sales_channels",
+      "type": "DataFilter"
+    },
+    {
+      "source": "customer_mix_table",
+      "target": "footer_comparison",
+      "type": "NoFilter"
+    },
+    {
+      "source": "sales_channels",
+      "target": "kpi_revenue",
+      "type": "DataFilter"
+    },
+    {
+      "source": "sales_channels",
+      "target": "detail_revenue",
+      "type": "DataFilter"
+    },
+    {
+      "source": "sales_channels",
+      "target": "kpi_margin",
+      "type": "DataFilter"
+    },
+    {
+      "source": "sales_channels",
+      "target": "detail_margin",
+      "type": "DataFilter"
+    },
+    {
+      "source": "sales_channels",
+      "target": "kpi_orders",
+      "type": "DataFilter"
+    },
+    {
+      "source": "sales_channels",
+      "target": "detail_orders",
+      "type": "DataFilter"
+    },
+    {
+      "source": "sales_channels",
+      "target": "kpi_units",
+      "type": "DataFilter"
+    },
+    {
+      "source": "sales_channels",
+      "target": "detail_units",
+      "type": "DataFilter"
+    },
+    {
+      "source": "sales_channels",
+      "target": "revenue_spark",
+      "type": "DataFilter"
+    },
+    {
+      "source": "sales_channels",
+      "target": "revenue_trend",
+      "type": "DataFilter"
+    },
+    {
+      "source": "sales_channels",
+      "target": "product_performance",
+      "type": "DataFilter"
+    },
+    {
+      "source": "sales_channels",
+      "target": "leading_regions",
+      "type": "DataFilter"
+    },
+    {
+      "source": "sales_channels",
+      "target": "customer_mix_bar",
+      "type": "DataFilter"
+    },
+    {
+      "source": "sales_channels",
+      "target": "customer_mix_table",
+      "type": "DataFilter"
+    },
+    {
+      "source": "sales_channels",
+      "target": "footer_comparison",
+      "type": "NoFilter"
+    },
+    {
+      "source": "filter_period",
+      "target": "filter_category",
+      "type": "NoFilter"
+    },
+    {
+      "source": "filter_period",
+      "target": "filter_region",
+      "type": "NoFilter"
+    },
+    {
+      "source": "filter_period",
+      "target": "filter_channel",
+      "type": "NoFilter"
+    },
+    {
+      "source": "filter_category",
+      "target": "filter_period",
+      "type": "NoFilter"
+    },
+    {
+      "source": "filter_category",
+      "target": "filter_region",
+      "type": "NoFilter"
+    },
+    {
+      "source": "filter_category",
+      "target": "filter_channel",
+      "type": "NoFilter"
+    },
+    {
+      "source": "filter_region",
+      "target": "filter_period",
+      "type": "NoFilter"
+    },
+    {
+      "source": "filter_region",
+      "target": "filter_category",
+      "type": "NoFilter"
+    },
+    {
+      "source": "filter_region",
+      "target": "filter_channel",
+      "type": "NoFilter"
+    },
+    {
+      "source": "filter_channel",
+      "target": "filter_period",
+      "type": "NoFilter"
+    },
+    {
+      "source": "filter_channel",
+      "target": "filter_category",
+      "type": "NoFilter"
+    },
+    {
+      "source": "filter_channel",
+      "target": "filter_region",
+      "type": "NoFilter"
+    },
+    {
+      "source": "revenue_spark",
+      "target": "filter_period",
+      "type": "NoFilter"
+    },
+    {
+      "source": "revenue_spark",
+      "target": "filter_category",
+      "type": "NoFilter"
+    },
+    {
+      "source": "revenue_spark",
+      "target": "filter_region",
+      "type": "NoFilter"
+    },
+    {
+      "source": "revenue_spark",
+      "target": "filter_channel",
+      "type": "NoFilter"
+    },
+    {
+      "source": "revenue_trend",
+      "target": "filter_period",
+      "type": "NoFilter"
+    },
+    {
+      "source": "revenue_trend",
+      "target": "filter_category",
+      "type": "NoFilter"
+    },
+    {
+      "source": "revenue_trend",
+      "target": "filter_region",
+      "type": "NoFilter"
+    },
+    {
+      "source": "revenue_trend",
+      "target": "filter_channel",
+      "type": "NoFilter"
+    },
+    {
+      "source": "product_performance",
+      "target": "filter_period",
+      "type": "NoFilter"
+    },
+    {
+      "source": "product_performance",
+      "target": "filter_category",
+      "type": "NoFilter"
+    },
+    {
+      "source": "product_performance",
+      "target": "filter_region",
+      "type": "NoFilter"
+    },
+    {
+      "source": "product_performance",
+      "target": "filter_channel",
+      "type": "NoFilter"
+    },
+    {
+      "source": "leading_regions",
+      "target": "filter_period",
+      "type": "NoFilter"
+    },
+    {
+      "source": "leading_regions",
+      "target": "filter_category",
+      "type": "NoFilter"
+    },
+    {
+      "source": "leading_regions",
+      "target": "filter_region",
+      "type": "NoFilter"
+    },
+    {
+      "source": "leading_regions",
+      "target": "filter_channel",
+      "type": "NoFilter"
+    },
+    {
+      "source": "customer_mix_bar",
+      "target": "filter_period",
+      "type": "NoFilter"
+    },
+    {
+      "source": "customer_mix_bar",
+      "target": "filter_category",
+      "type": "NoFilter"
+    },
+    {
+      "source": "customer_mix_bar",
+      "target": "filter_region",
+      "type": "NoFilter"
+    },
+    {
+      "source": "customer_mix_bar",
+      "target": "filter_channel",
+      "type": "NoFilter"
+    },
+    {
+      "source": "customer_mix_table",
+      "target": "filter_period",
+      "type": "NoFilter"
+    },
+    {
+      "source": "customer_mix_table",
+      "target": "filter_category",
+      "type": "NoFilter"
+    },
+    {
+      "source": "customer_mix_table",
+      "target": "filter_region",
+      "type": "NoFilter"
+    },
+    {
+      "source": "customer_mix_table",
+      "target": "filter_channel",
+      "type": "NoFilter"
+    },
+    {
+      "source": "sales_channels",
+      "target": "filter_period",
+      "type": "NoFilter"
+    },
+    {
+      "source": "sales_channels",
+      "target": "filter_category",
+      "type": "NoFilter"
+    },
+    {
+      "source": "sales_channels",
+      "target": "filter_region",
+      "type": "NoFilter"
+    },
+    {
+      "source": "sales_channels",
+      "target": "filter_channel",
+      "type": "NoFilter"
+    }
+  ],
+  "annotations": [
+    {
+      "name": "purpose",
+      "value": "Interactive commercial overview based on approved mockup v1"
+    },
+    {
+      "name": "defaultPeriod",
+      "value": "2026-01-01 through 2026-10-28; editable in period slicer"
+    }
+  ]
 }

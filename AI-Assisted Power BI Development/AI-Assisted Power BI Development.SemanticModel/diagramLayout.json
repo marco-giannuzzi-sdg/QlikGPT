@@ -7,7 +7,60 @@
         "x": 0,
         "y": 0
       },
-      "nodes": [],
+      "nodes": [
+        {
+          "location": {
+            "x": 422.591949284102,
+            "y": 629.23902766316849
+          },
+          "nodeIndex": "Calendario",
+          "nodeLineageTag": "73f8df9b-58db-4149-9976-f31d8f347ac8",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 624.77110523551517,
+            "y": 57
+          },
+          "nodeIndex": "Clienti",
+          "nodeLineageTag": "da83286d-56fb-4d1e-a423-d8ccf4c9d5fd",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 50,
+            "y": 627.31660248034007
+          },
+          "nodeIndex": "Prodotti",
+          "nodeLineageTag": "efb11eca-3951-4296-bd3d-6bc672fae486",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 231.0282941394214,
+            "y": 275.55065714553314
+          },
+          "nodeIndex": "Vendite",
+          "nodeLineageTag": "18f8aca2-9129-4b83-b9de-7877f98bbbb7",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
       "name": "Tutte le tabelle",
       "zoomValue": 100,
       "pinKeyFieldsToTop": false,

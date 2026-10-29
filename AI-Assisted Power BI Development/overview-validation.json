@@ -1,0 +1,11 @@
+{
+  "page": "Sales Overview",
+  "visuals": 49,
+  "queryVisuals": 20,
+  "tables": 4,
+  "relationships": 3,
+  "measures": 26,
+  "errors": [],
+  "warnings": [],
+  "nativePowerBIValidation": "Not run: user requested file-based development only."
+}

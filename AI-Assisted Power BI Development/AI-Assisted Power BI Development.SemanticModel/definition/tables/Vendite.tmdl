@@ -15,7 +15,7 @@ table Vendite
 		lineageTag: ee0d7ab2-f924-463a-85c3-d8044c3927e1
 
 	/// Fatturato netto meno costo del venduto.
-	measure 'Margine' = [Fatturato Netto] - [Costo Venduto]
+	measure Margine = [Fatturato Netto] - [Costo Venduto]
 		formatString: € #,##0.00
 		displayFolder: Indicatori
 		lineageTag: 27e0a033-63f4-4275-8d96-862f5cc8fbae
@@ -151,3 +151,113 @@ table Vendite
 				    Typed = Table.TransformColumnTypes(Navigation, {{"VenditaID", Int64.Type}, {"OrdineID", type text}, {"DataVendita", type date}, {"ProdottoID", Int64.Type}, {"ClienteID", Int64.Type}, {"Quantita", Int64.Type}, {"PrezzoUnitario", Currency.Type}, {"ScontoPercentuale", type number}, {"CostoUnitario", Currency.Type}, {"ImportoNetto", Currency.Type}, {"CostoTotale", Currency.Type}, {"Canale", type text}}, "it-IT")
 				in
 				    Typed
+
+
+	/// Fatturato sugli stessi giorni dell anno precedente.
+	measure 'Fatturato Netto AP' = CALCULATE([Fatturato Netto], DATEADD(Calendario[Data], -1, YEAR))
+		formatString: € #,##0.00
+		displayFolder: Confronti
+		lineageTag: d2efbbf1-e20b-4e11-8f06-eaa315e00045
+
+	/// Ordini negli stessi giorni dell anno precedente.
+	measure 'Numero Ordini AP' = CALCULATE([Numero Ordini], DATEADD(Calendario[Data], -1, YEAR))
+		formatString: #,##0
+		displayFolder: Confronti
+		lineageTag: 6bafb158-c5e6-4c51-9ae9-a2d9fba74da4
+
+	/// Unita vendute negli stessi giorni dell anno precedente.
+	measure 'Quantita Venduta AP' = CALCULATE([Quantita Venduta], DATEADD(Calendario[Data], -1, YEAR))
+		formatString: #,##0
+		displayFolder: Confronti
+		lineageTag: a722ee5a-d0dc-40c8-b66b-cddd4137c3f8
+
+	/// Variazione rispetto allo stesso periodo dell anno precedente.
+	measure 'Fatturato YoY %' = DIVIDE([Fatturato Netto] - [Fatturato Netto AP], [Fatturato Netto AP])
+		formatString: 0.0%
+		displayFolder: Confronti
+		lineageTag: 4ba25072-bd58-4056-9d55-4975527c7b72
+
+	/// Variazione degli ordini sul periodo equivalente.
+	measure 'Ordini YoY %' = DIVIDE([Numero Ordini] - [Numero Ordini AP], [Numero Ordini AP])
+		formatString: 0.0%
+		displayFolder: Confronti
+		lineageTag: 9ba2e177-68f2-48a5-9b45-c4bdb120cd0e
+
+	/// Variazione delle unita vendute sul periodo equivalente.
+	measure 'Quantita YoY %' = DIVIDE([Quantita Venduta] - [Quantita Venduta AP], [Quantita Venduta AP])
+		formatString: 0.0%
+		displayFolder: Confronti
+		lineageTag: 2f06ff07-f690-4c65-a90d-ee64ef2d04f6
+
+	/// Fatturato formattato per la card; nessun valore precalcolato.
+	measure 'OV Revenue' = VAR v = [Fatturato Netto] RETURN IF(ISBLANK(v), "—", SWITCH(TRUE(), ABS(v) >= 1000000, FORMAT(v / 1000000, "€0.000", "en-US") & "M", ABS(v) >= 1000, FORMAT(v / 1000, "€0.0", "en-US") & "K", FORMAT(v, "€#,0", "en-US")))
+		isHidden
+		displayFolder: Overview
+		lineageTag: 8369e71c-d5cd-42f3-9a30-c4dca07b3f23
+
+	/// Margine percentuale nel contesto dei filtri.
+	measure 'OV Margin' = IF(ISBLANK([Margine %]), "—", FORMAT([Margine %], "0.0%", "en-US"))
+		isHidden
+		displayFolder: Overview
+		lineageTag: 86fa3fae-d3e5-4b8f-b88c-b170d4800344
+
+	/// Ordini distinti nel contesto dei filtri.
+	measure 'OV Orders' = IF(ISBLANK([Numero Ordini]), "—", FORMAT([Numero Ordini], "#,0", "en-US"))
+		isHidden
+		displayFolder: Overview
+		lineageTag: 01e4be13-8bf6-4721-abc7-292918ad6f2c
+
+	/// Quantita nel contesto dei filtri.
+	measure 'OV Units' = IF(ISBLANK([Quantita Venduta]), "—", FORMAT([Quantita Venduta], "#,0", "en-US"))
+		isHidden
+		displayFolder: Overview
+		lineageTag: f24e93c0-128c-473d-afb4-871ffef3eac2
+
+	/// Etichetta dinamica della variazione fatturato.
+	measure 'OV Revenue Change' = VAR v = [Fatturato YoY %] RETURN IF(ISBLANK(v), "No prior-year comparison", IF(v > 0, UNICHAR(9650) & " ", IF(v < 0, UNICHAR(9660) & " ", "")) & FORMAT(v, "+0.0%;-0.0%;0.0%", "en-US") & " vs prior year")
+		isHidden
+		displayFolder: Overview
+		lineageTag: 8fb1e051-7c2a-4cd1-bfa8-0aedeb9c98d3
+
+	/// Etichetta dinamica della variazione ordini.
+	measure 'OV Orders Change' = VAR v = [Ordini YoY %] RETURN IF(ISBLANK(v), "No prior-year comparison", IF(v > 0, UNICHAR(9650) & " ", IF(v < 0, UNICHAR(9660) & " ", "")) & FORMAT(v, "+0.0%;-0.0%;0.0%", "en-US") & " vs prior year")
+		isHidden
+		displayFolder: Overview
+		lineageTag: 708ad531-9f5d-423f-a899-f0e5bcddca3e
+
+	/// Etichetta dinamica della variazione quantita.
+	measure 'OV Units Change' = VAR v = [Quantita YoY %] RETURN IF(ISBLANK(v), "No prior-year comparison", IF(v > 0, UNICHAR(9650) & " ", IF(v < 0, UNICHAR(9660) & " ", "")) & FORMAT(v, "+0.0%;-0.0%;0.0%", "en-US") & " vs prior year")
+		isHidden
+		displayFolder: Overview
+		lineageTag: 4eb8041a-6e16-4d23-8b1b-0ad81c953412
+
+	/// Margine assoluto, non utile netto.
+	measure 'OV Contribution' = VAR v = [Margine] RETURN IF(ISBLANK(v), "—", IF(ABS(v) >= 1000000, FORMAT(v / 1000000, "€0.000", "en-US") & "M", FORMAT(v / 1000, "€0.0", "en-US") & "K") & " contribution")
+		isHidden
+		displayFolder: Overview
+		lineageTag: 223fef73-fea3-403d-89a6-3f1658aadd12
+
+	/// Quota del segmento tra i segmenti selezionati, rispettando gli altri filtri.
+	measure 'Quota Segmento %' = DIVIDE([Fatturato Netto], CALCULATE([Fatturato Netto], ALLSELECTED(Clienti[Segmento])))
+		formatString: 0.0%
+		displayFolder: Overview
+		lineageTag: 7c32193e-670b-42fe-9c2e-41ab04637589
+
+	/// Posizione della regione per fatturato nel contesto selezionato.
+	measure 'OV Region Rank' = IF(NOT ISBLANK([Fatturato Netto]), RANKX(ALLSELECTED(Clienti[Regione]), [Fatturato Netto], , DESC, DENSE))
+		formatString: 0
+		isHidden
+		displayFolder: Overview
+		lineageTag: 9c88a374-717a-4761-a7ca-1ff9e7ad4d1b
+
+	/// Intervallo confrontato nell anno precedente.
+	measure 'OV Comparison Period' = VAR d = DATEADD(Calendario[Data], -1, YEAR) VAR dmin = MINX(d, Calendario[Data]) VAR dmax = MAXX(d, Calendario[Data]) RETURN IF(ISBLANK(dmin), "No comparable prior-year dates", "Compared with " & FORMAT(dmin, "dd MMM", "en-US") & " — " & FORMAT(dmax, "dd MMM yyyy", "en-US"))
+		isHidden
+		displayFolder: Overview
+		lineageTag: 58e2c102-96e5-423c-92a2-5839676a6004
+
+	/// Evidenzia il margine percentuale piu alto tra le categorie selezionate.
+	measure 'OV Margin Highlight' = VAR v = [Margine %] VAR best = MAXX(ALLSELECTED(Prodotti[Categoria]), CALCULATE([Margine %])) RETURN IF(NOT ISBLANK(v) && v >= best, "#C7F464", "#FFFFFF")
+		isHidden
+		displayFolder: Overview
+		lineageTag: 1e9405fe-1b8c-49fc-8fb4-72a29f222008

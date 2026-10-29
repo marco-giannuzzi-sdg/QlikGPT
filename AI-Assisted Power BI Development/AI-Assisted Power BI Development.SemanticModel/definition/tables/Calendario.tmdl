@@ -88,15 +88,19 @@ table Calendario
 		lineageTag: c04106c2-ee0c-4f36-923c-5dcc26ef353c
 
 		level Anno
+			lineageTag: 964b0271-e31d-4887-a71b-ab3ecf796476
 			column: Anno
 
 		level Trimestre
+			lineageTag: bf4286d9-c358-42de-8c55-cb8f91ffe124
 			column: Trimestre
 
 		level Mese
+			lineageTag: 1dbdb8ef-3a65-4c70-9e2a-e5f36cabe57c
 			column: Mese
 
 		level Data
+			lineageTag: 89b21ce4-709d-4471-aaab-a5688d26bae7
 			column: Data
 
 	partition Calendario = m
@@ -105,6 +109,14 @@ table Calendario
 				let
 				    Source = Excel.Workbook(File.Contents(DataFolder & "Calendario.xlsx"), null, true),
 				    Navigation = Source{[Item="Calendario", Kind="Table"]}[Data],
-				    Typed = Table.TransformColumnTypes(Navigation, {{"Data", type date}, {"Anno", Int64.Type}, {"MeseNumero", Int64.Type}, {"Mese", type text}, {"AnnoMese", type text}, {"AnnoMeseNumero", Int64.Type}, {"Trimestre", type text}, {"Giorno", Int64.Type}, {"GiornoSettimanaNumero", Int64.Type}, {"GiornoSettimana", type text}, {"FineSettimana", type logical}}, "it-IT")
+				    Typed = Table.TransformColumnTypes(Navigation, {{"Data", type date}, {"Anno", Int64.Type}, {"MeseNumero", Int64.Type}, {"Mese", type text}, {"AnnoMese", type text}, {"AnnoMeseNumero", Int64.Type}, {"Trimestre", type text}, {"Giorno", Int64.Type}, {"GiornoSettimanaNumero", Int64.Type}, {"GiornoSettimana", type text}, {"FineSettimana", type logical}}, "it-IT"),
+				    Display = Table.AddColumn(Typed, "Month", each Date.ToText([Data], "MMM yy", "en-US"), type text)
 				in
-				    Typed
+				        Display
+
+	column Month
+		dataType: string
+		lineageTag: 9755001d-ef0e-471d-91e6-b0987f44811c
+		summarizeBy: none
+		sourceColumn: Month
+		sortByColumn: AnnoMeseNumero

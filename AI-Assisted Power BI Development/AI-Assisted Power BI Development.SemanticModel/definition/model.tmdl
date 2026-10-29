@@ -11,10 +11,12 @@ annotation __PBI_TimeIntelligenceEnabled = 0
 
 annotation PBI_ProTooling = ["DevMode"]
 
-ref cultureInfo it-IT
-
+annotation PBI_QueryOrder = ["Prodotti","Clienti","Calendario","Vendite","DataFolder"]
 
 ref table Prodotti
 ref table Clienti
 ref table Calendario
 ref table Vendite
+
+ref cultureInfo it-IT
+

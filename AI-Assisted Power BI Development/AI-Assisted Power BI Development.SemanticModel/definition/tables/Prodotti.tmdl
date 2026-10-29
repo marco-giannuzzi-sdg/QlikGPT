@@ -4,8 +4,8 @@ table Prodotti
 
 	column ProdottoID
 		dataType: int64
-		isKey
 		isHidden
+		isKey
 		formatString: 0
 		lineageTag: 5b7b35bd-5d56-4680-b2bf-f1ea7acb6ad0
 		summarizeBy: none
@@ -64,3 +64,4 @@ table Prodotti
 				    Typed = Table.TransformColumnTypes(Navigation, {{"ProdottoID", Int64.Type}, {"CodiceProdotto", type text}, {"NomeProdotto", type text}, {"Categoria", type text}, {"Sottocategoria", type text}, {"Marca", type text}, {"PrezzoListino", Currency.Type}, {"CostoStandard", Currency.Type}}, "it-IT")
 				in
 				    Typed
+
