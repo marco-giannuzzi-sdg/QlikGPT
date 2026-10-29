@@ -3,9 +3,9 @@
   "name": "label_revenue",
   "position": {
     "x": 56,
-    "y": 180,
+    "y": 176,
     "width": 656,
-    "height": 27,
+    "height": 36,
     "z": 1100,
     "tabOrder": 1100
   },
@@ -22,7 +22,7 @@
                     "value": "NET REVENUE",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "13pt",
+                      "fontSize": "17px",
                       "color": "#FFFFFF",
                       "fontWeight": "bold"
                     }
@@ -153,6 +153,27 @@
               }
             },
             "verticalSpacing": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "spaceBelowTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "spaceBelowSubTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "spaceBelowTitleArea": {
               "expr": {
                 "Literal": {
                   "Value": "0D"

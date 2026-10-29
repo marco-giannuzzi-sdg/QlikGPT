@@ -25,7 +25,7 @@
             "rectangleRoundedCurve": {
               "expr": {
                 "Literal": {
-                  "Value": "12D"
+                  "Value": "12L"
                 }
               }
             }
@@ -60,6 +60,9 @@
                 }
               }
             }
+          },
+          "selector": {
+            "id": "default"
           }
         }
       ],
@@ -98,6 +101,9 @@
                 }
               }
             }
+          },
+          "selector": {
+            "id": "default"
           }
         }
       ],
@@ -107,7 +113,7 @@
             "shapeAngle": {
               "expr": {
                 "Literal": {
-                  "Value": "0D"
+                  "Value": "0L"
                 }
               }
             }
@@ -233,6 +239,27 @@
               }
             },
             "verticalSpacing": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "spaceBelowTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "spaceBelowSubTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "spaceBelowTitleArea": {
               "expr": {
                 "Literal": {
                   "Value": "0D"

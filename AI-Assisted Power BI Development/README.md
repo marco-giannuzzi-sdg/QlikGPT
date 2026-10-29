@@ -45,7 +45,7 @@ Pagina 1920 × 1080 con testata blu notte, fondo chiaro, grafici teal e accenti 
 
 - Quattro KPI: Net Revenue, Gross Margin, Orders e Units Sold; confronto anno precedente e margine assoluto.
 - Andamento mensile con linea del periodo selezionato e del periodo equivalente dell anno precedente.
-- Categorie con barre di fatturato e margine percentuale; il margine piu alto tra le categorie selezionate e evidenziato in lime.
+- Categorie con barre di fatturato e margine percentuale.
 - Top 5 posizioni per fatturato tra le regioni selezionate; eventuali pari merito vengono mantenuti.
 - Composizione del fatturato per segmento cliente, con quote e importi.
 - Canali con fatturato e conteggio distinto degli ordini.
@@ -54,7 +54,7 @@ Pagina 1920 × 1080 con testata blu notte, fondo chiaro, grafici teal e accenti 
 
 **Campi aggiunti in Power Query:** Calendario[Month] per asse mese/anno ordinato cronologicamente e Clienti[OverviewGroup] per la barra della composizione clienti. Non occorre modificare gli Excel.
 
-**Realizzazione:** visual nativi di Power BI, senza custom visual, dipendenze da immagini o servizi esterni. Il riquadro categorie usa una tabella con barre nei valori per mostrare fatturato e margine insieme. Etichette dei KPI e interfaccia in inglese; i campi del modello conservano i nomi italiani.
+**Realizzazione:** visual nativi di Power BI, senza custom visual, dipendenze da immagini o servizi esterni. I riquadri categorie, segmenti e canali usano matrici native con campi di raggruppamento espliciti. Le barre di fatturato sono separate dal testo degli importi per ottenere formati compatti come EUR 664.6K, indipendenti dalle unita automatiche del client. Etichette dei KPI e interfaccia in inglese; i campi del modello conservano i nomi italiani.
 
 ## Misure disponibili
 
@@ -87,3 +87,16 @@ Totali attesi dopo Aggiorna: **Fatturato Netto 7.064.517,86 EUR**, **Costo Vendu
 
 
 Per il periodo iniziale dell overview i valori attesi sono: **Fatturato Netto 2.225.634,04 EUR**, **Margine 905.533,75 EUR**, **Margine % 40,6866%**, **Numero Ordini 1.465**, **Quantita Venduta 10.797**. Il fatturato cresce del **12,7437%** rispetto al 01/01/2025–28/10/2025.
+
+
+## Revisione stile v2
+
+- Riempimenti e contorni delle 11 forme con selettore nativo `id: default`: testata e card fatturato blu notte, riquadri bianchi e linea lime.
+- Dimensioni dei testi statici espresse in pixel, con altezze maggiorate per evitare tagli e scrollbar nei titoli.
+- Matrici native al posto dei tre TableEx. Il client October 2026 aveva segnalato un errore di tooltip in `TableExInteractionManager.getGroupingTooltipInfo`; i tooltip dei riquadri sono disattivati.
+- Larghezza fissa di ogni colonna e righe compatte, con spazio verificato per tre elementi.
+- Zoom dei grafici disattivato e spazio tra titolo e area dati esplicito.
+- Filtri data ad alto contrasto; intervallo iniziale letto da `general.filter` senza estremi duplicati come stringhe.
+- Modello semantico, Excel e misure di business invariati.
+
+Per applicare questa revisione, chiudere il report attualmente aperto **senza salvare** e riaprire **lo stesso Sales Overview.pbip**. Aggiornare i dati se richiesto. Non salvare la vecchia sessione sopra le definizioni aggiornate. La revisione e stata controllata sui file e su una composizione tecnica; il rendering nativo aggiornato va verificato in Power BI.

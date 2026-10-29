@@ -3,9 +3,9 @@
   "name": "trend_title",
   "position": {
     "x": 56,
-    "y": 382,
+    "y": 374,
     "width": 820,
-    "height": 42,
+    "height": 56,
     "z": 1280,
     "tabOrder": 1280
   },
@@ -22,7 +22,7 @@
                     "value": "Revenue trend",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "24pt",
+                      "fontSize": "32px",
                       "color": "#182A38",
                       "fontWeight": "bold"
                     }
@@ -153,6 +153,27 @@
               }
             },
             "verticalSpacing": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "spaceBelowTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "spaceBelowSubTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "spaceBelowTitleArea": {
               "expr": {
                 "Literal": {
                   "Value": "0D"

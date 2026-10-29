@@ -7,5 +7,11 @@
   "measures": 26,
   "errors": [],
   "warnings": [],
-  "nativePowerBIValidation": "Not run: user requested file-based development only."
+  "nativePowerBIValidation": "Not run: user requested file-based development only.",
+  "styleRevision": "v2",
+  "shapeSelectorsValidated": 11,
+  "nativeMatrices": 3,
+  "tableExVisuals": 0,
+  "tableTooltipsEnabled": false,
+  "textHeightsAndColumnWidthsValidated": true
 }

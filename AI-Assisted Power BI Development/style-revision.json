@@ -1,0 +1,13 @@
+{
+  "revision": "v2",
+  "changes": [
+    "Shape fill and outline selectors corrected",
+    "Explicit pixel typography and safer text heights",
+    "Native matrices replace TableEx; tooltips disabled",
+    "All data columns have fixed widths; compact rows",
+    "Compact currency text uses existing dynamic OV Revenue measure",
+    "Date bounds read from general.filter; redundant string date bounds removed",
+    "Zoom and chart scroll controls disabled"
+  ],
+  "nativeRendering": "Awaiting user verification in Power BI Desktop; no app automation."
+}

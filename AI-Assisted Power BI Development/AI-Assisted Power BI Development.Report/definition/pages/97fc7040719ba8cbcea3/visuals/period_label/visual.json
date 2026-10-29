@@ -3,9 +3,9 @@
   "name": "period_label",
   "position": {
     "x": 1192,
-    "y": 20,
+    "y": 13,
     "width": 100,
-    "height": 26,
+    "height": 38,
     "z": 1040,
     "tabOrder": 1040
   },
@@ -22,7 +22,7 @@
                     "value": "PERIOD",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "11pt",
+                      "fontSize": "15px",
                       "color": "#C7F464",
                       "fontWeight": "bold"
                     }
@@ -153,6 +153,27 @@
               }
             },
             "verticalSpacing": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "spaceBelowTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "spaceBelowSubTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "spaceBelowTitleArea": {
               "expr": {
                 "Literal": {
                   "Value": "0D"

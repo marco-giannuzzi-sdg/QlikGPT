@@ -22,7 +22,7 @@
                     "value": "Sales Overview",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "48pt",
+                      "fontSize": "64px",
                       "color": "#FFFFFF",
                       "fontWeight": "bold"
                     }
@@ -153,6 +153,27 @@
               }
             },
             "verticalSpacing": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "spaceBelowTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "spaceBelowSubTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "spaceBelowTitleArea": {
               "expr": {
                 "Literal": {
                   "Value": "0D"

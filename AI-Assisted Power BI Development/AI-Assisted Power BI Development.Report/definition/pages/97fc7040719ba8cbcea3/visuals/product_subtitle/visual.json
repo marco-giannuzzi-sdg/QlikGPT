@@ -3,9 +3,9 @@
   "name": "product_subtitle",
   "position": {
     "x": 1292,
-    "y": 425,
+    "y": 424,
     "width": 570,
-    "height": 28,
+    "height": 38,
     "z": 1330,
     "tabOrder": 1330
   },
@@ -22,7 +22,7 @@
                     "value": "Revenue and gross margin by category",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "13pt",
+                      "fontSize": "17px",
                       "color": "#60778C",
                       "fontWeight": "normal"
                     }
@@ -153,6 +153,27 @@
               }
             },
             "verticalSpacing": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "spaceBelowTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "spaceBelowSubTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "spaceBelowTitleArea": {
               "expr": {
                 "Literal": {
                   "Value": "0D"

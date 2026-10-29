@@ -3,38 +3,37 @@
   "name": "customer_mix_table",
   "position": {
     "x": 688,
-    "y": 906,
+    "y": 914,
     "width": 564,
-    "height": 114,
+    "height": 108,
     "z": 1440,
     "tabOrder": 1440
   },
   "visual": {
-    "visualType": "tableEx",
+    "visualType": "pivotTable",
     "objects": {
-      "columnHeaders": [
+      "general": [
         {
           "properties": {
-            "autoSizeColumnWidth": {
+            "layout": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
+                  "Value": "'Tabular'"
                 }
               }
-            },
-            "columnAdjustment": {
-              "expr": {
-                "Literal": {
-                  "Value": "'growToFit'"
-                }
-              }
-            },
+            }
+          }
+        }
+      ],
+      "rowHeaders": [
+        {
+          "properties": {
             "fontColor": {
               "solid": {
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#60778C'"
+                      "Value": "'#182A38'"
                     }
                   }
                 }
@@ -72,6 +71,20 @@
                 }
               }
             },
+            "stepped": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "showExpandCollapseButtons": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
             "wordWrap": {
               "expr": {
                 "Literal": {
@@ -82,7 +95,105 @@
             "outlineStyle": {
               "expr": {
                 "Literal": {
-                  "Value": "0D"
+                  "Value": "0L"
+                }
+              }
+            },
+            "alignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Left'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "columnAdjustment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'fixedWidth'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#60778C'"
+                    }
+                  }
+                }
+              }
+            },
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Segoe UI'"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "showExpandCollapseButtons": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "outlineStyle": {
+              "expr": {
+                "Literal": {
+                  "Value": "0L"
+                }
+              }
+            },
+            "customColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
                 }
               }
             }
@@ -92,6 +203,17 @@
       "values": [
         {
           "properties": {
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#182A38'"
+                    }
+                  }
+                }
+              }
+            },
             "fontColorPrimary": {
               "solid": {
                 "color": {
@@ -109,6 +231,17 @@
                   "expr": {
                     "Literal": {
                       "Value": "'#182A38'"
+                    }
+                  }
+                }
+              }
+            },
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
                     }
                   }
                 }
@@ -157,10 +290,17 @@
                 }
               }
             },
+            "valuesOnRow": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
             "outlineStyle": {
               "expr": {
                 "Literal": {
-                  "Value": "0D"
+                  "Value": "0L"
                 }
               }
             }
@@ -170,13 +310,6 @@
       "grid": [
         {
           "properties": {
-            "gridVertical": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
-                }
-              }
-            },
             "gridHorizontal": {
               "expr": {
                 "Literal": {
@@ -202,33 +335,105 @@
                 }
               }
             },
+            "gridVertical": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
             "rowPadding": {
               "expr": {
                 "Literal": {
-                  "Value": "5D"
+                  "Value": "2D"
                 }
               }
             },
             "outlineStyle": {
               "expr": {
                 "Literal": {
-                  "Value": "0D"
+                  "Value": "0L"
                 }
               }
             }
           }
         }
       ],
-      "total": [
+      "subTotals": [
         {
           "properties": {
-            "totals": {
+            "rowSubtotals": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "columnSubtotals": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "perRowLevel": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "perColumnLevel": {
               "expr": {
                 "Literal": {
                   "Value": "false"
                 }
               }
             }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "238D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Clienti.Segmento"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "112D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Vendite.Quota Segmento %"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "180D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Vendite.OV Revenue"
           }
         }
       ],
@@ -239,6 +444,27 @@
               "expr": {
                 "Literal": {
                   "Value": "'Right'"
+                }
+              }
+            },
+            "styleValues": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "styleHeader": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "styleTotal": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }
@@ -256,23 +482,30 @@
                 }
               }
             },
-            "labelDisplayUnits": {
+            "styleValues": {
               "expr": {
                 "Literal": {
-                  "Value": "1000D"
+                  "Value": "true"
                 }
               }
             },
-            "labelPrecision": {
+            "styleHeader": {
               "expr": {
                 "Literal": {
-                  "Value": "1D"
+                  "Value": "false"
+                }
+              }
+            },
+            "styleTotal": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }
           },
           "selector": {
-            "metadata": "Vendite.Fatturato Netto"
+            "metadata": "Vendite.OV Revenue"
           }
         }
       ]
@@ -400,6 +633,27 @@
                   "Value": "0D"
                 }
               }
+            },
+            "spaceBelowTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "spaceBelowSubTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "spaceBelowTitleArea": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
             }
           }
         }
@@ -449,12 +703,25 @@
             }
           }
         }
+      ],
+      "visualTooltip": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
       ]
     },
     "drillFilterOtherVisuals": true,
     "query": {
       "queryState": {
-        "Values": {
+        "Rows": {
           "projections": [
             {
               "field": {
@@ -469,9 +736,12 @@
               },
               "queryRef": "Clienti.Segmento",
               "nativeQueryRef": "Segmento",
-              "displayName": "Segment",
-              "active": true
-            },
+              "displayName": "Segment"
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
             {
               "field": {
                 "Measure": {
@@ -495,11 +765,11 @@
                       "Entity": "Vendite"
                     }
                   },
-                  "Property": "Fatturato Netto"
+                  "Property": "OV Revenue"
                 }
               },
-              "queryRef": "Vendite.Fatturato Netto",
-              "nativeQueryRef": "Fatturato Netto",
+              "queryRef": "Vendite.OV Revenue",
+              "nativeQueryRef": "OV Revenue",
               "displayName": "Revenue"
             }
           ]
@@ -533,6 +803,10 @@
     {
       "name": "design",
       "value": "Sales Overview / approved mockup v1"
+    },
+    {
+      "name": "compatibility",
+      "value": "Explicit Rows and Values; replaced TableEx after getGroupingTooltipInfo error in Desktop 2.159.883.0"
     }
   ]
 }

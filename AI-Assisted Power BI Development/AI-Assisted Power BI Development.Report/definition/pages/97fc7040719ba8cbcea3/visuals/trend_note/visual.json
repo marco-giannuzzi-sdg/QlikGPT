@@ -3,9 +3,9 @@
   "name": "trend_note",
   "position": {
     "x": 56,
-    "y": 715,
+    "y": 708,
     "width": 1150,
-    "height": 23,
+    "height": 32,
     "z": 1310,
     "tabOrder": 1310
   },
@@ -22,7 +22,7 @@
                     "value": "Prior year matches the selected days, including partial months.",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "10pt",
+                      "fontSize": "13px",
                       "color": "#60778C",
                       "fontWeight": "normal"
                     }
@@ -153,6 +153,27 @@
               }
             },
             "verticalSpacing": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "spaceBelowTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "spaceBelowSubTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "spaceBelowTitleArea": {
               "expr": {
                 "Literal": {
                   "Value": "0D"

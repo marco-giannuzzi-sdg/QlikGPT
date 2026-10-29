@@ -3,9 +3,9 @@
   "name": "regions_title",
   "position": {
     "x": 56,
-    "y": 778,
+    "y": 770,
     "width": 550,
-    "height": 42,
+    "height": 56,
     "z": 1380,
     "tabOrder": 1380
   },
@@ -22,7 +22,7 @@
                     "value": "Leading regions",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "23pt",
+                      "fontSize": "31px",
                       "color": "#182A38",
                       "fontWeight": "bold"
                     }
@@ -153,6 +153,27 @@
               }
             },
             "verticalSpacing": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "spaceBelowTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "spaceBelowSubTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "spaceBelowTitleArea": {
               "expr": {
                 "Literal": {
                   "Value": "0D"

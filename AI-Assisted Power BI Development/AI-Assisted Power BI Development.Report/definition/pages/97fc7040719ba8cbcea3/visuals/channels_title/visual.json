@@ -3,9 +3,9 @@
   "name": "channels_title",
   "position": {
     "x": 1320,
-    "y": 778,
+    "y": 770,
     "width": 544,
-    "height": 42,
+    "height": 56,
     "z": 1450,
     "tabOrder": 1450
   },
@@ -22,7 +22,7 @@
                     "value": "Sales channels",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "23pt",
+                      "fontSize": "31px",
                       "color": "#182A38",
                       "fontWeight": "bold"
                     }
@@ -153,6 +153,27 @@
               }
             },
             "verticalSpacing": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "spaceBelowTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "spaceBelowSubTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "spaceBelowTitleArea": {
               "expr": {
                 "Literal": {
                   "Value": "0D"

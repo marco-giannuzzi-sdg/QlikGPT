@@ -3,9 +3,9 @@
   "name": "regions_subtitle",
   "position": {
     "x": 56,
-    "y": 819,
+    "y": 814,
     "width": 550,
-    "height": 27,
+    "height": 38,
     "z": 1390,
     "tabOrder": 1390
   },
@@ -22,7 +22,7 @@
                     "value": "Top 5 by revenue",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "13pt",
+                      "fontSize": "17px",
                       "color": "#60778C",
                       "fontWeight": "normal"
                     }
@@ -153,6 +153,27 @@
               }
             },
             "verticalSpacing": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "spaceBelowTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "spaceBelowSubTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "spaceBelowTitleArea": {
               "expr": {
                 "Literal": {
                   "Value": "0D"

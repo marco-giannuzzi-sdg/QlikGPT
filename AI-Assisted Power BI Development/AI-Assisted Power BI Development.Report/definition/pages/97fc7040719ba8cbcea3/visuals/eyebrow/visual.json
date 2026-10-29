@@ -3,9 +3,9 @@
   "name": "eyebrow",
   "position": {
     "x": 40,
-    "y": 16,
+    "y": 12,
     "width": 900,
-    "height": 28,
+    "height": 36,
     "z": 1010,
     "tabOrder": 1010
   },
@@ -22,7 +22,7 @@
                     "value": "COMMERCIAL PERFORMANCE",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "13pt",
+                      "fontSize": "17px",
                       "color": "#FFFFFF",
                       "fontWeight": "bold"
                     }
@@ -153,6 +153,27 @@
               }
             },
             "verticalSpacing": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "spaceBelowTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "spaceBelowSubTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "spaceBelowTitleArea": {
               "expr": {
                 "Literal": {
                   "Value": "0D"

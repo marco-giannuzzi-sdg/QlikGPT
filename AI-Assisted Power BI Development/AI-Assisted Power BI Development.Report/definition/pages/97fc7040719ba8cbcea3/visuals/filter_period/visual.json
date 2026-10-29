@@ -3,9 +3,9 @@
   "name": "filter_period",
   "position": {
     "x": 1304,
-    "y": 0,
+    "y": 3,
     "width": 584,
-    "height": 68,
+    "height": 72,
     "z": 1050,
     "tabOrder": 1050
   },
@@ -19,20 +19,6 @@
               "expr": {
                 "Literal": {
                   "Value": "'Between'"
-                }
-              }
-            },
-            "startDate": {
-              "expr": {
-                "Literal": {
-                  "Value": "'2026-01-01T00:00:00'"
-                }
-              }
-            },
-            "endDate": {
-              "expr": {
-                "Literal": {
-                  "Value": "'2026-10-28T00:00:00'"
                 }
               }
             }
@@ -286,7 +272,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#FFFFFF'"
+                      "Value": "'#081C30'"
                     }
                   }
                 }
@@ -297,7 +283,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#081C30'"
+                      "Value": "'#FFFFFF'"
                     }
                   }
                 }
@@ -316,6 +302,13 @@
                   "Value": "'Segoe UI'"
                 }
               }
+            },
+            "hideDatePickerButton": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
             }
           }
         }
@@ -324,6 +317,17 @@
         {
           "properties": {
             "iconColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#081C30'"
+                    }
+                  }
+                }
+              }
+            },
+            "backgroundColor": {
               "solid": {
                 "color": {
                   "expr": {
@@ -337,7 +341,14 @@
             "backgroundShow": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
+                  "Value": "true"
+                }
+              }
+            },
+            "backgroundTransparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
                 }
               }
             },
@@ -470,6 +481,27 @@
               }
             },
             "verticalSpacing": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "spaceBelowTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "spaceBelowSubTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "spaceBelowTitleArea": {
               "expr": {
                 "Literal": {
                   "Value": "0D"

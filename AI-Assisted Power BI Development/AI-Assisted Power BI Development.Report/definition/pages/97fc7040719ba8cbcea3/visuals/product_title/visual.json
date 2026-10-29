@@ -3,9 +3,9 @@
   "name": "product_title",
   "position": {
     "x": 1292,
-    "y": 382,
+    "y": 374,
     "width": 570,
-    "height": 42,
+    "height": 56,
     "z": 1320,
     "tabOrder": 1320
   },
@@ -22,7 +22,7 @@
                     "value": "Product performance",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "24pt",
+                      "fontSize": "32px",
                       "color": "#182A38",
                       "fontWeight": "bold"
                     }
@@ -153,6 +153,27 @@
               }
             },
             "verticalSpacing": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "spaceBelowTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "spaceBelowSubTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "spaceBelowTitleArea": {
               "expr": {
                 "Literal": {
                   "Value": "0D"
