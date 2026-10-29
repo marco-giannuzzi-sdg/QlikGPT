@@ -1,0 +1,64 @@
+/// Anagrafica sintetica: una riga per ClienteID. Nessun dato personale reale.
+table Clienti
+	lineageTag: da83286d-56fb-4d1e-a423-d8ccf4c9d5fd
+
+	column ClienteID
+		dataType: int64
+		isKey
+		isHidden
+		formatString: 0
+		lineageTag: 5907084f-49e1-4347-9eff-0991999587d0
+		summarizeBy: none
+		sourceColumn: ClienteID
+
+	column CodiceCliente
+		dataType: string
+		lineageTag: 45464eac-e2d3-4495-a25f-1f47743b7cdd
+		summarizeBy: none
+		sourceColumn: CodiceCliente
+
+	column NomeCliente
+		dataType: string
+		lineageTag: 2038163a-ac3e-4956-af1a-86d244bad109
+		summarizeBy: none
+		sourceColumn: NomeCliente
+
+	column Segmento
+		dataType: string
+		lineageTag: e7d8110d-b9cb-412c-bf8c-e34bcd373035
+		summarizeBy: none
+		sourceColumn: Segmento
+
+	column Citta
+		dataType: string
+		lineageTag: f6e657f7-2478-42d6-85a4-1729a97a7910
+		summarizeBy: none
+		sourceColumn: Citta
+
+	column Regione
+		dataType: string
+		lineageTag: 0c49ab7f-aa7c-4702-a606-f1ec954baecf
+		summarizeBy: none
+		sourceColumn: Regione
+
+	column AreaGeografica
+		dataType: string
+		lineageTag: 78ea1352-5f9e-41c4-ba0c-60d3c8f41189
+		summarizeBy: none
+		sourceColumn: AreaGeografica
+
+	column Paese
+		dataType: string
+		lineageTag: f8e4d36a-3b79-4e1a-8dff-ff1a154022b2
+		summarizeBy: none
+		sourceColumn: Paese
+
+	partition Clienti = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents(DataFolder & "Clienti.xlsx"), null, true),
+				    Navigation = Source{[Item="Clienti", Kind="Table"]}[Data],
+				    Typed = Table.TransformColumnTypes(Navigation, {{"ClienteID", Int64.Type}, {"CodiceCliente", type text}, {"NomeCliente", type text}, {"Segmento", type text}, {"Citta", type text}, {"Regione", type text}, {"AreaGeografica", type text}, {"Paese", type text}}, "it-IT")
+				in
+				    Typed

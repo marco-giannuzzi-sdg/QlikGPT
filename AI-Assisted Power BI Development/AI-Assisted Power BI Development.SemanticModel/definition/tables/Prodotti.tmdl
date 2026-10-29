@@ -1,0 +1,66 @@
+/// Anagrafica sintetica: una riga per ProdottoID.
+table Prodotti
+	lineageTag: efb11eca-3951-4296-bd3d-6bc672fae486
+
+	column ProdottoID
+		dataType: int64
+		isKey
+		isHidden
+		formatString: 0
+		lineageTag: 5b7b35bd-5d56-4680-b2bf-f1ea7acb6ad0
+		summarizeBy: none
+		sourceColumn: ProdottoID
+
+	column CodiceProdotto
+		dataType: string
+		lineageTag: abd18a7c-becd-48f7-aec4-254b428a04a5
+		summarizeBy: none
+		sourceColumn: CodiceProdotto
+
+	column NomeProdotto
+		dataType: string
+		lineageTag: 4f7546c2-05d9-413a-b759-2fe6b104a45b
+		summarizeBy: none
+		sourceColumn: NomeProdotto
+
+	column Categoria
+		dataType: string
+		lineageTag: bb6912c5-8cfe-4df9-83a6-2073e4830797
+		summarizeBy: none
+		sourceColumn: Categoria
+
+	column Sottocategoria
+		dataType: string
+		lineageTag: 51725c80-74c1-4c30-a47c-8153932b2c3d
+		summarizeBy: none
+		sourceColumn: Sottocategoria
+
+	column Marca
+		dataType: string
+		lineageTag: 6ffdac97-768f-47d2-bf32-6d4ba1dd2115
+		summarizeBy: none
+		sourceColumn: Marca
+
+	column PrezzoListino
+		dataType: decimal
+		formatString: € #,##0.00
+		lineageTag: af1b2a9e-2483-4a17-8fac-1d563ae5cd6b
+		summarizeBy: none
+		sourceColumn: PrezzoListino
+
+	column CostoStandard
+		dataType: decimal
+		formatString: € #,##0.00
+		lineageTag: c6ec8818-1052-463f-9840-defa21cba807
+		summarizeBy: none
+		sourceColumn: CostoStandard
+
+	partition Prodotti = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents(DataFolder & "Prodotti.xlsx"), null, true),
+				    Navigation = Source{[Item="Prodotti", Kind="Table"]}[Data],
+				    Typed = Table.TransformColumnTypes(Navigation, {{"ProdottoID", Int64.Type}, {"CodiceProdotto", type text}, {"NomeProdotto", type text}, {"Categoria", type text}, {"Sottocategoria", type text}, {"Marca", type text}, {"PrezzoListino", Currency.Type}, {"CostoStandard", Currency.Type}}, "it-IT")
+				in
+				    Typed

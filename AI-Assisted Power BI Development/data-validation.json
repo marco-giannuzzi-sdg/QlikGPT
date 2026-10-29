@@ -1,0 +1,19 @@
+{
+  "counts": {
+    "Prodotti": 48,
+    "Clienti": 240,
+    "Calendario": 1096,
+    "Vendite": 9559
+  },
+  "uniqueSales": true,
+  "uniqueProducts": true,
+  "uniqueCustomers": true,
+  "calendarContinuous": true,
+  "orphanProduct": 0,
+  "orphanCustomer": 0,
+  "orphanDate": 0,
+  "netSales": 7064517.86,
+  "totalCost": 4200892.86,
+  "quantity": 35038,
+  "orders": 4780
+}

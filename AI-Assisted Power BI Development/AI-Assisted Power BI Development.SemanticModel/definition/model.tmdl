@@ -7,9 +7,14 @@ model Model
 		legacyRedirects
 		returnErrorValuesAsNull
 
-annotation __PBI_TimeIntelligenceEnabled = 1
+annotation __PBI_TimeIntelligenceEnabled = 0
 
 annotation PBI_ProTooling = ["DevMode"]
 
 ref cultureInfo it-IT
 
+
+ref table Prodotti
+ref table Clienti
+ref table Calendario
+ref table Vendite

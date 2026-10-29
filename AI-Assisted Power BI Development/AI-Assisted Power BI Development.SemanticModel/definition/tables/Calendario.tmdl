@@ -1,0 +1,110 @@
+/// Calendario giornaliero continuo 2024-2026, marcato come tabella data.
+table Calendario
+	lineageTag: 73f8df9b-58db-4149-9976-f31d8f347ac8
+	dataCategory: Time
+
+	column Data
+		dataType: dateTime
+		isKey
+		formatString: dd/MM/yyyy
+		lineageTag: d6283a8c-77f0-4e5a-afcb-cdef44bcba7d
+		summarizeBy: none
+		sourceColumn: Data
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Anno
+		dataType: int64
+		formatString: 0
+		lineageTag: 28988596-932b-44dc-95ae-94a2940c98fb
+		summarizeBy: none
+		sourceColumn: Anno
+
+	column MeseNumero
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: bf8a7b18-d853-4441-a1d0-6b1f041b38dd
+		summarizeBy: none
+		sourceColumn: MeseNumero
+
+	column Mese
+		dataType: string
+		lineageTag: 566baf12-01dd-4acd-a729-807eed625467
+		summarizeBy: none
+		sourceColumn: Mese
+		sortByColumn: MeseNumero
+
+	column AnnoMese
+		dataType: string
+		lineageTag: 6d0f8bc7-df93-470e-9d16-5430c79c7f48
+		summarizeBy: none
+		sourceColumn: AnnoMese
+		sortByColumn: AnnoMeseNumero
+
+	column AnnoMeseNumero
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 1e7ab8b0-c4e7-48d9-b275-315fbbab8d73
+		summarizeBy: none
+		sourceColumn: AnnoMeseNumero
+
+	column Trimestre
+		dataType: string
+		lineageTag: 60d6f58c-5b4a-4c8a-93d3-2c83f43ac357
+		summarizeBy: none
+		sourceColumn: Trimestre
+
+	column Giorno
+		dataType: int64
+		formatString: 0
+		lineageTag: 1affa2f2-6320-43c4-9da3-d841f3b40b78
+		summarizeBy: none
+		sourceColumn: Giorno
+
+	column GiornoSettimanaNumero
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 77dc8e08-1bde-405f-9d70-a744dbb02c2e
+		summarizeBy: none
+		sourceColumn: GiornoSettimanaNumero
+
+	column GiornoSettimana
+		dataType: string
+		lineageTag: df1f7d2d-e67f-46ac-9701-88d3c3c2122f
+		summarizeBy: none
+		sourceColumn: GiornoSettimana
+		sortByColumn: GiornoSettimanaNumero
+
+	column FineSettimana
+		dataType: boolean
+		lineageTag: 15b388e3-7d87-4bf5-a312-580d430a20b1
+		summarizeBy: none
+		sourceColumn: FineSettimana
+
+	hierarchy Calendario
+		lineageTag: c04106c2-ee0c-4f36-923c-5dcc26ef353c
+
+		level Anno
+			column: Anno
+
+		level Trimestre
+			column: Trimestre
+
+		level Mese
+			column: Mese
+
+		level Data
+			column: Data
+
+	partition Calendario = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents(DataFolder & "Calendario.xlsx"), null, true),
+				    Navigation = Source{[Item="Calendario", Kind="Table"]}[Data],
+				    Typed = Table.TransformColumnTypes(Navigation, {{"Data", type date}, {"Anno", Int64.Type}, {"MeseNumero", Int64.Type}, {"Mese", type text}, {"AnnoMese", type text}, {"AnnoMeseNumero", Int64.Type}, {"Trimestre", type text}, {"Giorno", Int64.Type}, {"GiornoSettimanaNumero", Int64.Type}, {"GiornoSettimana", type text}, {"FineSettimana", type logical}}, "it-IT")
+				in
+				    Typed

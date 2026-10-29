@@ -1,0 +1,153 @@
+/// Dati sintetici. Una riga per prodotto di un ordine. Importi in EUR, IVA esclusa. Vendite fino al 28/10/2026.
+table Vendite
+	lineageTag: 18f8aca2-9129-4b83-b9de-7877f98bbbb7
+
+	/// Importi di riga al netto degli sconti; IVA esclusa.
+	measure 'Fatturato Netto' = SUM(Vendite[ImportoNetto])
+		formatString: € #,##0.00
+		displayFolder: Indicatori
+		lineageTag: 9691248d-4894-4feb-aca4-653c23115d2b
+
+	/// Costo storico delle unita vendute.
+	measure 'Costo Venduto' = SUM(Vendite[CostoTotale])
+		formatString: € #,##0.00
+		displayFolder: Indicatori
+		lineageTag: ee0d7ab2-f924-463a-85c3-d8044c3927e1
+
+	/// Fatturato netto meno costo del venduto.
+	measure 'Margine' = [Fatturato Netto] - [Costo Venduto]
+		formatString: € #,##0.00
+		displayFolder: Indicatori
+		lineageTag: 27e0a033-63f4-4275-8d96-862f5cc8fbae
+
+	/// Margine diviso fatturato netto.
+	measure 'Margine %' = DIVIDE([Margine], [Fatturato Netto])
+		formatString: 0.0%
+		displayFolder: Indicatori
+		lineageTag: 7d2b604c-1d26-415a-b2ee-be4eaddaf874
+
+	/// Numero di unita vendute.
+	measure 'Quantita Venduta' = SUM(Vendite[Quantita])
+		formatString: #,##0
+		displayFolder: Indicatori
+		lineageTag: aae5ce96-07b9-477c-877c-cf475b9d779d
+
+	/// Ordini distinti; un ordine puo avere piu righe.
+	measure 'Numero Ordini' = DISTINCTCOUNT(Vendite[OrdineID])
+		formatString: #,##0
+		displayFolder: Indicatori
+		lineageTag: 94687e49-facd-40b4-bdc6-1501909749f4
+
+	/// Clienti con vendite nel contesto selezionato.
+	measure 'Clienti Attivi' = DISTINCTCOUNT(Vendite[ClienteID])
+		formatString: #,##0
+		displayFolder: Indicatori
+		lineageTag: fe53f43f-f939-4c4d-b962-6ab72214700d
+
+	/// Fatturato netto diviso numero di ordini.
+	measure 'Valore Medio Ordine' = DIVIDE([Fatturato Netto], [Numero Ordini])
+		formatString: € #,##0.00
+		displayFolder: Indicatori
+		lineageTag: ad5855d8-6c13-4fd5-b1e2-4369c338b217
+
+	column VenditaID
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: fd5200a7-32e0-4903-a2b0-2df1730d1a76
+		summarizeBy: none
+		sourceColumn: VenditaID
+
+	column OrdineID
+		dataType: string
+		lineageTag: 582e9375-2802-4101-b22c-8a78dd54c371
+		summarizeBy: none
+		sourceColumn: OrdineID
+
+	column DataVendita
+		dataType: dateTime
+		formatString: dd/MM/yyyy
+		lineageTag: e729c7f0-3041-404e-8c3e-69b4833c755b
+		summarizeBy: none
+		sourceColumn: DataVendita
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column ProdottoID
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 994a17a7-ae49-4455-8726-49873af9a2f4
+		summarizeBy: none
+		sourceColumn: ProdottoID
+
+	column ClienteID
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: d97328aa-3fdf-432a-a981-a64a437b362b
+		summarizeBy: none
+		sourceColumn: ClienteID
+
+	column Quantita
+		dataType: int64
+		formatString: 0
+		lineageTag: 99b1a4b2-80c6-4a9e-a74f-d63bb2d6c84f
+		summarizeBy: none
+		sourceColumn: Quantita
+
+	column PrezzoUnitario
+		dataType: decimal
+		isHidden
+		formatString: € #,##0.00
+		lineageTag: 9f062e48-a38c-4aec-a33e-630abbdded36
+		summarizeBy: none
+		sourceColumn: PrezzoUnitario
+
+	column ScontoPercentuale
+		dataType: double
+		isHidden
+		formatString: 0.0%
+		lineageTag: 68cc7e95-f3b1-470b-9623-b43d69ba2801
+		summarizeBy: none
+		sourceColumn: ScontoPercentuale
+
+	column CostoUnitario
+		dataType: decimal
+		isHidden
+		formatString: € #,##0.00
+		lineageTag: 552b3ba1-e01f-4840-ad3d-eb82d382d413
+		summarizeBy: none
+		sourceColumn: CostoUnitario
+
+	column ImportoNetto
+		dataType: decimal
+		isHidden
+		formatString: € #,##0.00
+		lineageTag: 2ad355dd-2687-4008-9bf6-06fc2204bdc1
+		summarizeBy: none
+		sourceColumn: ImportoNetto
+
+	column CostoTotale
+		dataType: decimal
+		isHidden
+		formatString: € #,##0.00
+		lineageTag: 40ec18ed-2f93-4793-aab1-9fad5ab70d3e
+		summarizeBy: none
+		sourceColumn: CostoTotale
+
+	column Canale
+		dataType: string
+		lineageTag: ebbf8c96-4441-443c-a397-fa78f18edd9c
+		summarizeBy: none
+		sourceColumn: Canale
+
+	partition Vendite = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents(DataFolder & "Vendite.xlsx"), null, true),
+				    Navigation = Source{[Item="Vendite", Kind="Table"]}[Data],
+				    Typed = Table.TransformColumnTypes(Navigation, {{"VenditaID", Int64.Type}, {"OrdineID", type text}, {"DataVendita", type date}, {"ProdottoID", Int64.Type}, {"ClienteID", Int64.Type}, {"Quantita", Int64.Type}, {"PrezzoUnitario", Currency.Type}, {"ScontoPercentuale", type number}, {"CostoUnitario", Currency.Type}, {"ImportoNetto", Currency.Type}, {"CostoTotale", Currency.Type}, {"Canale", type text}}, "it-IT")
+				in
+				    Typed
