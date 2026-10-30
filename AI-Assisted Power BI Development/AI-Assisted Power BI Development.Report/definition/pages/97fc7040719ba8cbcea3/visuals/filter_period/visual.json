@@ -569,6 +569,11 @@
           ]
         }
       }
+    },
+    "syncGroup": {
+      "groupName": "SharedPeriod",
+      "fieldChanges": true,
+      "filterChanges": true
     }
   },
   "annotations": [

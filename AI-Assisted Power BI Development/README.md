@@ -14,7 +14,7 @@ Il valore iniziale di DataFolder punta alla copia locale creata su questo comput
 C:/Users/marco/Documents/Codex/2026-10-29/all/outputs/Sales Overview/data/
 ```
 
-Le definizioni PBIP includono query, colonne, misure e relazioni. La cache locale dei dati non viene versionata: ogni nuova copia richiede il primo aggiornamento. Il report include la pagina interattiva **Sales Overview**, costruita sul mockup approvato.
+Le definizioni PBIP includono query, colonne, misure e relazioni. La cache locale dei dati non viene versionata: ogni nuova copia richiede il primo aggiornamento. Il report include due pagine interattive: **Sales Overview** e **Products & Margin**, costruite sui mockup approvati. All apertura viene selezionato Products & Margin.
 
 ## Dati Excel
 
@@ -67,7 +67,7 @@ Pagina 1920 × 1080 con testata blu notte, fondo chiaro, grafici teal e accenti 
 - Clienti Attivi
 - Valore Medio Ordine
 
-Le misure di base sono nella cartella **Indicatori** di Vendite. Sono state aggiunte 7 misure riutilizzabili per confronti e quote, oltre a 11 helper nascosti per il layout e la formattazione: 26 misure complessive. I campi tecnici e gli importi di riga sono nascosti per favorire l'uso delle misure. Per filtrare per data usare Calendario. Per anno precedente confrontare periodi equivalenti: il 2026 contiene vendite solo fino al 28 ottobre.
+Le misure di base sono nella cartella **Indicatori** di Vendite. Il modello contiene 41 misure: 8 di base, 18 per la Sales Overview e 15 per Products & Margin. Due delle nuove misure sono riutilizzabili (Prodotti Venduti e Quota Fatturato Top 5 Prodotti); le altre supportano il layout e le analisi. I campi tecnici e gli importi di riga sono nascosti per favorire l'uso delle misure. Per filtrare per data usare Calendario. Per anno precedente confrontare periodi equivalenti: il 2026 contiene vendite solo fino al 28 ottobre.
 
 ## Verifiche eseguite
 
@@ -75,7 +75,7 @@ Le misure di base sono nella cartella **Indicatori** di Vendite. Sono state aggi
 - Chiavi univoche e nessuna vendita senza corrispondenza nelle tre dimensioni.
 - Date continue e calendario esteso ad anni completi.
 - Coerenza degli importi netti e dei costi delle righe.
-- Definizioni deserializzate con il parser Microsoft TMDL: 4 tabelle, 3 relazioni, 26 misure.
+- Definizioni deserializzate con il parser Microsoft TMDL: 4 tabelle, 3 relazioni, 41 misure.
 - Pagina e 49 elementi PBIR controllati sugli schemi ufficiali Microsoft, sui nomi delle proprieta e sugli enum pubblici. I 20 elementi con query hanno riferimenti a colonne e misure esistenti.
 - Dimensioni entro il canvas, identificativi univoci e destinazioni delle interazioni valide.
 - Anteprima tecnica del layout controllata per spaziatura e leggibilita; non costituisce uno screenshot di Power BI.
@@ -100,3 +100,23 @@ Per il periodo iniziale dell overview i valori attesi sono: **Fatturato Netto 2.
 - Modello semantico, Excel e misure di business invariati.
 
 Per applicare questa revisione, chiudere il report attualmente aperto **senza salvare** e riaprire **lo stesso Sales Overview.pbip**. Aggiornare i dati se richiesto. Non salvare la vecchia sessione sopra le definizioni aggiornate. La revisione e stata controllata sui file e su una composizione tecnica; il rendering nativo aggiornato va verificato in Power BI.
+
+
+## Products & Margin
+
+Secondo foglio con la stessa palette, tipografia e correzioni di stile della Sales Overview.
+
+- Quattro KPI: Gross Profit, Active Products, Gross Margin, Top 5 Revenue Share.
+- Mappa nativa dei prodotti: X = fatturato netto; Y = margine percentuale; dimensione = quantita venduta; colore = categoria. Tutti i prodotti con vendite sono rappresentati. Nomi e dettagli sono disponibili nei tooltip, per evitare sovrapposizioni tra le etichette.
+- Linee di riferimento dinamiche: fatturato medio per prodotto attivo e margine ponderato del portafoglio selezionato.
+- Top 5 prodotti per margine assoluto, con indicazione della percentuale di margine.
+- Dettaglio dei Top 5 per fatturato: prodotto, categoria, fatturato, margine assoluto, margine percentuale e unita vendute. Matrice nativa con sei colonne a larghezza esplicita e tooltip disattivati.
+- Confronto del margine percentuale delle categorie, con margine assoluto nelle etichette.
+
+**Filtri:** periodo, categoria, marca e canale. Periodo, categoria e canale sono sincronizzati con la prima pagina; marca rimane specifica di Products & Margin. Le classifiche risolvono gli eventuali pari merito usando ProdottoID e includono al massimo cinque prodotti. Il margine ponderato e il rapporto tra i totali, non la media delle percentuali dei prodotti.
+
+**Controlli:** parser Microsoft TMDL; schemi e proprieta PBIR; riferimenti di colonne e misure; selettori delle forme; ingombri dei testi; sei colonne e cinque righe della matrice; collegamenti e sincronizzazione delle due pagine. I valori iniziali sono stati ricalcolati indipendentemente dagli Excel esportati.
+
+Valori attesi per 01/01/2026–28/10/2026: margine lordo **905.533,75 EUR**, prodotti attivi **48**, margine **40,6866%**, quota fatturato Top 5 **42,9505%**, fatturato medio per prodotto **46.367,38 EUR**. Notebook Premium guida il margine assoluto con **92.071,71 EUR**.
+
+La pagina Products & Margin e selezionata in apertura. Per caricare le nuove definizioni, chiudere la sessione precedente senza salvare, riaprire **Sales Overview.pbip** e premere **Aggiorna**. Il progetto e stato modificato esclusivamente tramite file e GitHub; l esecuzione DAX e la resa nativa di questa nuova pagina rimangono da verificare in Power BI dopo la riapertura.

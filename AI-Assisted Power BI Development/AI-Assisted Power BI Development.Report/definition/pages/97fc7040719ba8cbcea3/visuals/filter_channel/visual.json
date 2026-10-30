@@ -392,6 +392,11 @@
           ]
         }
       }
+    },
+    "syncGroup": {
+      "groupName": "SharedChannel",
+      "fieldChanges": true,
+      "filterChanges": true
     }
   },
   "annotations": [

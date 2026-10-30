@@ -392,6 +392,11 @@
           ]
         }
       }
+    },
+    "syncGroup": {
+      "groupName": "SharedCategory",
+      "fieldChanges": true,
+      "filterChanges": true
     }
   },
   "annotations": [

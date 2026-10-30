@@ -1,0 +1,23 @@
+{
+  "page": "Products & Margin",
+  "visuals": 50,
+  "queryVisuals": 13,
+  "tables": 4,
+  "relationships": 3,
+  "measures": 41,
+  "errors": [],
+  "warnings": [],
+  "nativePowerBIValidation": "Not run: user requested file-based development only.",
+  "expectedMatrixRows": 5,
+  "productGrouping": "Prodotti.NomeProdotto",
+  "dynamicReferenceLines": [
+    "Average revenue per active product",
+    "Weighted portfolio margin"
+  ],
+  "synchronizedFilters": [
+    "period",
+    "category",
+    "channel"
+  ],
+  "defaultActivePage": true
+}

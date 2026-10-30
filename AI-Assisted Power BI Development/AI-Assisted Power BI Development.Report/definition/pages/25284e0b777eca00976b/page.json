@@ -1,0 +1,550 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.0.0/schema.json",
+  "name": "25284e0b777eca00976b",
+  "displayName": "Products & Margin",
+  "displayOption": "FitToPage",
+  "height": 1080,
+  "width": 1920,
+  "objects": {
+    "background": [
+      {
+        "properties": {
+          "color": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#F5F6F2'"
+                  }
+                }
+              }
+            }
+          },
+          "transparency": {
+            "expr": {
+              "Literal": {
+                "Value": "0D"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "outspace": [
+      {
+        "properties": {
+          "color": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#F5F6F2'"
+                  }
+                }
+              }
+            }
+          },
+          "transparency": {
+            "expr": {
+              "Literal": {
+                "Value": "0D"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "visualInteractions": [
+    {
+      "source": "pm_period",
+      "target": "pm_kpi_profit",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_period",
+      "target": "pm_kpi_active",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_period",
+      "target": "pm_kpi_margin",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_period",
+      "target": "pm_kpi_share",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_period",
+      "target": "pm_landscape",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_period",
+      "target": "pm_reference_caption",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_period",
+      "target": "pm_profit_drivers",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_period",
+      "target": "pm_product_detail",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_period",
+      "target": "pm_category_margins",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_period",
+      "target": "pm_filter_category",
+      "type": "NoFilter"
+    },
+    {
+      "source": "pm_period",
+      "target": "pm_filter_brand",
+      "type": "NoFilter"
+    },
+    {
+      "source": "pm_period",
+      "target": "pm_filter_channel",
+      "type": "NoFilter"
+    },
+    {
+      "source": "pm_filter_category",
+      "target": "pm_kpi_profit",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_filter_category",
+      "target": "pm_kpi_active",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_filter_category",
+      "target": "pm_kpi_margin",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_filter_category",
+      "target": "pm_kpi_share",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_filter_category",
+      "target": "pm_landscape",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_filter_category",
+      "target": "pm_reference_caption",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_filter_category",
+      "target": "pm_profit_drivers",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_filter_category",
+      "target": "pm_product_detail",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_filter_category",
+      "target": "pm_category_margins",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_filter_category",
+      "target": "pm_period",
+      "type": "NoFilter"
+    },
+    {
+      "source": "pm_filter_category",
+      "target": "pm_filter_brand",
+      "type": "NoFilter"
+    },
+    {
+      "source": "pm_filter_category",
+      "target": "pm_filter_channel",
+      "type": "NoFilter"
+    },
+    {
+      "source": "pm_filter_brand",
+      "target": "pm_kpi_profit",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_filter_brand",
+      "target": "pm_kpi_active",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_filter_brand",
+      "target": "pm_kpi_margin",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_filter_brand",
+      "target": "pm_kpi_share",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_filter_brand",
+      "target": "pm_landscape",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_filter_brand",
+      "target": "pm_reference_caption",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_filter_brand",
+      "target": "pm_profit_drivers",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_filter_brand",
+      "target": "pm_product_detail",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_filter_brand",
+      "target": "pm_category_margins",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_filter_brand",
+      "target": "pm_period",
+      "type": "NoFilter"
+    },
+    {
+      "source": "pm_filter_brand",
+      "target": "pm_filter_category",
+      "type": "NoFilter"
+    },
+    {
+      "source": "pm_filter_brand",
+      "target": "pm_filter_channel",
+      "type": "NoFilter"
+    },
+    {
+      "source": "pm_filter_channel",
+      "target": "pm_kpi_profit",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_filter_channel",
+      "target": "pm_kpi_active",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_filter_channel",
+      "target": "pm_kpi_margin",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_filter_channel",
+      "target": "pm_kpi_share",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_filter_channel",
+      "target": "pm_landscape",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_filter_channel",
+      "target": "pm_reference_caption",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_filter_channel",
+      "target": "pm_profit_drivers",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_filter_channel",
+      "target": "pm_product_detail",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_filter_channel",
+      "target": "pm_category_margins",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_filter_channel",
+      "target": "pm_period",
+      "type": "NoFilter"
+    },
+    {
+      "source": "pm_filter_channel",
+      "target": "pm_filter_category",
+      "type": "NoFilter"
+    },
+    {
+      "source": "pm_filter_channel",
+      "target": "pm_filter_brand",
+      "type": "NoFilter"
+    },
+    {
+      "source": "pm_landscape",
+      "target": "pm_kpi_profit",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_landscape",
+      "target": "pm_kpi_active",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_landscape",
+      "target": "pm_kpi_margin",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_landscape",
+      "target": "pm_kpi_share",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_landscape",
+      "target": "pm_reference_caption",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_landscape",
+      "target": "pm_profit_drivers",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_landscape",
+      "target": "pm_product_detail",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_landscape",
+      "target": "pm_category_margins",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_landscape",
+      "target": "pm_period",
+      "type": "NoFilter"
+    },
+    {
+      "source": "pm_landscape",
+      "target": "pm_filter_category",
+      "type": "NoFilter"
+    },
+    {
+      "source": "pm_landscape",
+      "target": "pm_filter_brand",
+      "type": "NoFilter"
+    },
+    {
+      "source": "pm_landscape",
+      "target": "pm_filter_channel",
+      "type": "NoFilter"
+    },
+    {
+      "source": "pm_profit_drivers",
+      "target": "pm_kpi_profit",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_profit_drivers",
+      "target": "pm_kpi_active",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_profit_drivers",
+      "target": "pm_kpi_margin",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_profit_drivers",
+      "target": "pm_kpi_share",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_profit_drivers",
+      "target": "pm_landscape",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_profit_drivers",
+      "target": "pm_reference_caption",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_profit_drivers",
+      "target": "pm_product_detail",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_profit_drivers",
+      "target": "pm_category_margins",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_profit_drivers",
+      "target": "pm_period",
+      "type": "NoFilter"
+    },
+    {
+      "source": "pm_profit_drivers",
+      "target": "pm_filter_category",
+      "type": "NoFilter"
+    },
+    {
+      "source": "pm_profit_drivers",
+      "target": "pm_filter_brand",
+      "type": "NoFilter"
+    },
+    {
+      "source": "pm_profit_drivers",
+      "target": "pm_filter_channel",
+      "type": "NoFilter"
+    },
+    {
+      "source": "pm_product_detail",
+      "target": "pm_kpi_profit",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_product_detail",
+      "target": "pm_kpi_active",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_product_detail",
+      "target": "pm_kpi_margin",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_product_detail",
+      "target": "pm_kpi_share",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_product_detail",
+      "target": "pm_landscape",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_product_detail",
+      "target": "pm_reference_caption",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_product_detail",
+      "target": "pm_profit_drivers",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_product_detail",
+      "target": "pm_category_margins",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_product_detail",
+      "target": "pm_period",
+      "type": "NoFilter"
+    },
+    {
+      "source": "pm_product_detail",
+      "target": "pm_filter_category",
+      "type": "NoFilter"
+    },
+    {
+      "source": "pm_product_detail",
+      "target": "pm_filter_brand",
+      "type": "NoFilter"
+    },
+    {
+      "source": "pm_product_detail",
+      "target": "pm_filter_channel",
+      "type": "NoFilter"
+    },
+    {
+      "source": "pm_category_margins",
+      "target": "pm_kpi_profit",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_category_margins",
+      "target": "pm_kpi_active",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_category_margins",
+      "target": "pm_kpi_margin",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_category_margins",
+      "target": "pm_kpi_share",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_category_margins",
+      "target": "pm_landscape",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_category_margins",
+      "target": "pm_reference_caption",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_category_margins",
+      "target": "pm_profit_drivers",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_category_margins",
+      "target": "pm_product_detail",
+      "type": "DataFilter"
+    },
+    {
+      "source": "pm_category_margins",
+      "target": "pm_period",
+      "type": "NoFilter"
+    },
+    {
+      "source": "pm_category_margins",
+      "target": "pm_filter_category",
+      "type": "NoFilter"
+    },
+    {
+      "source": "pm_category_margins",
+      "target": "pm_filter_brand",
+      "type": "NoFilter"
+    },
+    {
+      "source": "pm_category_margins",
+      "target": "pm_filter_channel",
+      "type": "NoFilter"
+    }
+  ],
+  "annotations": [
+    {
+      "name": "design",
+      "value": "Approved Products & Margin mockup v1"
+    },
+    {
+      "name": "nativeInteraction",
+      "value": "All products are plotted; product names and details are available through scatter tooltips to avoid overlapping labels."
+    }
+  ]
+}

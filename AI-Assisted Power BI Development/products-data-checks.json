@@ -1,0 +1,18 @@
+{
+  "initialPeriod": "2026-01-01 / 2026-10-28",
+  "revenue": 2225634.04,
+  "grossProfit": 905533.75,
+  "activeProducts": 48,
+  "grossMarginPct": 40.68655195442645,
+  "top5RevenueSharePct": 42.950470419656234,
+  "averageRevenuePerProduct": 46367.37583333333,
+  "topProfitProduct": "Notebook Premium",
+  "pages": 2,
+  "totalVisuals": 99,
+  "synchronizedFilters": [
+    "period",
+    "category",
+    "channel"
+  ],
+  "nativeDAXExecution": "Not run; expected values computed independently from exported Excel sources."
+}

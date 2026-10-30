@@ -4,7 +4,7 @@
   "queryVisuals": 20,
   "tables": 4,
   "relationships": 3,
-  "measures": 26,
+  "measures": 41,
   "errors": [],
   "warnings": [],
   "nativePowerBIValidation": "Not run: user requested file-based development only.",

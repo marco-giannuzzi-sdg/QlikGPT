@@ -261,3 +261,99 @@ table Vendite
 		isHidden
 		displayFolder: Overview
 		lineageTag: 1e9405fe-1b8c-49fc-8fb4-72a29f222008
+
+	/// Prodotti distinti con vendite nel periodo e nei filtri selezionati.
+	measure 'Prodotti Venduti' = COALESCE(DISTINCTCOUNT(Vendite[ProdottoID]), 0)
+		formatString: #,##0
+		displayFolder: Products & Margin
+		lineageTag: 5b71713c-b540-4a7d-a930-892ed88fc269
+
+	/// Quota del fatturato dei primi cinque prodotti; ID crescente risolve eventuali pari merito.
+	measure 'Quota Fatturato Top 5 Prodotti' = VAR p = ALLSELECTED(Prodotti) VAR t = TOPN(5, p, [Fatturato Netto], DESC, Prodotti[ProdottoID], ASC) RETURN DIVIDE(SUMX(t, [Fatturato Netto]), CALCULATE([Fatturato Netto], ALLSELECTED(Prodotti)))
+		formatString: 0.0%
+		displayFolder: Products & Margin
+		lineageTag: da0e3761-1163-4997-b10f-2ef2bf89cb23
+
+	/// Card dei prodotti attivi.
+	measure 'PM Active Products' = FORMAT([Prodotti Venduti], "#,0", "en-US")
+		isHidden
+		displayFolder: Products & Margin
+		lineageTag: 4989a07d-3b97-4b2a-be0a-81ff712cd419
+
+	/// Margine assoluto formattato in EUR K o M.
+	measure 'PM Gross Profit' = VAR v = [Margine] RETURN IF(ISBLANK(v), "—", SWITCH(TRUE(), ABS(v) >= 1000000, FORMAT(v / 1000000, "€0.000", "en-US") & "M", ABS(v) >= 1000, FORMAT(v / 1000, "€0.0", "en-US") & "K", FORMAT(v, "€#,0", "en-US")))
+		isHidden
+		displayFolder: Products & Margin
+		lineageTag: c93314b2-950f-4e1a-a82d-87ab552269ed
+
+	/// Card della concentrazione del fatturato.
+	measure 'PM Top 5 Share' = IF(ISBLANK([Quota Fatturato Top 5 Prodotti]), "—", FORMAT([Quota Fatturato Top 5 Prodotti], "0.0%", "en-US"))
+		isHidden
+		displayFolder: Products & Margin
+		lineageTag: 93f8b20d-86f6-4b05-89b3-34898bed7038
+
+	/// Categoria del singolo prodotto per la matrice di dettaglio.
+	measure 'PM Product Category' = SELECTEDVALUE(Prodotti[Categoria], "")
+		isHidden
+		displayFolder: Products & Margin
+		lineageTag: db5f154a-918b-4ff2-97b1-ccf75d88e50b
+
+	/// Posizione per margine assoluto tra i prodotti selezionati, con ID come spareggio.
+	measure 'PM Profit Rank' = VAR v = [Margine] VAR k = SELECTEDVALUE(Prodotti[ProdottoID]) RETURN IF(NOT ISBLANK(v) && NOT ISBLANK(k), COUNTROWS(FILTER(ALLSELECTED(Prodotti), VAR a = CALCULATE([Margine]) RETURN NOT ISBLANK(a) && (a > v || (a = v && Prodotti[ProdottoID] <= k)))))
+		formatString: 0
+		isHidden
+		displayFolder: Products & Margin
+		lineageTag: 6736f888-ab16-4de1-97de-706d2da65067
+
+	/// Posizione per fatturato tra i prodotti selezionati, con ID come spareggio.
+	measure 'PM Revenue Rank' = VAR v = [Fatturato Netto] VAR k = SELECTEDVALUE(Prodotti[ProdottoID]) RETURN IF(NOT ISBLANK(v) && NOT ISBLANK(k), COUNTROWS(FILTER(ALLSELECTED(Prodotti), VAR a = CALCULATE([Fatturato Netto]) RETURN NOT ISBLANK(a) && (a > v || (a = v && Prodotti[ProdottoID] <= k)))))
+		formatString: 0
+		isHidden
+		displayFolder: Products & Margin
+		lineageTag: b4438314-80a6-4424-bb51-1f0519c951cf
+
+	/// Fatturato del portafoglio selezionato senza il filtro della singola bolla.
+	measure 'PM Portfolio Revenue' = CALCULATE([Fatturato Netto], ALLSELECTED(Prodotti))
+		formatString: € #,##0.00
+		isHidden
+		displayFolder: Products & Margin
+		lineageTag: 95c97b5a-e215-4aff-ba5f-6c3a8953316a
+
+	/// Margine ponderato del portafoglio selezionato: rapporto tra somme.
+	measure 'PM Portfolio Margin' = CALCULATE([Margine %], ALLSELECTED(Prodotti))
+		formatString: 0.0%
+		isHidden
+		displayFolder: Products & Margin
+		lineageTag: d4c8e49a-48b6-46e1-bb5c-403341907426
+
+	/// Fatturato medio per prodotto con vendite, nei filtri selezionati.
+	measure 'PM Average Product Revenue' = DIVIDE([PM Portfolio Revenue], CALCULATE([Prodotti Venduti], ALLSELECTED(Prodotti)))
+		formatString: € #,##0.00
+		isHidden
+		displayFolder: Products & Margin
+		lineageTag: 1df6303b-6da3-4858-9b91-dad651782c7e
+
+	/// Limite dinamico dell asse fatturato con margine per le bolle.
+	measure 'PM Scatter Revenue Limit' = VAR v = MAXX(ALLSELECTED(Prodotti), [Fatturato Netto]) RETURN IF(ISBLANK(v), 10000, CEILING(v * 1.08, 10000))
+		formatString: 0
+		isHidden
+		displayFolder: Products & Margin
+		lineageTag: 7cc43434-ea71-498d-b0aa-fcf26c402882
+
+	/// Seconda riga delle etichette dei prodotti per margine assoluto.
+	measure 'PM Margin Label' = IF(ISBLANK([Margine %]), "", FORMAT([Margine %], "0.0%", "en-US") & " margin")
+		isHidden
+		displayFolder: Products & Margin
+		lineageTag: e187e9e3-3568-4ca6-bcf5-5807108e6d87
+
+	/// Valori delle due linee di riferimento nel grafico a bolle.
+	measure 'PM Reference Caption' = VAR r = [PM Average Product Revenue] VAR m = [PM Portfolio Margin] RETURN IF(ISBLANK(r), "No sales in the selected period", "Portfolio averages: revenue / product " & FORMAT(r / 1000, "€0.0", "en-US") & "K · gross margin " & FORMAT(m, "0.0%", "en-US"))
+		isHidden
+		displayFolder: Products & Margin
+		lineageTag: 3debbf73-4230-479a-9a83-9384cbd2f79d
+
+	/// Colore della prima posizione nella classifica per margine, dinamico con i filtri.
+	measure 'PM Profit Driver Color' = IF([PM Profit Rank] = 1, "#081C30", "#187F82")
+		isHidden
+		displayFolder: Products & Margin
+		lineageTag: abf01418-fc37-4cab-ba07-993a79a391c1
